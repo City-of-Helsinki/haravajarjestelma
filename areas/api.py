@@ -1,16 +1,12 @@
-from collections import defaultdict
-
 from django.conf import settings
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 from django.db.models import Count, Q, Sum
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
 from django_filters import rest_framework as filters
-from munigeo.models import Address, AdministrativeDivision, Street
+from munigeo.models import Address, Street
 from parler_rest.fields import TranslatedFieldsField
 from parler_rest.serializers import TranslatableModelSerializer
-from rest_framework import mixins, serializers, viewsets
+from rest_framework import serializers, viewsets
 from rest_framework.response import Response
 
 from areas.models import ContractZone
@@ -42,92 +38,6 @@ class TranslatedModelSerializer(TranslatableModelSerializer, UTCModelSerializer)
         ret.update(translated_fields)
 
         return ret
-
-
-class AdministrativeDivisionSerializer(TranslatedModelSerializer):
-    bbox = serializers.ReadOnlyField(source="geometry.boundary.extent")
-
-    class Meta:
-        model = AdministrativeDivision
-        fields = ("translations", "ocd_id", "origin_id", "bbox")
-
-
-class NeigborhoodSerializer(AdministrativeDivisionSerializer):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["sub_districts"] = serializers.SerializerMethodField()
-
-        sub_district_qs = (
-            self._get_base_sub_district_qs()
-            .filter(type__type="sub_district")
-            .exclude(origin_id="Aluemeri")  # wtf
-            .select_related("geometry")
-            .prefetch_related("translations")
-            .order_by("origin_id")
-        )
-
-        # cache sub districts grouped by their parent origin_id for faster access
-        sub_district_map = defaultdict(list)
-        for sub_district in sub_district_qs:
-            origin_id = sub_district.origin_id
-            if origin_id.endswith("0"):
-                # When a sub district id ends with '0', it means the neighborhood consists of only one sub district,
-                # which for us means basically "the neighborhood has no sub districts", so we skip the sub district.
-                # For example neighborhood Konala 32 has only one sub district, Konala 320.
-                continue
-            parent_origin_id = origin_id[:2]
-            sub_district_map[parent_origin_id].append(sub_district)
-
-        self._sub_district_map = sub_district_map
-
-    def get_sub_districts(self, obj):
-        sub_districts = self._sub_district_map.get(obj.origin_id, [])
-        serializer = AdministrativeDivisionSerializer(
-            sub_districts, many=True, context=self.context
-        )
-        return serializer.data
-
-    def _get_base_sub_district_qs(self):
-        if not isinstance(self.instance, AdministrativeDivision):
-            return AdministrativeDivision.objects.all()
-
-        # when we are dealing with a single neighborhood, we can skip some unnecessary work by fetching only
-        # its sub districts instead of all districts
-
-        try:
-            int_origin_id = int(self.instance.origin_id)
-        except ValueError:
-            return AdministrativeDivision.objects.none()
-
-        if (
-            int_origin_id >= 10
-        ):  # only neighborhoods with origin id >= 10 can have sub districts
-            origin_id_min = self.instance.origin_id + "0"
-            origin_id_max = self.instance.origin_id + "9"
-
-            # filter sub districts based on the neighborhood's id,
-            # for example for neighborhood 32 filter sub districts by id 320 - 329
-            return AdministrativeDivision.objects.filter(
-                type__type="sub_district",
-                origin_id__gte=origin_id_min,
-                origin_id__lte=origin_id_max,
-            )
-        else:
-            return AdministrativeDivision.objects.none()
-
-
-class NeighborhoodViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    queryset = (
-        AdministrativeDivision.objects.filter(type__type="neighborhood")
-        .select_related("geometry")
-        .prefetch_related("translations")
-        .order_by("origin_id")
-    )
-    serializer_class = NeigborhoodSerializer
-
-    @method_decorator(cache_page(settings.CACHES["default"].get("TIMEOUT", 60 * 60)))
-    def list(self, *args, **kwargs):
-        return super().list(*args, **kwargs)
 
 
 class GeoQueryParamSerializer(serializers.Serializer):
@@ -172,17 +82,12 @@ class GeoQueryViewSet(viewsets.ViewSet):
         point = Point(
             param_serializer.validated_data["lon"],
             param_serializer.validated_data["lat"],
+            srid=settings.DEFAULT_SRID,
         )
-        neighborhood = AdministrativeDivision.objects.filter(
-            type__type="neighborhood", geometry__boundary__covers=point
-        ).first()
         address = self.get_closest_address(point)
         contract_zone = ContractZone.objects.filter(boundary__covers=point).first()
 
         data = {
-            "neighborhood": NeigborhoodSerializer(neighborhood).data
-            if neighborhood
-            else None,
             "closest_address": AddressSerializer(address).data if address else None,
             "contract_zone": ContractZoneSerializerGeoQueryView(contract_zone).data
             if contract_zone

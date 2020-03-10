@@ -10,7 +10,6 @@
 
 3. Import geo data
     * `docker exec -it haravajarjestelma-backend python manage.py geo_import --municipalities finland`
-    * `docker exec -it haravajarjestelma-backend python manage.py geo_import --divisions helsinki`
     * `docker exec -it haravajarjestelma-backend python manage.py geo_import --addresses helsinki`
     * `docker exec -it haravajarjestelma-backend python manage.py import_helsinki_contract_zones`
 
@@ -62,7 +61,6 @@ Create superuser if needed:
 Import geo data
 
     python manage.py geo_import --municipalities finland
-    python manage.py geo_import --divisions helsinki
     python manage.py geo_import --addresses helsinki
     python manage.py import_helsinki_contract_zones
 

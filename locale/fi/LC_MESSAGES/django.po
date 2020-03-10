@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-15 14:36+0200\n"
+"POT-Creation-Date: 2020-03-06 11:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,8 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Imported fields"
-msgstr "Importoidut kentät"
+msgid "Users"
+msgstr "Käyttäjät"
 
 msgid "Areas"
 msgstr "Alueet"
@@ -42,11 +42,20 @@ msgstr "sähköposti"
 msgid "phone"
 msgstr "puhelinnumero"
 
+msgid "secondary contact person"
+msgstr "toissijainen kontaktihenkilö"
+
+msgid "secondary email"
+msgstr "toissijainen sähköposti"
+
+msgid "secondary phone"
+msgstr "toissijainen puhelinnumero"
+
 msgid "contractor"
 msgstr "urakoitsija"
 
-msgid "contractor user"
-msgstr "urakoitsijan käyttäjä"
+msgid "contractor users"
+msgstr "urakoitsijakäyttäjät"
 
 msgid "active"
 msgstr "voimassa"
@@ -135,43 +144,41 @@ msgstr "jätepihtejä"
 msgid "additional equipment information"
 msgstr "varusteiden lisätiedot"
 
+msgid "reminder notification sent at"
+msgstr "muistutus lähetetty"
+
 msgid "event"
 msgstr "tapahtuma"
 
 msgid "events"
 msgstr "tapahtumat"
 
-msgid "Notifications"
-msgstr "Herätteet"
-
 msgid "Event created"
 msgstr "Tapahtuma luotu"
 
-msgid "type"
-msgstr "tyyppi"
+msgid "Event approved notification to organizer"
+msgstr "\"Tapahtuma hyväksytty\" järjestäjälle"
 
-msgid "subject"
-msgstr "otsikko"
+msgid "Event approved notification to contractor"
+msgstr "\"Tapahtuma hyväksytty\" urakoitsijalle"
 
-msgid "body, HTML version"
-msgstr "sisältö, HTML-versio"
+msgid "Event approved notification to official"
+msgstr "\"Tapahtuma hyväksytty\" virkailijalle"
 
-msgid "body, plain text version"
-msgstr "sisältö, tekstiversio"
+msgid "Event reminder"
+msgstr "Tapahtumamuistutus"
 
-msgid "If left blank, the HTML version without HTML tags will be used."
-msgstr ""
-"Mikäli tätä ei täytetä, käytetään tekstiversiona HTML-versiota, josta on "
-"poistettu HTML tagit."
+msgid "Swedish"
+msgstr "ruotsi"
 
-msgid "notification"
-msgstr "heräte"
+msgid "English"
+msgstr "englanti"
 
-msgid "notifications"
-msgstr "herätteet"
+msgid "AD groups"
+msgstr "AD-ryhmät"
 
-msgid "Users"
-msgstr "Käyttäjät"
+msgid "Roles"
+msgstr "Roolit"
 
 msgid "official"
 msgstr "virkailija"

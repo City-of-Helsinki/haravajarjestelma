@@ -61,7 +61,7 @@ class ContractZone(models.Model):
     def __str__(self):
         return self.name
 
-    def get_unavailable_dates(self):
+    def get_unavailable_dates(self, exclude_event=None):
         """
         Return a list of dates for which it is not possible to create an Event ATM.
         """
@@ -72,6 +72,8 @@ class ContractZone(models.Model):
         too_early_dates = {date for date in date_range(today, last_too_early_day)}
 
         events = self.events.filter(start_time__date__gt=last_too_early_day)
+        if exclude_event:
+            events = events.exclude(pk=exclude_event.pk)
         day_event_map = defaultdict(set)
 
         for event in events:

@@ -2,14 +2,7 @@ import factory
 import factory.fuzzy
 from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from factory.random import randgen
-from munigeo.models import (
-    Address,
-    AdministrativeDivision,
-    AdministrativeDivisionGeometry,
-    AdministrativeDivisionType,
-    Municipality,
-    Street,
-)
+from munigeo.models import Address, Municipality, Street
 
 from .models import ContractZone
 
@@ -27,50 +20,6 @@ class ContractZoneFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = ContractZone
-
-
-class AdministrativeDivisionTypeFactory(factory.django.DjangoModelFactory):
-    type = factory.Faker("word")
-    name = factory.Faker("bs")
-
-    class Meta:
-        model = AdministrativeDivisionType
-        django_get_or_create = ("type",)
-
-
-class AdministrativeDivisionGeometryFactory(factory.django.DjangoModelFactory):
-    boundary = factory.Sequence(
-        lambda n: MultiPolygon(
-            Polygon(
-                ((24 + n, 60), (25 + n, 60), (25 + n, 61), (24 + n, 61), (24 + n, 60))
-            )
-        )
-    )
-
-    class Meta:
-        model = AdministrativeDivisionGeometry
-
-
-class NeighborhoodFactory(factory.django.DjangoModelFactory):
-    name = factory.Faker("street_name")
-    type = factory.SubFactory(AdministrativeDivisionTypeFactory, type="neighborhood")
-    origin_id = factory.Sequence(lambda n: str(n + 10))
-    ocd_id = factory.Faker("uri_path", deep=4)
-    geometry = factory.RelatedFactory(AdministrativeDivisionGeometryFactory, "division")
-
-    class Meta:
-        model = AdministrativeDivision
-
-
-class SubDistrictFactory(factory.django.DjangoModelFactory):
-    name = factory.Faker("street_name")
-    type = factory.SubFactory(AdministrativeDivisionTypeFactory, type="sub_district")
-    origin_id = factory.Sequence(lambda n: str(n + 100))
-    ocd_id = factory.Faker("uri_path", deep=4)
-    geometry = factory.RelatedFactory(AdministrativeDivisionGeometryFactory, "division")
-
-    class Meta:
-        model = AdministrativeDivision
 
 
 # Because of a bug in django-munigeo v0.3.2 we cannot use Django's get_or_create() for models that

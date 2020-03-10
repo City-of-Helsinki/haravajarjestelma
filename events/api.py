@@ -41,7 +41,9 @@ class EventSerializer(UTCModelSerializer):
             if start_time or end_time:
                 start_date = localtime(start_time or self.instance.start_time).date()
                 end_date = localtime(end_time or self.instance.end_time).date()
-                zone_unavailable_dates = data["contract_zone"].get_unavailable_dates()
+                zone_unavailable_dates = data["contract_zone"].get_unavailable_dates(
+                    exclude_event=self.instance
+                )
                 unavailable_dates = set(date_range(start_date, end_date)) & set(
                     zone_unavailable_dates
                 )

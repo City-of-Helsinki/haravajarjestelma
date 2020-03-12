@@ -37,7 +37,7 @@ class Event(models.Model):
     modified_at = models.DateTimeField(verbose_name=_("modified at"), auto_now=True)
 
     name = models.CharField(verbose_name=_("name"), max_length=255)
-    description = models.TextField(verbose_name=_("description"))
+    description = models.TextField(verbose_name=_("description"), blank=True)
     start_time = models.DateTimeField(verbose_name=_("start time"))
     end_time = models.DateTimeField(verbose_name=_("end time"))
     location = models.PointField(verbose_name=_("location"), srid=settings.DEFAULT_SRID)

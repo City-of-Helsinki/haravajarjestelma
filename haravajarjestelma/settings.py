@@ -31,7 +31,7 @@ env = environ.Env(
         "postgis://haravajarjestelma:haravajarjestelma@localhost/haravajarjestelma",
     ),
     CACHE_URL=(str, "locmemcache://"),
-    DEFAULT_FROM_EMAIL=(str, ""),
+    DEFAULT_FROM_EMAIL=(str, "haravajarjestelma@example.com"),
     MAILER_EMAIL_BACKEND=(str, "django.core.mail.backends.console.EmailBackend"),
     MAIL_MAILGUN_KEY=(str, ""),
     MAIL_MAILGUN_DOMAIN=(str, ""),

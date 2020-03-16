@@ -3,7 +3,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from django.utils.timezone import localtime
+from django.utils.timezone import localtime, now
 
 from common.utils import get_today, is_vacation_day, ONE_DAY
 from events.models import Event
@@ -19,12 +19,12 @@ class Command(BaseCommand):
         logger.info("Sending event reminder notifications (if needed)")
         today = get_today()
 
-        for event in Event.objects.filter(reminder_sent_at=None):
+        for event in Event.objects.filter(start_time__gt=now(), reminder_sent_at=None):
             reminder_day = localtime(event.start_time).date() - timedelta(
                 days=settings.EVENT_REMINDER_DAYS_IN_ADVANCE
             )
             while is_vacation_day(reminder_day):
                 reminder_day -= ONE_DAY
 
-            if today >= reminder_day:
+            if today == reminder_day:
                 send_event_reminder_notification(event)

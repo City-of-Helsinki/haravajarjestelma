@@ -41,7 +41,6 @@ env = environ.Env(
     SENTRY_ENVIRONMENT=(str, ""),
     CORS_ORIGIN_WHITELIST=(list, []),
     CORS_ORIGIN_ALLOW_ALL=(bool, False),
-    NOTIFICATIONS_ENABLED=(bool, False),
     TOKEN_AUTH_ACCEPTED_AUDIENCE=(str, "https://api.hel.fi/auth/puistotalkoot"),
     TOKEN_AUTH_ACCEPTED_SCOPE_PREFIX=(str, ""),
     TOKEN_AUTH_AUTHSERVER_URL=(str, ""),

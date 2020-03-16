@@ -36,6 +36,7 @@ env = environ.Env(
     MAIL_MAILGUN_KEY=(str, ""),
     MAIL_MAILGUN_DOMAIN=(str, ""),
     MAIL_MAILGUN_API=(str, ""),
+    MAIL_SENDGRID_KEY=(str, ""),
     SENTRY_DSN=(str, ""),
     SENTRY_ENVIRONMENT=(str, ""),
     CORS_ORIGIN_WHITELIST=(list, []),
@@ -73,14 +74,18 @@ CACHES = {"default": env.cache()}
 
 if env.str("DEFAULT_FROM_EMAIL"):
     DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL")
-if env("MAIL_MAILGUN_KEY"):
+
+EMAIL_BACKEND = "mailer.backend.DbBackend"
+MAILER_EMAIL_BACKEND = env.str("MAILER_EMAIL_BACKEND")
+
+if MAILER_EMAIL_BACKEND == "anymail.backends.mailgun.EmailBackend":
     ANYMAIL = {
         "MAILGUN_API_KEY": env("MAIL_MAILGUN_KEY"),
         "MAILGUN_SENDER_DOMAIN": env("MAIL_MAILGUN_DOMAIN"),
         "MAILGUN_API_URL": env("MAIL_MAILGUN_API"),
     }
-EMAIL_BACKEND = "mailer.backend.DbBackend"
-MAILER_EMAIL_BACKEND = env.str("MAILER_EMAIL_BACKEND")
+elif MAILER_EMAIL_BACKEND == "anymail.backends.sendgrid.EmailBackend":
+    ANYMAIL = {"SENDGRID_API_KEY": env.str("MAIL_SENDGRID_KEY")}
 
 try:
     version = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"]).strip()

@@ -76,6 +76,14 @@ The project is now running at [localhost:8085](http://localhost:8085)
 
 In order to get reminder notifications of upcoming events sent to contractors, `./manage.py send_event_reminder_notifications` needs to be run periodically, preferably daily.
 
+### Settings
+
+The following settings can be used to configure the application either using environment variables or `local_settings.py`:
+
+* `EXCLUDED_CONTRACT_ZONES`: List of names of contract zones that should not be imported. Default `[]`.
+
+  Example env: `EXCLUDED_CONTRACT_ZONES=Itä-Helsingin kartanopihat,Suomenlinna`
+
 ## Code format
 
 This project uses [`black`](https://github.com/ambv/black) for Python code formatting.

@@ -85,7 +85,7 @@ class GeoQueryViewSet(viewsets.ViewSet):
             srid=settings.DEFAULT_SRID,
         )
         address = self.get_closest_address(point)
-        contract_zone = ContractZone.objects.filter(boundary__covers=point).first()
+        contract_zone = ContractZone.objects.get_active_by_location(point)
 
         data = {
             "closest_address": AddressSerializer(address).data if address else None,

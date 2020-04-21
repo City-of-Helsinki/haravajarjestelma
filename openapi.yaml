@@ -1,0 +1,984 @@
+openapi: 3.0.2
+info:
+  title: Haravajärjestelmä
+  version: '1.0'
+  description: Helsinki Park volunteer activities (Puistotalkoot) API
+security:
+  - JWTAuth: []
+servers:
+  - url: 'https://puistotalkoot-api.prod.kuva.hel.ninja'
+    description: Production
+  - url: 'https://puistotalkoot-api.test.kuva.hel.ninja'
+    description: Test
+paths:
+  /v1/event/:
+    get:
+      operationId: listEvents
+      description: ''
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: contract_zone
+        required: false
+        in: query
+        description: contract_zone
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                          readOnly: true
+                        state:
+                          enum:
+                          - waiting_for_approval
+                          - approved
+                          readOnly: true
+                        created_at:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                        modified_at:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                        name:
+                          type: string
+                          maxLength: 255
+                        description:
+                          type: string
+                        start_time:
+                          type: string
+                          format: date-time
+                        end_time:
+                          type: string
+                          format: date-time
+                        location:
+                          type: string
+                        organizer_first_name:
+                          type: string
+                          maxLength: 100
+                        organizer_last_name:
+                          type: string
+                          maxLength: 100
+                        organizer_email:
+                          type: string
+                          format: email
+                          maxLength: 254
+                        organizer_phone:
+                          type: string
+                          maxLength: 50
+                        estimated_attendee_count:
+                          type: integer
+                          maximum: 2147483647
+                          minimum: 0
+                        targets:
+                          type: string
+                        maintenance_location:
+                          type: string
+                        additional_information:
+                          type: string
+                        small_trash_bag_count:
+                          type: integer
+                          maximum: 2147483647
+                          minimum: 0
+                        large_trash_bag_count:
+                          type: integer
+                          maximum: 2147483647
+                          minimum: 0
+                        trash_picker_count:
+                          type: integer
+                          maximum: 2147483647
+                          minimum: 0
+                        equipment_information:
+                          type: string
+                        contract_zone:
+                          type: string
+                          readOnly: true
+                      required:
+                      - name
+                      - start_time
+                      - end_time
+                      - location
+                      - organizer_first_name
+                      - organizer_last_name
+                      - organizer_email
+                      - organizer_phone
+                      - estimated_attendee_count
+                      - targets
+                      - maintenance_location
+                      - small_trash_bag_count
+                      - large_trash_bag_count
+                      - trash_picker_count
+          description: ''
+    post:
+      operationId: createEvent
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id001
+              properties:
+                name:
+                  type: string
+                  maxLength: 255
+                description:
+                  type: string
+                start_time:
+                  type: string
+                  format: date-time
+                end_time:
+                  type: string
+                  format: date-time
+                location:
+                  type: string
+                organizer_first_name:
+                  type: string
+                  maxLength: 100
+                organizer_last_name:
+                  type: string
+                  maxLength: 100
+                organizer_email:
+                  type: string
+                  format: email
+                  maxLength: 254
+                organizer_phone:
+                  type: string
+                  maxLength: 50
+                estimated_attendee_count:
+                  type: integer
+                  maximum: 2147483647
+                  minimum: 0
+                targets:
+                  type: string
+                maintenance_location:
+                  type: string
+                additional_information:
+                  type: string
+                small_trash_bag_count:
+                  type: integer
+                  maximum: 2147483647
+                  minimum: 0
+                large_trash_bag_count:
+                  type: integer
+                  maximum: 2147483647
+                  minimum: 0
+                trash_picker_count:
+                  type: integer
+                  maximum: 2147483647
+                  minimum: 0
+                equipment_information:
+                  type: string
+              required:
+              - name
+              - start_time
+              - end_time
+              - location
+              - organizer_first_name
+              - organizer_last_name
+              - organizer_email
+              - organizer_phone
+              - estimated_attendee_count
+              - targets
+              - maintenance_location
+              - small_trash_bag_count
+              - large_trash_bag_count
+              - trash_picker_count
+          application/x-www-form-urlencoded:
+            schema: *id001
+          multipart/form-data:
+            schema: *id001
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  state:
+                    enum:
+                    - waiting_for_approval
+                    - approved
+                    readOnly: true
+                  created_at:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified_at:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  name:
+                    type: string
+                    maxLength: 255
+                  description:
+                    type: string
+                  start_time:
+                    type: string
+                    format: date-time
+                  end_time:
+                    type: string
+                    format: date-time
+                  location:
+                    type: string
+                  organizer_first_name:
+                    type: string
+                    maxLength: 100
+                  organizer_last_name:
+                    type: string
+                    maxLength: 100
+                  organizer_email:
+                    type: string
+                    format: email
+                    maxLength: 254
+                  organizer_phone:
+                    type: string
+                    maxLength: 50
+                  estimated_attendee_count:
+                    type: integer
+                    maximum: 2147483647
+                    minimum: 0
+                  targets:
+                    type: string
+                  maintenance_location:
+                    type: string
+                  additional_information:
+                    type: string
+                  small_trash_bag_count:
+                    type: integer
+                    maximum: 2147483647
+                    minimum: 0
+                  large_trash_bag_count:
+                    type: integer
+                    maximum: 2147483647
+                    minimum: 0
+                  trash_picker_count:
+                    type: integer
+                    maximum: 2147483647
+                    minimum: 0
+                  equipment_information:
+                    type: string
+                  contract_zone:
+                    type: string
+                    readOnly: true
+                required:
+                - name
+                - start_time
+                - end_time
+                - location
+                - organizer_first_name
+                - organizer_last_name
+                - organizer_email
+                - organizer_phone
+                - estimated_attendee_count
+                - targets
+                - maintenance_location
+                - small_trash_bag_count
+                - large_trash_bag_count
+                - trash_picker_count
+          description: ''
+  /v1/event/{id}/:
+    get:
+      operationId: retrieveEvent
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this event.
+        schema:
+          type: string
+      - name: contract_zone
+        required: false
+        in: query
+        description: contract_zone
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  state:
+                    enum:
+                    - waiting_for_approval
+                    - approved
+                    readOnly: true
+                  created_at:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified_at:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  name:
+                    type: string
+                    maxLength: 255
+                  description:
+                    type: string
+                  start_time:
+                    type: string
+                    format: date-time
+                  end_time:
+                    type: string
+                    format: date-time
+                  location:
+                    type: string
+                  organizer_first_name:
+                    type: string
+                    maxLength: 100
+                  organizer_last_name:
+                    type: string
+                    maxLength: 100
+                  organizer_email:
+                    type: string
+                    format: email
+                    maxLength: 254
+                  organizer_phone:
+                    type: string
+                    maxLength: 50
+                  estimated_attendee_count:
+                    type: integer
+                    maximum: 2147483647
+                    minimum: 0
+                  targets:
+                    type: string
+                  maintenance_location:
+                    type: string
+                  additional_information:
+                    type: string
+                  small_trash_bag_count:
+                    type: integer
+                    maximum: 2147483647
+                    minimum: 0
+                  large_trash_bag_count:
+                    type: integer
+                    maximum: 2147483647
+                    minimum: 0
+                  trash_picker_count:
+                    type: integer
+                    maximum: 2147483647
+                    minimum: 0
+                  equipment_information:
+                    type: string
+                  contract_zone:
+                    type: string
+                    readOnly: true
+                required:
+                - name
+                - start_time
+                - end_time
+                - location
+                - organizer_first_name
+                - organizer_last_name
+                - organizer_email
+                - organizer_phone
+                - estimated_attendee_count
+                - targets
+                - maintenance_location
+                - small_trash_bag_count
+                - large_trash_bag_count
+                - trash_picker_count
+          description: ''
+    put:
+      operationId: updateEvent
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this event.
+        schema:
+          type: string
+      - name: contract_zone
+        required: false
+        in: query
+        description: contract_zone
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id002
+              properties:
+                name:
+                  type: string
+                  maxLength: 255
+                description:
+                  type: string
+                start_time:
+                  type: string
+                  format: date-time
+                end_time:
+                  type: string
+                  format: date-time
+                location:
+                  type: string
+                organizer_first_name:
+                  type: string
+                  maxLength: 100
+                organizer_last_name:
+                  type: string
+                  maxLength: 100
+                organizer_email:
+                  type: string
+                  format: email
+                  maxLength: 254
+                organizer_phone:
+                  type: string
+                  maxLength: 50
+                estimated_attendee_count:
+                  type: integer
+                  maximum: 2147483647
+                  minimum: 0
+                targets:
+                  type: string
+                maintenance_location:
+                  type: string
+                additional_information:
+                  type: string
+                small_trash_bag_count:
+                  type: integer
+                  maximum: 2147483647
+                  minimum: 0
+                large_trash_bag_count:
+                  type: integer
+                  maximum: 2147483647
+                  minimum: 0
+                trash_picker_count:
+                  type: integer
+                  maximum: 2147483647
+                  minimum: 0
+                equipment_information:
+                  type: string
+              required:
+              - name
+              - start_time
+              - end_time
+              - location
+              - organizer_first_name
+              - organizer_last_name
+              - organizer_email
+              - organizer_phone
+              - estimated_attendee_count
+              - targets
+              - maintenance_location
+              - small_trash_bag_count
+              - large_trash_bag_count
+              - trash_picker_count
+          application/x-www-form-urlencoded:
+            schema: *id002
+          multipart/form-data:
+            schema: *id002
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  state:
+                    enum:
+                    - waiting_for_approval
+                    - approved
+                    readOnly: true
+                  created_at:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified_at:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  name:
+                    type: string
+                    maxLength: 255
+                  description:
+                    type: string
+                  start_time:
+                    type: string
+                    format: date-time
+                  end_time:
+                    type: string
+                    format: date-time
+                  location:
+                    type: string
+                  organizer_first_name:
+                    type: string
+                    maxLength: 100
+                  organizer_last_name:
+                    type: string
+                    maxLength: 100
+                  organizer_email:
+                    type: string
+                    format: email
+                    maxLength: 254
+                  organizer_phone:
+                    type: string
+                    maxLength: 50
+                  estimated_attendee_count:
+                    type: integer
+                    maximum: 2147483647
+                    minimum: 0
+                  targets:
+                    type: string
+                  maintenance_location:
+                    type: string
+                  additional_information:
+                    type: string
+                  small_trash_bag_count:
+                    type: integer
+                    maximum: 2147483647
+                    minimum: 0
+                  large_trash_bag_count:
+                    type: integer
+                    maximum: 2147483647
+                    minimum: 0
+                  trash_picker_count:
+                    type: integer
+                    maximum: 2147483647
+                    minimum: 0
+                  equipment_information:
+                    type: string
+                  contract_zone:
+                    type: string
+                    readOnly: true
+                required:
+                - name
+                - start_time
+                - end_time
+                - location
+                - organizer_first_name
+                - organizer_last_name
+                - organizer_email
+                - organizer_phone
+                - estimated_attendee_count
+                - targets
+                - maintenance_location
+                - small_trash_bag_count
+                - large_trash_bag_count
+                - trash_picker_count
+          description: ''
+    patch:
+      operationId: partial_updateEvent
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this event.
+        schema:
+          type: string
+      - name: contract_zone
+        required: false
+        in: query
+        description: contract_zone
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id003
+              properties:
+                name:
+                  type: string
+                  maxLength: 255
+                description:
+                  type: string
+                start_time:
+                  type: string
+                  format: date-time
+                end_time:
+                  type: string
+                  format: date-time
+                location:
+                  type: string
+                organizer_first_name:
+                  type: string
+                  maxLength: 100
+                organizer_last_name:
+                  type: string
+                  maxLength: 100
+                organizer_email:
+                  type: string
+                  format: email
+                  maxLength: 254
+                organizer_phone:
+                  type: string
+                  maxLength: 50
+                estimated_attendee_count:
+                  type: integer
+                  maximum: 2147483647
+                  minimum: 0
+                targets:
+                  type: string
+                maintenance_location:
+                  type: string
+                additional_information:
+                  type: string
+                small_trash_bag_count:
+                  type: integer
+                  maximum: 2147483647
+                  minimum: 0
+                large_trash_bag_count:
+                  type: integer
+                  maximum: 2147483647
+                  minimum: 0
+                trash_picker_count:
+                  type: integer
+                  maximum: 2147483647
+                  minimum: 0
+                equipment_information:
+                  type: string
+          application/x-www-form-urlencoded:
+            schema: *id003
+          multipart/form-data:
+            schema: *id003
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  state:
+                    enum:
+                    - waiting_for_approval
+                    - approved
+                    readOnly: true
+                  created_at:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  modified_at:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  name:
+                    type: string
+                    maxLength: 255
+                  description:
+                    type: string
+                  start_time:
+                    type: string
+                    format: date-time
+                  end_time:
+                    type: string
+                    format: date-time
+                  location:
+                    type: string
+                  organizer_first_name:
+                    type: string
+                    maxLength: 100
+                  organizer_last_name:
+                    type: string
+                    maxLength: 100
+                  organizer_email:
+                    type: string
+                    format: email
+                    maxLength: 254
+                  organizer_phone:
+                    type: string
+                    maxLength: 50
+                  estimated_attendee_count:
+                    type: integer
+                    maximum: 2147483647
+                    minimum: 0
+                  targets:
+                    type: string
+                  maintenance_location:
+                    type: string
+                  additional_information:
+                    type: string
+                  small_trash_bag_count:
+                    type: integer
+                    maximum: 2147483647
+                    minimum: 0
+                  large_trash_bag_count:
+                    type: integer
+                    maximum: 2147483647
+                    minimum: 0
+                  trash_picker_count:
+                    type: integer
+                    maximum: 2147483647
+                    minimum: 0
+                  equipment_information:
+                    type: string
+                  contract_zone:
+                    type: string
+                    readOnly: true
+                required:
+                - name
+                - start_time
+                - end_time
+                - location
+                - organizer_first_name
+                - organizer_last_name
+                - organizer_email
+                - organizer_phone
+                - estimated_attendee_count
+                - targets
+                - maintenance_location
+                - small_trash_bag_count
+                - large_trash_bag_count
+                - trash_picker_count
+          description: ''
+    delete:
+      operationId: destroyEvent
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this event.
+        schema:
+          type: string
+      - name: contract_zone
+        required: false
+        in: query
+        description: contract_zone
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /v1/geo_query/:
+    get:
+      description: Fetch information of geolocation
+      parameters:
+        - name: lon
+          in: query
+          schema:
+            type: string
+          example: '24.937788590323184'
+        - name: lat
+          in: query
+          schema:
+            type: string
+          example: '60.171071435439295'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  contract_zone:
+                    type: object
+                    properties:
+                      unavailable_dates:
+                        type: array
+                        items:
+                          type: string
+                      name:
+                        type: string
+                      active:
+                        type: boolean
+                      id:
+                        type: integer
+                  closest_address:
+                    type: object
+                    properties:
+                      number:
+                        type: string
+                      number_end:
+                        type: string
+                      distance:
+                        type: number
+                      street:
+                        type: object
+                        properties:
+                          name:
+                            type: object
+                            properties:
+                              sv:
+                                type: string
+                              fi:
+                                type: string
+                      letter:
+                        type: string
+                      location:
+                        type: object
+                        properties:
+                          coordinates:
+                            type: array
+                            items:
+                              type: number
+                          type:
+                            type: string
+              examples:
+                '0':
+                  value: >-
+                    {"closest_address":{"street":{"name":{"sv":"Postgatan","fi":"Postikatu"}},"distance":24.09049143,"number":"1","number_end":"","letter":"","location":{"type":"Point","coordinates":[24.938211081496277,60.17112410090096]}},"contract_zone":{"id":1,"name":"Hoito
+                    1:
+                    Keskusta","active":true,"unavailable_dates":["2020-04-21","2020-04-22","2020-04-23","2020-04-24","2020-04-25","2020-04-26","2020-04-27","2020-04-28"]}}
+  /v1/user/{uuid}/:
+    get:
+      operationId: retrieveUser
+      description: ''
+      parameters:
+      - name: uuid
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                  first_name:
+                    type: string
+                    maxLength: 30
+                  last_name:
+                    type: string
+                    maxLength: 150
+                  is_official:
+                    type: boolean
+                  is_contractor:
+                    type: string
+                    readOnly: true
+                required:
+                - uuid
+          description: ''
+  /v1/contract_zone/:
+    get:
+      operationId: listContractZones
+      description: ''
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: stats_year
+        required: false
+        in: query
+        description: stats_year
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                          readOnly: true
+                        name:
+                          type: string
+                          maxLength: 255
+                        active:
+                          type: boolean
+                      required:
+                      - name
+          description: ''
+  /v1/contract_zone/{id}/:
+    get:
+      operationId: retrieveContractZone
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this contract zone.
+        schema:
+          type: string
+      - name: stats_year
+        required: false
+        in: query
+        description: stats_year
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  name:
+                    type: string
+                    maxLength: 255
+                  active:
+                    type: boolean
+                required:
+                - name
+          description: ''
+components:
+  securitySchemes:
+    # TODO this isn't completely correct as this means "Authorization: Bearer <JWT token>" instead of the actual "Authorization: JWT <JWT token>"
+    JWTAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

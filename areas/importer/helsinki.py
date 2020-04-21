@@ -6,6 +6,7 @@ from django.contrib.gis.gdal import DataSource
 from django.db import transaction
 
 from areas.models import ContractZone
+from haravajarjestelma.settings import EXCLUDED_CONTRACT_ZONES
 
 from .utils import ModelSyncher
 
@@ -22,13 +23,22 @@ class HelsinkiImporter:
         logger.info("Helsinki contract zone import done!")
 
     def _fetch_contract_zones(self):
+        contract_zone_filter_str = (
+            ' AND "nimi" NOT IN ({})'.format(
+                ",".join(("'{}'".format(cz) for cz in EXCLUDED_CONTRACT_ZONES))
+            )
+            if EXCLUDED_CONTRACT_ZONES
+            else ""
+        )
         query_params = {
             "SERVICE": "WFS",
             "VERSION": "2.0.0",
             "REQUEST": "GetFeature",
             "TYPENAME": "Vastuualue_rya_urakkarajat",
             "SRSNAME": "EPSG:{}".format(settings.DEFAULT_SRID),
-            "cql_filter": "tehtavakokonaisuus='PUISTO' and status='voimassa'",
+            "cql_filter": "tehtavakokonaisuus='PUISTO' AND status='voimassa'{}".format(
+                contract_zone_filter_str
+            ),
             "outputFormat": "application/json",
         }
         wfs_url = "{}?{}".format(

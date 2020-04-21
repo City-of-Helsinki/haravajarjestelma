@@ -76,6 +76,22 @@ The project is now running at [localhost:8085](http://localhost:8085)
 
 In order to get reminder notifications of upcoming events sent to contractors, `./manage.py send_event_reminder_notifications` needs to be run periodically, preferably daily.
 
+### Settings
+
+The following settings can be used to configure the application either using environment variables or `local_settings.py`:
+
+* `EXCLUDED_CONTRACT_ZONES`: List of names of contract zones that should not be imported. Default `[]`.
+
+  Example env: `EXCLUDED_CONTRACT_ZONES=Itä-Helsingin kartanopihat,Suomenlinna`
+
+* `EVENT_MINIMUM_DAYS_BEFORE_START`: Minimum amount of days an event needs to be created in advance before it's start. Default `7`.
+
+* `EVENT_MAXIMUM_COUNT_PER_CONTRACT_ZONE`: Maximum amount of events there can be on one day per contract zone. Default: `3`.
+
+* `EVENT_REMINDER_DAYS_IN_ADVANCE`: Number of days event reminders to contractors are sent in advance. Default `2`.
+
+* `HELSINKI_WFS_BASE_URL`: Base URL of Helsinki WFS API that is used as the source for contract zones. Default `https://kartta.hel.fi/ws/geoserver/avoindata/wfs`.
+
 ## Code format
 
 This project uses [`black`](https://github.com/ambv/black) for Python code formatting.
@@ -83,3 +99,7 @@ We follow the basic config, without any modifications. Basic `black` commands:
 
 * To let `black` do its magic: `black .`
 * To see which files `black` would change: `black --check .`
+
+## API documentation
+
+OpenAPI 3 definition of the API can be found [here](openapi.yaml).

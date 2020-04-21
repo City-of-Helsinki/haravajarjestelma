@@ -84,6 +84,14 @@ The following settings can be used to configure the application either using env
 
   Example env: `EXCLUDED_CONTRACT_ZONES=Itä-Helsingin kartanopihat,Suomenlinna`
 
+* `EVENT_MINIMUM_DAYS_BEFORE_START`: Minimum amount of days an event needs to be created in advance before it's start. Default `7`.
+
+* `EVENT_MAXIMUM_COUNT_PER_CONTRACT_ZONE`: Maximum amount of events there can be on one day per contract zone. Default: `3`.
+
+* `EVENT_REMINDER_DAYS_IN_ADVANCE`: Number of days event reminders to contractors are sent in advance. Default `2`.
+
+* `HELSINKI_WFS_BASE_URL`: Base URL of Helsinki WFS API that is used as the source for contract zones. Default `https://kartta.hel.fi/ws/geoserver/avoindata/wfs`.
+
 ## Code format
 
 This project uses [`black`](https://github.com/ambv/black) for Python code formatting.

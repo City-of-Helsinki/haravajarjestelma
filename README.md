@@ -99,3 +99,7 @@ We follow the basic config, without any modifications. Basic `black` commands:
 
 * To let `black` do its magic: `black .`
 * To see which files `black` would change: `black --check .`
+
+## API documentation
+
+OpenAPI 3 definition of the API can be found [here](openapi.yaml).

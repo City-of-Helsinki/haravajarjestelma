@@ -205,6 +205,7 @@ REST_FRAMEWORK = {
 }
 
 LOG_LEVEL = env("LOG_LEVEL")
+LOG_LEVEL = "DEBUG"
 
 LOGGING = {
     "version": 1,

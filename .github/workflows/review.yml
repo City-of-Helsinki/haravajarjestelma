@@ -58,9 +58,10 @@ jobs:
           kubeconfig_raw: ${{ env.KUBECONFIG_RAW}}
           target_namespace: ${{ env.K8S_NAMESPACE }}
           single_run: true
-          secret_name: "-secret"
-          command: "{/bin/sh}"
-          args: "{-c,cd /app && python manage.py geo_import --municipalities finland && python manage.py geo_import --addresses helsinki}"
+          secret_name: "-secret" # When this starts with "-", it's though as suffix of secret in dynamic lookup
+          schedule: '*/5 * * * *' # once per 5 minutes. Ignored when single_run=true
+          command: "{/bin/sh}" # Quite often command is this. Note brackets as this go to Helm.
+          args: "{-c,cd /app && echo Piupau}" # Note brackets as this go to Helm
           limit_memory: 4096Mi
           max_duration: 900 # 15min
 

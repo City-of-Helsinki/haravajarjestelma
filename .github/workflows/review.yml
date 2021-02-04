@@ -49,7 +49,7 @@ jobs:
           K8S_SECRET_CORS_ORIGIN_ALLOW_ALL: 1
           K8S_SECRET_EXCLUDED_CONTRACT_ZONES: ${{ secrets.EXCLUDED_CONTRACT_ZONES }}
 
-      - name: Deploy municipality and address import cronjob
+      - name: Deploy Cronjob
         uses: City-of-Helsinki/setup-cronjob-action@main
         with:
           image_repository: ghcr.io/city-of-helsinki/${{ github.event.repository.name }} # If using same image than application itsel (normal with e.g. Django)

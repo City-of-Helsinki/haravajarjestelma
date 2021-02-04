@@ -63,7 +63,7 @@ jobs:
           command: "{/bin/sh}" # Quite often command is this. Note brackets as this go to Helm.
           args: "{-c,cd /app && echo Piupau}" # Note brackets as this go to Helm
           limit_memory: 4096Mi
-          max_duration: 900 # 15min
+          max_duration: 900
 
       - name: Deploy contract zone import cronjob
         uses: City-of-Helsinki/setup-cronjob-action@main

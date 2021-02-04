@@ -52,7 +52,7 @@ jobs:
       - name: Deploy municipality and address import cronjob
         uses: City-of-Helsinki/setup-cronjob-action@main
         with:
-          name: municipality-and-address-import-cronjob
+          name: muni
           image_repository: ghcr.io/city-of-helsinki/${{ github.event.repository.name }} # If using same image than application itsel (normal with e.g. Django)
           image_tag:  ${{ github.sha }}
           kubeconfig_raw: ${{ env.KUBECONFIG_RAW}}

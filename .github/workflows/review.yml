@@ -61,29 +61,3 @@ jobs:
           schedule: '*/5 * * * *' # once per 5 minutes. Ignored when single_run=true
           command: "{/bin/sh}" # Quite often command is this. Note brackets as this go to Helm.
           args: "{-c,cd /app && echo Hello}" # Note brackets as this go to Helm
-
-      - name: Deploy contract zone import cronjob
-        uses: City-of-Helsinki/setup-cronjob-action@main
-        with:
-          name: contract-zone-import-cronjob
-          image_repository: ghcr.io/city-of-helsinki/${{ github.event.repository.name }}
-          image_tag:  ${{ github.sha }}
-          kubeconfig_raw: ${{ env.KUBECONFIG_RAW}}
-          target_namespace: ${{ env.K8S_NAMESPACE }}
-          single_run: true
-          secret_name: "-secret"
-          command: "{/bin/sh}"
-          args: "{-c,cd /app && python manage.py import_helsinki_contract_zones}"
-
-      - name: Deploy reminder email cronjob
-        uses: City-of-Helsinki/setup-cronjob-action@main
-        with:
-          name: reminder-email-cronjob
-          image_repository: ghcr.io/city-of-helsinki/${{ github.event.repository.name }}
-          image_tag:  ${{ github.sha }}
-          kubeconfig_raw: ${{ env.KUBECONFIG_RAW}}
-          target_namespace: ${{ env.K8S_NAMESPACE }}
-          single_run: true
-          secret_name: "-secret"
-          command: "{/bin/sh}"
-          args: "{-c,cd /app && python manage.py send_event_reminder_notifications}"

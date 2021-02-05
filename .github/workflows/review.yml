@@ -52,12 +52,12 @@ jobs:
       - name: Deploy Cronjob
         uses: City-of-Helsinki/setup-cronjob-action@main
         with:
-          image_repository: ghcr.io/city-of-helsinki/${{ github.event.repository.name }} # If using same image than application itsel (normal with e.g. Django)
+          image_repository: ghcr.io/city-of-helsinki/${{ github.event.repository.name }}
           image_tag:  ${{ github.sha }}
           kubeconfig_raw: ${{ env.KUBECONFIG_RAW}}
           target_namespace: ${{ env.K8S_NAMESPACE }}
           single_run: true
-          secret_name: "text-cron-review-postgresql" # When this starts with "-", it's though as suffix of secret in dynamic lookup
-          schedule: "*/5 * * * *" # once per 5 minutes. Ignored when single_run=true
-          command: "{/bin/sh}" # Quite often command is this. Note brackets as this go to Helm.
-          args: "{-c,cd /app && echo Hello}" # Note brackets as this go to Helm
+          secret_name: "text-cron-review-postgresql"
+          schedule: "*/5 * * * *"
+          command: "{/bin/sh}"
+          args: "{-c,cd /app && echo Hello}"

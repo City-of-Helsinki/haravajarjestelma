@@ -50,7 +50,7 @@ jobs:
       #     K8S_SECRET_EXCLUDED_CONTRACT_ZONES: ${{ secrets.EXCLUDED_CONTRACT_ZONES }}
 
       - name: Deploy Cronjob
-        uses: City-of-Helsinki/setup-cronjob-action@main
+        uses: City-of-Helsinki/setup-cronjob-action@fix/configuration
         with:
           image_repository: ghcr.io/city-of-helsinki/${{ github.event.repository.name }}
           image_tag:  ${{ github.sha }}

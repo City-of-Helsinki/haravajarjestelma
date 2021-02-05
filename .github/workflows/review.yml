@@ -57,7 +57,7 @@ jobs:
           kubeconfig_raw: ${{ env.KUBECONFIG_RAW}}
           target_namespace: ${{ env.K8S_NAMESPACE }}
           single_run: true
-          secret_name: "-secret" # When this starts with "-", it's though as suffix of secret in dynamic lookup
+          secret_name: "text-cron-review-postgresql" # When this starts with "-", it's though as suffix of secret in dynamic lookup
           schedule: "*/5 * * * *" # once per 5 minutes. Ignored when single_run=true
           command: "{/bin/sh}" # Quite often command is this. Note brackets as this go to Helm.
           args: "{-c,cd /app && echo Hello}" # Note brackets as this go to Helm

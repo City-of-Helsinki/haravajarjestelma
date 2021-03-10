@@ -14,6 +14,10 @@ env:
   DATABASE_USER: user
   DATABASE_PASSWORD: testing-password
   APP_MIGRATE_COMMAND: /app/.prod/on_deploy.sh
+  K8S_REQUEST_CPU: 20m
+  K8S_REQUEST_RAM: 200Mi
+  K8S_LIMIT_CPU: 200m
+  K8S_LIMIT_RAM: 300Mi
 
 jobs:
   build:
@@ -48,3 +52,31 @@ jobs:
           K8S_SECRET_TOKEN_AUTH_AUTHSERVER_URL: "https://tunnistamo.test.kuva.hel.ninja/openid"
           K8S_SECRET_CORS_ORIGIN_ALLOW_ALL: 1
           K8S_SECRET_EXCLUDED_CONTRACT_ZONES: ${{ secrets.EXCLUDED_CONTRACT_ZONES }}
+
+      - name: Deploy municipality and address import cronjob
+        uses: City-of-Helsinki/setup-cronjob-action@main
+        with:
+          name: municipality-and-address-import-cronjob
+          image_repository: ghcr.io/city-of-helsinki/${{ github.event.repository.name }}
+          image_tag:  ${{ github.sha }}
+          kubeconfig_raw: ${{ env.KUBECONFIG_RAW}}
+          target_namespace: ${{ env.K8S_NAMESPACE }}
+          single_run: true
+          secret_name: "-secret"
+          command: "{/bin/sh}"
+          args: "{-c,cd /app && python manage.py geo_import --municipalities finland && python manage.py geo_import --addresses helsinki}"
+          limit_memory: 4096Mi
+          max_duration: 900 # 15min
+
+      - name: Deploy contract zone import cronjob
+        uses: City-of-Helsinki/setup-cronjob-action@main
+        with:
+          name: contract-zone-import-cronjob
+          image_repository: ghcr.io/city-of-helsinki/${{ github.event.repository.name }}
+          image_tag:  ${{ github.sha }}
+          kubeconfig_raw: ${{ env.KUBECONFIG_RAW}}
+          target_namespace: ${{ env.K8S_NAMESPACE }}
+          single_run: true
+          secret_name: "-secret"
+          command: "{/bin/sh}"
+          args: "{-c,cd /app && python manage.py import_helsinki_contract_zones}"

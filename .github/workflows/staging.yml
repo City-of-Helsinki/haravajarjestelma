@@ -14,6 +14,11 @@ env:
   BUILD_ARTIFACT_FOLDER: 'build_artifacts'
   SERVICE_ARTIFACT_FOLDER: 'service_artifacts'
   APP_MIGRATE_COMMAND: /app/.prod/on_deploy.sh
+  K8S_REQUEST_CPU: 20m
+  K8S_REQUEST_RAM: 200Mi
+  K8S_LIMIT_CPU: 200m
+  K8S_LIMIT_RAM: 300Mi
+  K8S_REPLICACOUNT: 2
 
 jobs:
   build:
@@ -54,3 +59,45 @@ jobs:
           K8S_SECRET_DATABASE_DB: ${{ secrets.K8S_SECRET_DATABASE_DB_STAGING }}
           K8S_SECRET_DATABASE_USERNAME: ${{ secrets.K8S_SECRET_DATABASE_USERNAME_STAGING }}
           K8S_SECRET_DATABASE_PASSWORD: ${{ secrets.K8S_SECRET_DATABASE_PASSWORD_STAGING }}
+
+      - name: Deploy municipality and address import cronjob
+        uses: City-of-Helsinki/setup-cronjob-action@main
+        with:
+          name: municipality-and-address-import-cronjob
+          image_repository: ghcr.io/city-of-helsinki/${{ github.event.repository.name }}
+          image_tag:  ${{ github.sha }}
+          kubeconfig_raw: ${{ env.KUBECONFIG_RAW}}
+          target_namespace: ${{ secrets.K8S_NAMESPACE_STAGING }}
+          secret_name: "project-staging-haravajarjestelma-secret"
+          schedule: "0 4 * * *" # daily at 4:00am UTC
+          command: "{/bin/sh}"
+          args: "{-c,cd /app && python manage.py geo_import --municipalities finland && python manage.py geo_import --addresses helsinki}"
+          limit_memory: 4096Mi
+          max_duration: 900 # 15min
+
+      - name: Deploy contract zone import cronjob
+        uses: City-of-Helsinki/setup-cronjob-action@main
+        with:
+          name: contract-zone-import-cronjob
+          image_repository: ghcr.io/city-of-helsinki/${{ github.event.repository.name }}
+          image_tag:  ${{ github.sha }}
+          kubeconfig_raw: ${{ env.KUBECONFIG_RAW}}
+          target_namespace: ${{ secrets.K8S_NAMESPACE_STAGING }}
+          secret_name: "project-staging-haravajarjestelma-secret"
+          schedule: "30 * * * *" # hourly at xx:30
+          command: "{/bin/sh}"
+          args: "{-c,cd /app && python manage.py import_helsinki_contract_zones}"
+
+
+      - name: Deploy reminder email cronjob
+        uses: City-of-Helsinki/setup-cronjob-action@main
+        with:
+          name: reminder-email-cronjob
+          image_repository: ghcr.io/city-of-helsinki/${{ github.event.repository.name }}
+          image_tag:  ${{ github.sha }}
+          kubeconfig_raw: ${{ env.KUBECONFIG_RAW}}
+          target_namespace: ${{ secrets.K8S_NAMESPACE_STAGING }}
+          secret_name: "project-staging-haravajarjestelma-secret"
+          schedule: "0 8 * * *" # daily at 8:00am UTC
+          command: "{/bin/sh}"
+          args: "{-c,cd /app && python manage.py send_event_reminder_notifications}"

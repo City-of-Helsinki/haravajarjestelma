@@ -14,3 +14,4 @@ django-enumfields
 django-ilmoitin
 factory_boy
 sentry-sdk
+drf-oidc-auth<0.11

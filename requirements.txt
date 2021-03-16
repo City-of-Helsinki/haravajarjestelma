@@ -22,7 +22,7 @@ django-parler==1.9.2      # via -r requirements.in, django-ilmoitin, django-muni
 django==2.2.13            # via -r requirements.in, django-anymail, django-cors-headers, django-filter, django-helusers, django-ilmoitin, django-mailer, django-mptt, django-munigeo, drf-oidc-auth
 djangorestframework-gis==0.14  # via -r requirements.in
 djangorestframework==3.10.3  # via -r requirements.in, django-parler-rest, djangorestframework-gis, drf-oidc-auth
-drf-oidc-auth==0.9        # via django-helusers
+drf-oidc-auth==0.10.0     # via -r requirements.in, django-helusers
 ecdsa==0.13.3             # via python-jose
 factory-boy==2.12.0       # via -r requirements.in
 faker==2.0.2              # via factory-boy

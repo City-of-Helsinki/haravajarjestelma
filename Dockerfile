@@ -12,7 +12,6 @@ RUN apt-install.sh \
         libpq-dev \
         build-essential \
         gdal-bin \
-        python-gdal \
         python3-gdal \
     && pip install -U pip \
     && pip install --no-cache-dir -r /app/requirements.txt \

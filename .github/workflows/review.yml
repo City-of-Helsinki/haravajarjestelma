@@ -66,7 +66,7 @@ jobs:
           single_run: true
           secret_name: "-secret"
           command: "{/bin/sh}"
-          args: "{-c,cd /app && python3 manage.py geo_import --municipalities finland && python manage.py geo_import --addresses helsinki}"
+          args: "{-c,cd /app && python3 manage.py geo_import --municipalities finland && python3 manage.py geo_import --addresses helsinki}"
           limit_memory: 4096Mi
           max_duration: 900 # 15min
 

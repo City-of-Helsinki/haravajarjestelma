@@ -81,4 +81,4 @@ jobs:
           single_run: true
           secret_name: "-secret"
           command: "{/bin/sh}"
-          args: "{-c,cd /app && python manage.py import_helsinki_contract_zones}"
+          args: "{-c,cd /app && python3 manage.py import_helsinki_contract_zones}"

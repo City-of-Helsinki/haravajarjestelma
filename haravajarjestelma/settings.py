@@ -33,6 +33,8 @@ env = environ.Env(
     CACHE_URL=(str, "locmemcache://"),
     DEFAULT_FROM_EMAIL=(str, "haravajarjestelma@example.com"),
     MAILER_EMAIL_BACKEND=(str, "django.core.mail.backends.console.EmailBackend"),
+    # None == django-mailer uses internal default
+    MAILER_LOCK_PATH=(str, None),
     MAIL_MAILGUN_KEY=(str, ""),
     MAIL_MAILGUN_DOMAIN=(str, ""),
     MAIL_MAILGUN_API=(str, ""),
@@ -77,6 +79,7 @@ if env.str("DEFAULT_FROM_EMAIL"):
 
 EMAIL_BACKEND = "mailer.backend.DbBackend"
 MAILER_EMAIL_BACKEND = env.str("MAILER_EMAIL_BACKEND")
+MAILER_LOCK_PATH = env("MAILER_LOCK_PATH")
 
 if MAILER_EMAIL_BACKEND == "anymail.backends.mailgun.EmailBackend":
     ANYMAIL = {

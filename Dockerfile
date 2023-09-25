@@ -8,7 +8,7 @@ COPY --chown=appuser:appuser requirements-prod.txt /app/requirements-prod.txt
 
 RUN apt-install.sh \
         git \
-        netcat \
+        netcat-openbsd \
         libpq-dev \
         build-essential \
         gdal-bin \

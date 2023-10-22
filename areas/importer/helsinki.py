@@ -55,9 +55,7 @@ class HelsinkiImporter:
     def _process_contract_zones(self, data_source):
         layer = data_source[0]
         syncher = ModelSyncher(
-            ContractZone.objects.all(),
-            lambda x: x.origin_id,
-            self._deactivate_contract_zone,
+            ContractZone.objects.all(), lambda x: x.name, self._deactivate_contract_zone
         )
 
         for feat in layer:
@@ -81,7 +79,7 @@ class HelsinkiImporter:
                 "active": True,
             }
 
-            contract_zone = syncher.get(data["origin_id"])
+            contract_zone = syncher.get(data["name"])
             if contract_zone:
                 logger.info(
                     "Updating contract zone {} (id {})".format(

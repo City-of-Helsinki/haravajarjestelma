@@ -21,9 +21,7 @@ class ContractZoneQuerySet(models.QuerySet):
 
 
 class ContractZone(models.Model):
-    origin_id = models.CharField(
-        verbose_name=_("origin ID"), max_length=50, unique=True
-    )
+    origin_id = models.CharField(verbose_name=_("origin ID"), max_length=50)
     name = models.CharField(verbose_name=_("name"), max_length=255)
     boundary = models.MultiPolygonField(
         verbose_name=_("boundary"), srid=PROJECTION_SRID

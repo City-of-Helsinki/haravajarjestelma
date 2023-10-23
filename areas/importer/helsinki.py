@@ -14,11 +14,11 @@ logger = logging.getLogger(__name__)
 
 
 class HelsinkiImporter:
-    def import_contract_zones(self):
+    def import_contract_zones(self, force=False):
         logger.info("Importing Helsinki contract zones")
 
         data_source = self._fetch_contract_zones()
-        self._process_contract_zones(data_source)
+        self._process_contract_zones(data_source, force)
 
         logger.info("Helsinki contract zone import done!")
 
@@ -52,12 +52,10 @@ class HelsinkiImporter:
         return data_source
 
     @transaction.atomic
-    def _process_contract_zones(self, data_source):
+    def _process_contract_zones(self, data_source, force=False):
         layer = data_source[0]
         syncher = ModelSyncher(
-            ContractZone.objects.all(),
-            lambda x: x.origin_id,
-            self._deactivate_contract_zone,
+            ContractZone.objects.all(), lambda x: x.name, self._deactivate_contract_zone
         )
 
         for feat in layer:
@@ -81,7 +79,7 @@ class HelsinkiImporter:
                 "active": True,
             }
 
-            contract_zone = syncher.get(data["origin_id"])
+            contract_zone = syncher.get(data["name"])
             if contract_zone:
                 logger.info(
                     "Updating contract zone {} (id {})".format(
@@ -101,7 +99,7 @@ class HelsinkiImporter:
             contract_zone.save()
             syncher.mark(contract_zone)
 
-        syncher.finish()
+        syncher.finish(force=force)
 
     @staticmethod
     def _get_attribute_safe(feature, attribute):

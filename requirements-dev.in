@@ -8,3 +8,4 @@ pytest-cov
 pytest-django
 freezegun
 black
+pip-tools

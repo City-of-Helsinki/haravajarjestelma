@@ -71,6 +71,7 @@ ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 DATABASES = {"default": env.db()}
 # Ensure postgis engine
 DATABASES["default"]["ENGINE"] = "django.contrib.gis.db.backends.postgis"
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 CACHES = {"default": env.cache()}
 
@@ -120,8 +121,8 @@ USE_TZ = True
 LOCALE_PATHS = (os.path.join(BASE_DIR, "locale"),)
 
 INSTALLED_APPS = [
-    "helusers",
-    "django.contrib.admin",
+    "helusers.apps.HelusersConfig",
+    "helusers.apps.HelusersAdminConfig",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",

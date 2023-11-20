@@ -2,7 +2,7 @@ import logging
 
 from django.contrib.auth import get_user_model
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django_ilmoitin.registry import notifications
 from django_ilmoitin.utils import send_notification
 from enumfields import Enum

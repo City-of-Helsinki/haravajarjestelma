@@ -4,7 +4,7 @@ from datetime import timedelta
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.utils.timezone import localtime, now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from munigeo.utils import get_default_srid
 
 from common.utils import date_range, is_vacation_day, ONE_DAY

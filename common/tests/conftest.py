@@ -1,6 +1,6 @@
 import factory.random
 import pytest
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from freezegun import freeze_time
 from rest_framework.test import APIClient
 

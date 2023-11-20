@@ -1,7 +1,7 @@
 from django.contrib.admin import register
 from django.contrib.auth import get_user_model
 from django.contrib.gis.admin import OSMGeoAdmin
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from .models import ContractZone
 

@@ -96,7 +96,7 @@ def test_too_early_days_included_in_unavailable_dates(api_client, contract_zone)
     response_data = get(api_client, get_url(60, 24))
     dates = response_data["contract_zone"]["unavailable_dates"]
 
-    return dates == [
+    assert dates == [
         today,
         today + timedelta(days=1),
         today + timedelta(days=2),

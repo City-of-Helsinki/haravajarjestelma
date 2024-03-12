@@ -30,6 +30,7 @@ env = environ.Env(
         str,
         "postgis://haravajarjestelma:haravajarjestelma@localhost/haravajarjestelma",
     ),
+    DATABASE_PASSWORD=(str, ""),
     CACHE_URL=(str, "locmemcache://"),
     DEFAULT_FROM_EMAIL=(str, "haravajarjestelma@example.com"),
     MAILER_EMAIL_BACKEND=(str, "django.core.mail.backends.console.EmailBackend"),
@@ -71,6 +72,9 @@ ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 DATABASES = {"default": env.db()}
 # Ensure postgis engine
 DATABASES["default"]["ENGINE"] = "django.contrib.gis.db.backends.postgis"
+
+if env("DATABASE_PASSWORD"):
+    DATABASES["default"]["PASSWORD"] = env("DATABASE_PASSWORD")
 
 CACHES = {"default": env.cache()}
 

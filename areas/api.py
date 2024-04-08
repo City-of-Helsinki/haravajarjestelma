@@ -89,9 +89,11 @@ class GeoQueryViewSet(viewsets.ViewSet):
 
         data = {
             "closest_address": AddressSerializer(address).data if address else None,
-            "contract_zone": ContractZoneSerializerGeoQueryView(contract_zone).data
-            if contract_zone
-            else None,
+            "contract_zone": (
+                ContractZoneSerializerGeoQueryView(contract_zone).data
+                if contract_zone
+                else None
+            ),
         }
 
         return Response(data)

@@ -1,6 +1,5 @@
 from collections import defaultdict
 from datetime import timedelta
-
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.utils.timezone import localtime, now

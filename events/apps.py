@@ -7,5 +7,5 @@ class EventsConfig(AppConfig):
     verbose_name = _("Events")
 
     def ready(self):
-        import events.receivers  # noqa
         import events.notifications  # noqa
+        import events.receivers  # noqa

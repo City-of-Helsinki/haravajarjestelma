@@ -1,6 +1,5 @@
-from copy import deepcopy
-
 import pytz
+from copy import deepcopy
 from django.db import models
 from rest_framework import serializers
 

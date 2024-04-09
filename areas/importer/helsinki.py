@@ -1,6 +1,5 @@
 import logging
 import urllib
-
 from django.conf import settings
 from django.contrib.gis.gdal import DataSource
 from django.db import transaction

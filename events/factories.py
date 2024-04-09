@@ -1,6 +1,5 @@
-from datetime import timedelta
-
 import factory.fuzzy
+from datetime import timedelta
 from django.contrib.gis.geos import Point
 from django.utils import timezone
 from factory.random import randgen

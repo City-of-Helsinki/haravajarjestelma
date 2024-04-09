@@ -1,6 +1,5 @@
-from datetime import datetime, time, timedelta
-
 import pytest
+from datetime import datetime, time, timedelta
 from django.conf import settings
 from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.utils import timezone

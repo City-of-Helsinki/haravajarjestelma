@@ -1,6 +1,5 @@
-from datetime import date, datetime, timedelta
-
 import pytest
+from datetime import date, datetime, timedelta
 from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.utils.timezone import localtime, make_aware, now
 from freezegun import freeze_time

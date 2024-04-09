@@ -1,8 +1,7 @@
-import os
-import subprocess
-
 import environ
+import os
 import sentry_sdk
+import subprocess
 from django.utils.translation import gettext_lazy as _
 from sentry_sdk.integrations.django import DjangoIntegration
 

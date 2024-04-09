@@ -1,6 +1,5 @@
-from datetime import timedelta
-
 import holidays
+from datetime import timedelta
 from django.core import mail
 from django.utils.timezone import localtime, now
 

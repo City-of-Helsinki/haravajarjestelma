@@ -1,4 +1,3 @@
-version: '3.7'
 services:
     postgres:
         image: postgis/postgis:13-3.2-alpine
@@ -18,7 +17,7 @@ services:
             context: .
             target: development
         env_file:
-            - docker-compose.env.yaml
+            - compose.env
         environment:
             DATABASE_URL: postgres://haravajarjestelma:haravajarjestelma@haravajarjestelma-db/haravajarjestelma
             DATABASE_HOST: haravajarjestelma-db.helsinki

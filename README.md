@@ -4,9 +4,9 @@
 
 ## Development with Docker
 
-1. Copy `docker-compose.env.yaml.example` to `docker-compose.env.yaml` and modify it if needed.
+1. Copy `compose.env.example` to `compose.env` and modify it if needed.
 
-2. Run `docker-compose up`
+2. Run `docker compose up`
 
 3. Import geo data
     * `docker exec -it haravajarjestelma-backend python manage.py geo_import --municipalities finland`

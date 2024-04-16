@@ -4,7 +4,6 @@ FROM helsinkitest/python:3.9-slim as appbase
 RUN mkdir /entrypoint
 
 COPY --chown=appuser:appuser requirements.txt /app/requirements.txt
-COPY --chown=appuser:appuser requirements-prod.txt /app/requirements-prod.txt
 
 RUN apt-install.sh \
         git \
@@ -15,7 +14,6 @@ RUN apt-install.sh \
         python3-gdal \
     && pip install -U pip \
     && pip install --no-cache-dir -r /app/requirements.txt \
-    && pip install --no-cache-dir  -r /app/requirements-prod.txt \
     && apt-cleanup.sh build-essential
 
 COPY --chown=appuser:appuser docker-entrypoint.sh /entrypoint/docker-entrypoint.sh

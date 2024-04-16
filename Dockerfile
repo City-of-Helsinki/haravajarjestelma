@@ -18,6 +18,7 @@ RUN apt-install.sh \
 
 COPY --chown=appuser:appuser docker-entrypoint.sh /entrypoint/docker-entrypoint.sh
 ENTRYPOINT ["/entrypoint/docker-entrypoint.sh"]
+EXPOSE 8000/tcp
 
 # ==============================
 FROM appbase as development
@@ -34,7 +35,6 @@ ENV DEV_SERVER=1
 COPY --chown=appuser:appuser . /app/
 
 USER appuser
-EXPOSE 8085/tcp
 
 # ==============================
 FROM appbase as production
@@ -45,4 +45,3 @@ COPY --chown=appuser:appuser . /app/
 RUN SECRET_KEY="only-used-for-collectstatic" python manage.py collectstatic
 
 USER appuser
-EXPOSE 8000/tcp

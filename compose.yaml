@@ -24,7 +24,7 @@ services:
         volumes:
             - .:/app
         ports:
-            - 8085:8085
+            - 127.0.0.1:8085:8000
         depends_on:
             - postgres
         container_name: haravajarjestelma-backend

@@ -41,9 +41,9 @@ Create user and database
 
     sudo -u postgres createuser -P -R -S haravajarjestelma  # use password `haravajarjestelma`
     sudo -u postgres createdb -O haravajarjestelma haravajarjestelma
-    
+
 Create extensions in the database
-    
+
     sudo -u postgres psql haravajarjestelma -c "CREATE EXTENSION postgis;"
 
 Allow user to create test database
@@ -94,11 +94,30 @@ The following settings can be used to configure the application either using env
 
 ## Code format
 
-This project uses [`black`](https://github.com/ambv/black) for Python code formatting.
-We follow the basic config, without any modifications. Basic `black` commands:
+This project uses
+[`black`](https://github.com/ambv/black),
+[`flake8`](https://gitlab.com/pycqa/flake8) and
+[`isort`](https://github.com/pycqa/isort)
+for code formatting and quality checking. Project follows the basic
+black config, without any modifications.
+
+Basic `black` commands:
 
 * To let `black` do its magic: `black .`
 * To see which files `black` would change: `black --check .`
+
+[`pre-commit`](https://pre-commit.com/) can be used to install and
+run all the formatting tools as git hooks automatically before a
+commit.
+
+## Commit message format
+
+New commit messages must adhere to the [Conventional Commits](https://www.conventionalcommits.org/)
+specification, and line length is limited to 72 characters.
+
+When [`pre-commit`](https://pre-commit.com/) is in use, [`commitlint`](https://github.com/conventional-changelog/commitlint)
+checks new commit messages for the correct format.
+
 
 ## API documentation
 

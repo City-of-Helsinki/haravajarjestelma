@@ -1,7 +1,7 @@
 version: '3.7'
 services:
     postgres:
-        image: helsinkitest/postgis:10-2.5-alpine
+        image: postgis/postgis:13-3.2-alpine
         restart: on-failure
         environment:
             POSTGRES_USER: haravajarjestelma

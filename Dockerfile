@@ -12,7 +12,7 @@ RUN apt-install.sh \
         build-essential \
         gdal-bin \
         python3-gdal \
-    && pip install -U pip \
+    && pip install -U pip setuptools wheel \
     && pip install --no-cache-dir -r /app/requirements.txt \
     && apt-cleanup.sh build-essential
 

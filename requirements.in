@@ -18,3 +18,4 @@ sentry-sdk
 drf-oidc-auth
 uwsgi
 pytz
+requests

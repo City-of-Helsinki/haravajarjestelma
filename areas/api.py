@@ -9,6 +9,7 @@ from parler_rest.serializers import TranslatableModelSerializer
 from rest_framework import serializers, viewsets
 from rest_framework.response import Response
 
+from areas.digitransit import digitransit_address_search
 from areas.models import ContractZone
 from common.api import UTCModelSerializer
 from events.models import Event
@@ -160,3 +161,20 @@ class ContractZoneViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ContractZone.objects.all()
     serializer_class = ContractZoneSerializer
     filterset_class = ContractZoneFilter
+
+
+class AddressSearchParamSerializer(serializers.Serializer):
+    text = serializers.CharField(required=True)
+    language = serializers.ChoiceField(choices=["fi", "sv", "en"], default="fi")
+
+
+class AddressSearchViewSet(viewsets.ViewSet):
+    def list(self, request, format=None):
+        param_serializer = AddressSearchParamSerializer(data=request.query_params)
+        param_serializer.is_valid(raise_exception=True)
+
+        text = param_serializer.data["text"]
+        language = param_serializer.data["language"]
+        data = digitransit_address_search(text, language)
+
+        return Response(data)

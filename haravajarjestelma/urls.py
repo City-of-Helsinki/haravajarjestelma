@@ -3,13 +3,14 @@ from django.http import HttpResponse
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from areas.api import ContractZoneViewSet, GeoQueryViewSet
+from areas.api import AddressSearchViewSet, ContractZoneViewSet, GeoQueryViewSet
 from events.api import EventViewSet
 from users.api import UserViewSet
 
 router = DefaultRouter()
 router.register("event", EventViewSet)
 router.register("geo_query", GeoQueryViewSet, basename="geo_query")
+router.register("address_search", AddressSearchViewSet, basename="address_search")
 router.register("user", UserViewSet)
 router.register("contract_zone", ContractZoneViewSet)
 

@@ -77,8 +77,7 @@ class ContractZoneSerializerGeoQueryView(ContractZoneSerializerBase):
 class GeoQueryViewSet(viewsets.ViewSet):
     def list(self, request, format=None):
         param_serializer = GeoQueryParamSerializer(data=request.query_params)
-        if not param_serializer.is_valid():
-            return Response(param_serializer.errors)
+        param_serializer.is_valid(raise_exception=True)
 
         point = Point(
             param_serializer.validated_data["lon"],

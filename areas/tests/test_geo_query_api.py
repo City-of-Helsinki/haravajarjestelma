@@ -60,7 +60,7 @@ def contract_zone():
 
 
 def test_required_parameters(api_client):
-    response_data = get(api_client, URL)
+    response_data = get(api_client, URL, status_code=400)
     assert all(param in response_data for param in ("lat", "lon"))
 
 

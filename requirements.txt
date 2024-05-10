@@ -159,6 +159,7 @@ pyyaml==6.0.1
     # via django-munigeo
 requests==2.31.0
     # via
+    #   -r requirements.in
     #   django-anymail
     #   django-helusers
     #   django-munigeo

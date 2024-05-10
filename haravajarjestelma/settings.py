@@ -53,6 +53,11 @@ env = environ.Env(
     EVENT_REMINDER_DAYS_IN_ADVANCE=(int, 2),
     HELSINKI_WFS_BASE_URL=(str, "https://kartta.hel.fi/ws/geoserver/avoindata/wfs"),
     EXCLUDED_CONTRACT_ZONES=(list, []),
+    DIGITRANSIT_ADDRESS_SEARCH_URL=(
+        str,
+        "https://api.digitransit.fi/geocoding/v1/search",
+    ),
+    DIGITRANSIT_API_KEY=(str, ""),
     LOG_LEVEL=(str, "INFO"),
 )
 if os.path.exists(env_file):
@@ -191,6 +196,9 @@ EVENT_REMINDER_DAYS_IN_ADVANCE = env("EVENT_REMINDER_DAYS_IN_ADVANCE")
 HELSINKI_WFS_BASE_URL = env("HELSINKI_WFS_BASE_URL")
 
 EXCLUDED_CONTRACT_ZONES = env("EXCLUDED_CONTRACT_ZONES")
+
+DIGITRANSIT_ADDRESS_SEARCH_URL = env("DIGITRANSIT_ADDRESS_SEARCH_URL")
+DIGITRANSIT_API_KEY = env("DIGITRANSIT_API_KEY")
 
 CORS_ORIGIN_WHITELIST = env("CORS_ORIGIN_WHITELIST")
 CORS_ORIGIN_ALLOW_ALL = env("CORS_ORIGIN_ALLOW_ALL")

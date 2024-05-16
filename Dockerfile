@@ -34,6 +34,9 @@ ENV DEV_SERVER=1
 
 COPY --chown=appuser:appuser . /app/
 
+# django-munigeo municipality importer requires this
+RUN mkdir -p /app/data && chgrp -R 0 /app/data && chmod g+w -R /app/data
+
 USER appuser
 
 # ==============================
@@ -41,6 +44,9 @@ FROM appbase as production
 # ==============================
 
 COPY --chown=appuser:appuser . /app/
+
+# django-munigeo municipality importer requires this
+RUN mkdir -p /app/data && chgrp -R 0 /app/data && chmod g+w -R /app/data
 
 RUN SECRET_KEY="only-used-for-collectstatic" python manage.py collectstatic
 

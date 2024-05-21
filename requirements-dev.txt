@@ -89,7 +89,7 @@ pyyaml==6.0.1
     # via
     #   -c requirements.txt
     #   responses
-requests==2.31.0
+requests==2.32.0
     # via
     #   -c requirements.txt
     #   responses

@@ -169,7 +169,7 @@ requests-cache==1.2.0
     # via django-munigeo
 rsa==4.9
     # via python-jose
-sentry-sdk==2.3.0
+sentry-sdk==2.8.0
     # via -r requirements.in
 six==1.16.0
     # via

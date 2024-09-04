@@ -103,9 +103,10 @@ class HelsinkiImporter:
     @staticmethod
     def _get_attribute_safe(feature, attribute):
         try:
-            return str(feature[attribute])
+            value = feature.get(attribute)
         except IndexError:
-            return ""
+            value = None
+        return str(value).strip() if value is not None else ""
 
     @staticmethod
     def _deactivate_contract_zone(contract_zone):

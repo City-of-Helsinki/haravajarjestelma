@@ -2,6 +2,7 @@ import logging
 import urllib
 from django.conf import settings
 from django.contrib.gis.gdal import DataSource
+from django.contrib.gis.gdal.feature import Feature
 from django.db import transaction
 
 from areas.models import ContractZone
@@ -101,7 +102,7 @@ class HelsinkiImporter:
         syncher.finish(force=force)
 
     @staticmethod
-    def _get_attribute_safe(feature, attribute):
+    def _get_attribute_safe(feature: Feature, attribute):
         try:
             value = feature.get(attribute)
         except IndexError:

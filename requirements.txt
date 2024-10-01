@@ -10,25 +10,25 @@ asgiref==3.8.1
     #   django-cors-headers
 asttokens==2.4.1
     # via stack-data
-attrs==23.2.0
+attrs==24.2.0
     # via
     #   cattrs
     #   requests-cache
-authlib==1.3.1
+authlib==1.3.2
     # via drf-oidc-auth
-cachetools==5.3.3
+cachetools==5.5.0
     # via django-helusers
-cattrs==23.2.3
+cattrs==24.1.2
     # via requests-cache
-certifi==2024.2.2
+certifi==2024.8.30
     # via
     #   requests
     #   sentry-sdk
-cffi==1.16.0
+cffi==1.17.1
     # via cryptography
 charset-normalizer==3.3.2
     # via requests
-cryptography==42.0.7
+cryptography==43.0.1
     # via
     #   authlib
     #   drf-oidc-auth
@@ -36,7 +36,7 @@ decorator==5.1.1
     # via ipython
 deprecation==2.1.0
     # via django-helusers
-django==4.2.15
+django==4.2.16
     # via
     #   -r requirements.in
     #   django-anymail
@@ -51,17 +51,19 @@ django==4.2.15
     #   django-parler-rest
     #   djangorestframework
     #   drf-oidc-auth
-django-anymail==10.3
+django-anymail==12.0
     # via django-ilmoitin
-django-cors-headers==4.3.1
+django-cors-headers==4.4.0
     # via -r requirements.in
 django-enumfields==2.1.1
     # via -r requirements.in
 django-environ==0.11.2
     # via -r requirements.in
-django-filter==24.2
-    # via -r requirements.in
-django-helusers==0.12.0
+django-filter==24.3
+    # via
+    #   -r requirements.in
+    #   djangorestframework-gis
+django-helusers==0.13.0
     # via -r requirements.in
 django-ilmoitin==0.7.0
     # via -r requirements.in
@@ -89,25 +91,25 @@ djangorestframework==3.15.2
     #   django-parler-rest
     #   djangorestframework-gis
     #   drf-oidc-auth
-djangorestframework-gis==1.0
+djangorestframework-gis==1.1
     # via -r requirements.in
 drf-oidc-auth==3.0.0
     # via -r requirements.in
 ecdsa==0.19.0
     # via python-jose
-exceptiongroup==1.2.1
+exceptiongroup==1.2.2
     # via
     #   cattrs
     #   ipython
-executing==2.0.1
+executing==2.1.0
     # via stack-data
-factory-boy==3.3.0
+factory-boy==3.3.1
     # via -r requirements.in
-faker==25.2.0
+faker==30.0.0
     # via factory-boy
-holidays==0.49
+holidays==0.57
     # via -r requirements.in
-idna==3.7
+idna==3.10
     # via requests
 ipython==8.18.1
     # via -r requirements.in
@@ -121,25 +123,25 @@ markupsafe==2.1.5
     # via jinja2
 matplotlib-inline==0.1.7
     # via ipython
-packaging==24.0
+packaging==24.1
     # via deprecation
 parso==0.8.4
     # via jedi
 pexpect==4.9.0
     # via ipython
-platformdirs==4.2.2
+platformdirs==4.3.6
     # via requests-cache
-prompt-toolkit==3.0.43
+prompt-toolkit==3.0.48
     # via ipython
-psycopg==3.1.19
+psycopg==3.2.2
     # via -r requirements.in
-psycopg-c==3.1.19
+psycopg-c==3.2.2
     # via psycopg
 ptyprocess==0.7.0
     # via pexpect
-pure-eval==0.2.2
+pure-eval==0.2.3
     # via stack-data
-pyasn1==0.6.0
+pyasn1==0.6.1
     # via
     #   python-jose
     #   rsa
@@ -153,11 +155,11 @@ python-dateutil==2.9.0.post0
     #   holidays
 python-jose==3.3.0
     # via django-helusers
-pytz==2024.1
+pytz==2024.2
     # via -r requirements.in
-pyyaml==6.0.1
+pyyaml==6.0.2
     # via django-munigeo
-requests==2.32.2
+requests==2.32.3
     # via
     #   -r requirements.in
     #   django-anymail
@@ -165,11 +167,11 @@ requests==2.32.2
     #   django-munigeo
     #   drf-oidc-auth
     #   requests-cache
-requests-cache==1.2.0
+requests-cache==1.2.1
     # via django-munigeo
 rsa==4.9
     # via python-jose
-sentry-sdk==2.8.0
+sentry-sdk==2.14.0
     # via -r requirements.in
 six==1.16.0
     # via
@@ -178,7 +180,7 @@ six==1.16.0
     #   ecdsa
     #   python-dateutil
     #   url-normalize
-sqlparse==0.5.0
+sqlparse==0.5.1
     # via django
 stack-data==0.6.3
     # via ipython
@@ -186,7 +188,7 @@ traitlets==5.14.3
     # via
     #   ipython
     #   matplotlib-inline
-typing-extensions==4.11.0
+typing-extensions==4.12.2
     # via
     #   asgiref
     #   cattrs
@@ -194,13 +196,13 @@ typing-extensions==4.11.0
     #   psycopg
 url-normalize==1.4.3
     # via requests-cache
-urllib3==2.2.1
+urllib3==2.2.3
     # via
     #   django-anymail
     #   requests
     #   requests-cache
     #   sentry-sdk
-uwsgi==2.0.25.1
+uwsgi==2.0.27
     # via -r requirements.in
 wcwidth==0.2.13
     # via prompt-toolkit

@@ -11,4 +11,4 @@ jobs:
     secrets: inherit
     with:
       python-version: 3.9
-      database-type: postgis  # postgres / postgis
+      database-type: postgis

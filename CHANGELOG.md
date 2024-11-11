@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.2](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v0.7.1...haravajarjestelma-v0.7.2) (2024-11-11)
+
+
+### Dependencies
+
+* Upgrade python packages ([#159](https://github.com/City-of-Helsinki/haravajarjestelma/issues/159)) ([dd3308d](https://github.com/City-of-Helsinki/haravajarjestelma/commit/dd3308d9af07a893c9aa8c57b789149d4ad9d106))
+
 ## [0.7.1](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v0.7.0...haravajarjestelma-v0.7.1) (2024-09-09)
 
 

@@ -65,7 +65,7 @@ django-filter==24.3
     #   djangorestframework-gis
 django-helusers==0.13.0
     # via -r requirements.in
-django-ilmoitin==0.7.0
+django-ilmoitin==0.7.1
     # via -r requirements.in
 django-js-asset==2.2.0
     # via django-mptt

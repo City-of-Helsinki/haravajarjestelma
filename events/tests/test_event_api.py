@@ -128,12 +128,12 @@ def get_detail_url(event):
     return reverse("v1:event-detail", kwargs={"pk": event.pk})
 
 
-def test_unauthenticated_user_get_list_no_results(event, api_client):
+def test_anonymous_user_get_list_no_results(event, api_client):
     results = get(api_client, LIST_URL)["results"]
     assert len(results) == 0
 
 
-def test_unauthenticated_user_get_detail_404(event, api_client):
+def test_anonymous_user_get_detail_404(event, api_client):
     get(api_client, get_detail_url(event), 404)
 
 
@@ -180,9 +180,7 @@ def test_official_get_detail_check_data(api_client, official, event):
     check_received_event_data(data, event)
 
 
-def test_unauthenticated_user_post_new_event(
-    user_api_client, contract_zone, event_data
-):
+def test_regular_user_post_new_event(user_api_client, contract_zone, event_data):
     post(user_api_client, LIST_URL, event_data)
 
     assert Event.objects.count() == 1
@@ -212,9 +210,7 @@ def test_official_patch_event(official_api_client, event, event_data):
     assert updated_event.state == "approved"
 
 
-def test_unauthenticated_user_cannot_modify_or_delete_event(
-    user_api_client, event, event_data
-):
+def test_regular_user_cannot_modify_or_delete_event(user_api_client, event, event_data):
     url = get_detail_url(event)
 
     put(user_api_client, url, event_data, 404)

@@ -9,6 +9,7 @@ django-munigeo
 django-parler
 django-parler-rest
 django-filter
+helsinki-profile-gdpr-api
 holidays
 django-enumfields
 django-ilmoitin

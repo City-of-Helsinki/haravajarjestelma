@@ -226,9 +226,9 @@ def test_regular_user_cannot_modify_or_delete_event(
     event_data = make_event_data(contract_zone=event.contract_zone)
     url = get_detail_url(event)
 
-    put(user_api_client, url, event_data, 404)
-    patch(user_api_client, url, event_data, 404)
-    delete(user_api_client, url, 404)
+    put(user_api_client, url, event_data, 403)
+    patch(user_api_client, url, event_data, 403)
+    delete(user_api_client, url, 403)
 
 
 def test_contractor_cannot_modify_or_delete_other_than_own_event(
@@ -237,21 +237,21 @@ def test_contractor_cannot_modify_or_delete_other_than_own_event(
     event_data = make_event_data(contract_zone=event.contract_zone)
     url = get_detail_url(event)
 
-    put(contractor_api_client, url, event_data, 404)
-    patch(contractor_api_client, url, event_data, 404)
-    delete(contractor_api_client, url, 404)
+    put(contractor_api_client, url, event_data, 403)
+    patch(contractor_api_client, url, event_data, 403)
+    delete(contractor_api_client, url, 403)
 
 
-def test_contractor_can_modify_and_delete_own_event(
+def test_contractor_cannot_modify_and_delete_own_event(
     contractor_api_client, event, make_event_data
 ):
     event_data = make_event_data(contract_zone=event.contract_zone)
     event.contract_zone.contractor_users.add(contractor_api_client.user)
     url = get_detail_url(event)
 
-    put(contractor_api_client, url, event_data)
-    patch(contractor_api_client, url, event_data)
-    delete(contractor_api_client, url)
+    put(contractor_api_client, url, event_data, 403)
+    patch(contractor_api_client, url, event_data, 403)
+    delete(contractor_api_client, url, 403)
 
 
 def test_official_can_modify_and_delete_event(
@@ -263,6 +263,17 @@ def test_official_can_modify_and_delete_event(
     put(official_api_client, url, event_data)
     patch(official_api_client, url, event_data)
     delete(official_api_client, url)
+
+
+def test_superuser_can_modify_and_delete_event(
+    superuser_api_client, event, make_event_data
+):
+    event_data = make_event_data(contract_zone=event.contract_zone)
+    url = get_detail_url(event)
+
+    put(superuser_api_client, url, event_data)
+    patch(superuser_api_client, url, event_data)
+    delete(superuser_api_client, url)
 
 
 def test_event_must_start_before_ending(settings, user_api_client, make_event_data):

@@ -8,11 +8,13 @@ from users.factories import UserFactory
 
 @pytest.fixture
 def user():
+    """A regular user."""
     return UserFactory()
 
 
 @pytest.fixture
 def contractor():
+    """A regular user that belongs to a contract zone."""
     user = UserFactory()
     contract_zone = ContractZoneFactory()
     contract_zone.contractor_users.add(user)

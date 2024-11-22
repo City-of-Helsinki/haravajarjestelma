@@ -59,6 +59,8 @@ env = environ.Env(
     ),
     DIGITRANSIT_API_KEY=(str, ""),
     LOG_LEVEL=(str, "INFO"),
+    GDPR_API_QUERY_SCOPE=(str, "gdprquery"),
+    GDPR_API_DELETE_SCOPE=(str, "gdprdelete"),
 )
 if os.path.exists(env_file):
     env.read_env(env_file)
@@ -243,3 +245,12 @@ if os.path.exists(local_settings_path):
     with open(local_settings_path) as fp:
         code = compile(fp.read(), local_settings_path, "exec")
     exec(code, globals(), locals())
+
+# GDPR API settings
+GDPR_API_MODEL = "users.User"
+GDPR_API_MODEL_LOOKUP = "uuid"
+GDPR_API_URL_PATTERN = "v1/user/<uuid:uuid>"
+GDPR_API_USER_PROVIDER = "users.gdpr.get_user"
+GDPR_API_DELETER = "users.gdpr.delete_data"
+GDPR_API_QUERY_SCOPE = env("GDPR_API_QUERY_SCOPE")
+GDPR_API_DELETE_SCOPE = env("GDPR_API_DELETE_SCOPE")

@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.gis.db import models
 from django.utils.timezone import localtime, now
 from django.utils.translation import gettext_lazy as _
+from helsinki_gdpr.models import SerializableMixin
 from munigeo.utils import get_default_srid
 
 from common.utils import date_range, is_vacation_day, ONE_DAY
@@ -19,7 +20,9 @@ class ContractZoneQuerySet(models.QuerySet):
         return self.filter(boundary__covers=location, active=True).first()
 
 
-class ContractZone(models.Model):
+class ContractZone(SerializableMixin):
+    serialize_fields = ({"name": "name"},)
+
     origin_id = models.CharField(verbose_name=_("origin ID"), max_length=50)
     name = models.CharField(verbose_name=_("name"), max_length=255)
     boundary = models.MultiPolygonField(

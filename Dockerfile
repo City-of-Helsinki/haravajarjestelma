@@ -1,5 +1,5 @@
 # ==============================
-FROM helsinkitest/python:3.9-slim as appbase
+FROM helsinkitest/python:3.9-slim AS appbase
 # ==============================
 RUN mkdir /entrypoint
 
@@ -21,7 +21,7 @@ ENTRYPOINT ["/entrypoint/docker-entrypoint.sh"]
 EXPOSE 8000/tcp
 
 # ==============================
-FROM appbase as development
+FROM appbase AS development
 # ==============================
 
 COPY --chown=appuser:appuser requirements-dev.txt /app/requirements-dev.txt
@@ -40,7 +40,7 @@ RUN mkdir -p /app/data && chgrp -R 0 /app/data && chmod g+w -R /app/data
 USER appuser
 
 # ==============================
-FROM appbase as production
+FROM appbase AS production
 # ==============================
 
 COPY --chown=appuser:appuser . /app/

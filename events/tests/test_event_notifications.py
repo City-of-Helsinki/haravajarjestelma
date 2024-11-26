@@ -6,6 +6,7 @@ from django.utils.timezone import localtime, now
 from django_ilmoitin.models import NotificationTemplate
 from freezegun import freeze_time
 
+from areas.factories import ContractZoneFactory
 from common.utils import assert_to_addresses
 from events.factories import EventFactory
 from events.models import Event
@@ -63,11 +64,12 @@ def notification_template_event_reminder():
 
 
 def test_event_created_notification_is_sent_to_contractors_and_admin(
-    contract_zone, notification_template_event_created, official
+    notification_template_event_created, official
 ):
-    contract_zone.secondary_email = "mark@example.com"
-    contract_zone.save()
-    event = EventFactory()
+    contract_zone = ContractZoneFactory(
+        email="primary@test.test", secondary_email="secondary@test.test"
+    )
+    event = EventFactory(contract_zone=contract_zone)
 
     assert len(mail.outbox) == 3
     subject_str = "test event created subject, event: {}!".format(event.name)
@@ -104,7 +106,9 @@ def test_event_approved_to_organizer_notification_is_sent_to_organizer_and_contr
     contract_zone.secondary_email = "mark@example.com"
     contract_zone.save()
     event = EventFactory(
-        state=Event.WAITING_FOR_APPROVAL, organizer_email="organizer@example.com"
+        state=Event.WAITING_FOR_APPROVAL,
+        organizer_email="organizer@example.com",
+        contract_zone=contract_zone,
     )
     mail.outbox = []
     event.state = Event.APPROVED
@@ -129,7 +133,7 @@ def test_event_approved_to_organizer_notification_is_sent_to_organizer_and_contr
 
 @pytest.mark.parametrize("vacation_involved", (True, False))
 def test_event_reminder_notification_is_sent_to_contractors_in_time(
-    contract_zone, notification_template_event_reminder, vacation_involved
+    notification_template_event_reminder, vacation_involved
 ):
 
     if vacation_involved:
@@ -163,6 +167,6 @@ def test_event_reminder_notification_is_sent_to_contractors_in_time(
     subject_str = "hello! don't forget event {}!".format(event.name)
     assert mail.outbox[0].subject == subject_str
     assert mail.outbox[1].subject == subject_str
-    assert_to_addresses(contract_zone.email, contract_zone.secondary_email)
+    assert_to_addresses(event.contract_zone.email, event.contract_zone.secondary_email)
 
     freezer.stop()

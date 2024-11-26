@@ -1,4 +1,3 @@
-import factory
 import factory.fuzzy
 from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from factory.random import randgen
@@ -9,6 +8,8 @@ from .models import ContractZone
 
 class ContractZoneFactory(factory.django.DjangoModelFactory):
     name = factory.Faker("bs")
+    email = factory.Faker("email")
+    secondary_email = factory.Faker("email")
     boundary = factory.Sequence(
         lambda n: MultiPolygon(
             Polygon(

@@ -128,7 +128,9 @@ def test_unavailable_dates(
     """
     for event_day in event_days:
         d = make_aware(datetime(2018, 12, event_day, 11))
-        EventFactory(start_time=d, end_time=d + timedelta(hours=1))
+        EventFactory(
+            start_time=d, end_time=d + timedelta(hours=1), contract_zone=contract_zone
+        )
 
     response_data = get(api_client, get_url(60, 24))
     dates = response_data["contract_zone"]["unavailable_dates"][8:]

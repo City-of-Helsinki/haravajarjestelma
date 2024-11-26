@@ -4,7 +4,7 @@ from django.contrib.gis.geos import Point
 from django.utils import timezone
 from factory.random import randgen
 
-from areas.models import ContractZone
+from areas.factories import ContractZoneFactory
 
 from .models import Event
 
@@ -19,11 +19,6 @@ class EventFactory(factory.django.DjangoModelFactory):
     end_time = factory.LazyAttribute(
         lambda e: e.start_time + timedelta(hours=randgen.randint(1, 6))
     )
-    location = factory.LazyFunction(
-        lambda: Point(
-            24.915 + randgen.uniform(0, 0.040), 60.154 + randgen.uniform(0, 0.022)
-        )
-    )
     organizer_first_name = factory.Faker("first_name")
     organizer_last_name = factory.Faker("last_name")
     organizer_email = factory.Faker("email")
@@ -36,9 +31,15 @@ class EventFactory(factory.django.DjangoModelFactory):
     large_trash_bag_count = factory.fuzzy.FuzzyInteger(1, 500)
     trash_picker_count = factory.fuzzy.FuzzyInteger(1, 50)
     equipment_information = factory.Faker("text")
-    contract_zone = factory.LazyAttribute(
-        lambda e: ContractZone.objects.get_active_by_location(e.location)
-    )
+    contract_zone = factory.SubFactory(ContractZoneFactory)
 
     class Meta:
         model = Event
+
+    @factory.lazy_attribute
+    def location(self):
+        centroid = self.contract_zone.boundary[0].centroid
+        return Point(
+            centroid.x + randgen.uniform(0, 0.040),
+            centroid.y + randgen.uniform(0, 0.022),
+        )

@@ -25,7 +25,7 @@ def official():
 
 
 @pytest.fixture
-def user_api_client(api_client, user):
+def user_api_client(user):
     api_client = APIClient()
     api_client.force_authenticate(user=user)
     api_client.user = user
@@ -33,7 +33,7 @@ def user_api_client(api_client, user):
 
 
 @pytest.fixture
-def contractor_api_client(api_client, contractor):
+def contractor_api_client(contractor):
     api_client = APIClient()
     api_client.force_authenticate(user=contractor)
     api_client.user = contractor
@@ -41,7 +41,7 @@ def contractor_api_client(api_client, contractor):
 
 
 @pytest.fixture
-def official_api_client(api_client, official):
+def official_api_client(official):
     api_client = APIClient()
     api_client.force_authenticate(user=official)
     api_client.user = official

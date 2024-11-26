@@ -70,8 +70,10 @@ def send_event_reminder_notification(event):
 
     if not contact_emails:
         logger.warning(
-            'Contract zone {} has no contact email so cannot send "event_reminder" notification there.'
-        ).format(event.contract_zone)
+            'Contract zone {} has no contact email so cannot send "event_reminder" notification there.'.format(
+                event.contract_zone
+            )
+        )
         return
 
     for email in contact_emails:

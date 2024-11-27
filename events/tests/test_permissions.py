@@ -1,7 +1,13 @@
 import pytest
 from django.contrib.auth.models import AnonymousUser
 
-from events.permissions import AllowPost, IsOfficial, IsSuperUser, ReadOnly
+from events.permissions import (
+    AllowPost,
+    AllowStatePatchOnly,
+    IsOfficial,
+    IsSuperUser,
+    ReadOnly,
+)
 from users.factories import UserFactory
 
 
@@ -14,6 +20,7 @@ from users.factories import UserFactory
         ("post", False),
         ("put", False),
         ("delete", False),
+        ("patch", False),
     ],
 )
 def test_read_only_permission(rf, method, expected):
@@ -30,11 +37,42 @@ def test_read_only_permission(rf, method, expected):
         ("options", False),
         ("put", False),
         ("delete", False),
+        ("patch", False),
     ],
 )
 def test_allow_post_permission(rf, method, expected):
     request = getattr(rf, method)("/foo")
     assert AllowPost().has_permission(request, None) is expected
+
+
+@pytest.mark.parametrize(
+    "method,method_expected",
+    [
+        ("patch", True),
+        ("post", False),
+        ("get", False),
+        ("head", False),
+        ("options", False),
+        ("put", False),
+        ("delete", False),
+    ],
+)
+@pytest.mark.parametrize(
+    "data,data_expected",
+    [
+        ({}, True),
+        ({"state": 0}, True),
+        ({"name": "foo"}, False),
+        ({"state": 0, "name": "foo"}, False),
+    ],
+)
+def test_allow_state_patch_only_permission(
+    rf, method, data, method_expected, data_expected
+):
+    expected = method_expected and data_expected
+    request = getattr(rf, method)("/foo", data, content_type="application/json")
+    request.data = data
+    assert AllowStatePatchOnly().has_permission(request, None) is expected
 
 
 class IsSuperUserTest:

@@ -11,6 +11,7 @@ from areas.models import ContractZone
 from common.tests.utils import assert_objects_in_results, delete, get, patch, post, put
 from events.factories import EventFactory
 from events.models import Event
+from users.factories import UserFactory
 
 LIST_URL = reverse("v1:event-list")
 
@@ -144,32 +145,6 @@ def test_anonymous_user_get_detail_404(event, api_client):
     get(api_client, get_detail_url(event), 404)
 
 
-@pytest.mark.parametrize("is_zones_contractor_user", (True, False))
-def test_contractor_get_list_check_only_own_received(
-    contractor_api_client, event, is_zones_contractor_user
-):
-    if is_zones_contractor_user:
-        event.contract_zone.contractor_users.add(contractor_api_client.user)
-
-    results = get(contractor_api_client, LIST_URL)["results"]
-
-    assert len(results) == (1 if is_zones_contractor_user else 0)
-
-
-@pytest.mark.parametrize("is_zones_contractor_user", (True, False))
-def test_contractor_get_detail_check_only_own_received(
-    contractor_api_client, event, is_zones_contractor_user
-):
-    if is_zones_contractor_user:
-        event.contract_zone.contractor_users.add(contractor_api_client.user)
-
-    get(
-        contractor_api_client,
-        get_detail_url(event),
-        200 if is_zones_contractor_user else 404,
-    )
-
-
 def test_official_get_list_check_data(api_client, official, event):
     api_client.force_authenticate(user=official)
 
@@ -231,27 +206,83 @@ def test_regular_user_cannot_modify_or_delete_event(
     delete(user_api_client, url, 403)
 
 
-def test_contractor_cannot_modify_or_delete_other_than_own_event(
-    contractor_api_client, event, make_event_data
-):
-    event_data = make_event_data(contract_zone=event.contract_zone)
-    url = get_detail_url(event)
+class TestContractor:
+    @pytest.fixture
+    def contractor_event(self, contractor_api_client):
+        event = EventFactory(name="contractor event", state=Event.WAITING_FOR_APPROVAL)
+        event.contract_zone.contractor_users.add(contractor_api_client.user)
+        return event
 
-    put(contractor_api_client, url, event_data, 403)
-    patch(contractor_api_client, url, event_data, 403)
-    delete(contractor_api_client, url, 403)
+    def test_can_partial_update_own_event_state(
+        self, contractor_api_client, contractor_event
+    ):
+        url = get_detail_url(contractor_event)
 
+        patch(contractor_api_client, url, {"state": Event.APPROVED}, 200)
 
-def test_contractor_cannot_modify_and_delete_own_event(
-    contractor_api_client, event, make_event_data
-):
-    event_data = make_event_data(contract_zone=event.contract_zone)
-    event.contract_zone.contractor_users.add(contractor_api_client.user)
-    url = get_detail_url(event)
+    @pytest.mark.parametrize(
+        "patch_data", [{"name": "foo"}, {"state": Event.APPROVED, "name": "foo"}]
+    )
+    def test_cannot_partial_update_other_than_own_event_state(
+        self, contractor_api_client, contractor_event, patch_data
+    ):
+        url = get_detail_url(contractor_event)
 
-    put(contractor_api_client, url, event_data, 403)
-    patch(contractor_api_client, url, event_data, 403)
-    delete(contractor_api_client, url, 403)
+        patch(contractor_api_client, url, patch_data, 403)
+
+    def test_cannot_partial_update_other_events_state(self, contractor_api_client):
+        other_event = EventFactory(
+            name="some other contractor's event", state=Event.WAITING_FOR_APPROVAL
+        )
+        other_event.contract_zone.contractor_users.add(UserFactory())
+
+        url = get_detail_url(other_event)
+
+        # contractor cannot see the event, so the response code should be 404 (since
+        # the payload is otherwise correct)
+        patch(contractor_api_client, url, {"state": Event.APPROVED}, 404)
+
+    def test_cannot_update_own_event(
+        self, contractor_api_client, contractor_event, make_event_data
+    ):
+        event_data = make_event_data(contract_zone=contractor_event.contract_zone)
+        url = get_detail_url(contractor_event)
+
+        put(contractor_api_client, url, event_data, 403)
+
+    def test_cannot_delete_own_event(self, contractor_api_client, contractor_event):
+        url = get_detail_url(contractor_event)
+
+        delete(contractor_api_client, url, 403)
+
+    def test_cannot_update_other_event(
+        self, contractor_api_client, event, make_event_data
+    ):
+        event_data = make_event_data(contract_zone=event.contract_zone)
+        url = get_detail_url(event)
+
+        put(contractor_api_client, url, event_data, 403)
+
+    def test_cannot_delete_other_event(self, contractor_api_client, event):
+        url = get_detail_url(event)
+
+        delete(contractor_api_client, url, 403)
+
+    def test_can_list_own_events(self, contractor_api_client, contractor_event):
+        results = get(contractor_api_client, LIST_URL)["results"]
+
+        assert len(results) == 1
+
+    def test_can_retrieve_own_events(self, contractor_api_client, contractor_event):
+        get(contractor_api_client, get_detail_url(contractor_event), 200)
+
+    def test_cannot_list_other_events(self, contractor_api_client, event):
+        results = get(contractor_api_client, LIST_URL)["results"]
+
+        assert len(results) == 0
+
+    def test_cannot_retrieve_other_events(self, contractor_api_client, event):
+        get(contractor_api_client, get_detail_url(event), 404)
 
 
 def test_official_can_modify_and_delete_event(

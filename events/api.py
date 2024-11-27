@@ -1,12 +1,19 @@
 from django.utils.timezone import localtime
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers, viewsets
+from rest_framework.permissions import IsAuthenticated
 
 from areas.models import ContractZone
 from common.api import UTCModelSerializer
 from common.utils import date_range
 from events.models import ERROR_MSG_NO_CONTRACT_ZONE, Event
-from events.permissions import AllowPost, IsOfficial, IsSuperUser, ReadOnly
+from events.permissions import (
+    AllowPost,
+    AllowStatePatchOnly,
+    IsOfficial,
+    IsSuperUser,
+    ReadOnly,
+)
 
 
 class EventSerializer(UTCModelSerializer):
@@ -60,7 +67,13 @@ class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     filterset_fields = ("contract_zone",)
-    permission_classes = [IsSuperUser | IsOfficial | AllowPost | ReadOnly]
+    permission_classes = [
+        IsSuperUser
+        | IsOfficial
+        | (IsAuthenticated & AllowStatePatchOnly)
+        | AllowPost
+        | ReadOnly
+    ]
 
     def get_queryset(self):
         return self.queryset.filter_for_user(self.request.user)

@@ -1,5 +1,9 @@
+ARG PYTHON_VERSION=3.9
+ARG IMAGE_VARIANT=slim
+ARG BUILDER_REGISTRY=docker.io
+
 # ==============================
-FROM helsinkitest/python:3.9-slim AS appbase
+FROM ${BUILDER_REGISTRY}/helsinkitest/python:${PYTHON_VERSION}-${IMAGE_VARIANT} AS appbase
 # ==============================
 RUN mkdir /entrypoint
 

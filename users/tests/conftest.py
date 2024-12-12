@@ -27,6 +27,11 @@ def official():
 
 
 @pytest.fixture
+def superuser():
+    return UserFactory(is_superuser=True)
+
+
+@pytest.fixture
 def user_api_client(user):
     api_client = APIClient()
     api_client.force_authenticate(user=user)
@@ -47,4 +52,12 @@ def official_api_client(official):
     api_client = APIClient()
     api_client.force_authenticate(user=official)
     api_client.user = official
+    return api_client
+
+
+@pytest.fixture
+def superuser_api_client(superuser):
+    api_client = APIClient()
+    api_client.force_authenticate(user=superuser)
+    api_client.user = superuser
     return api_client

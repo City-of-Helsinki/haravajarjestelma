@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.8.0](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v0.7.2...haravajarjestelma-v0.8.0) (2025-01-07)
+
+
+### Features
+
+* Add GDPR API ([16f97b3](https://github.com/City-of-Helsinki/haravajarjestelma/commit/16f97b35e7004a31518f6bb352fe85837f14eafb))
+* Enable back channel logout ([294c002](https://github.com/City-of-Helsinki/haravajarjestelma/commit/294c00201dab11ec6fb37aec9f12698a2b90b7f9))
+* Make oidc configurations profile compatible ([e351d4b](https://github.com/City-of-Helsinki/haravajarjestelma/commit/e351d4bea5a797001e8a8b4acaccf339ef12efec))
+
+
+### Bug Fixes
+
+* **events:** Fix broken warning ([00f325a](https://github.com/City-of-Helsinki/haravajarjestelma/commit/00f325aa0b3f41009adb349d4ffbbb0c3dd6db6d))
+
+
+### Dependencies
+
+* Bump django from 4.2.16 to 4.2.17 ([70d87a9](https://github.com/City-of-Helsinki/haravajarjestelma/commit/70d87a9ef82586ba2c25bde3b86c24647b41be45))
+* Update django-ilmoitin ([0fbbe25](https://github.com/City-of-Helsinki/haravajarjestelma/commit/0fbbe2549adb85618d73310e334d3aaf124ca788))
+
 ## [0.7.2](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v0.7.1...haravajarjestelma-v0.7.2) (2024-11-11)
 
 

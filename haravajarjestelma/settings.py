@@ -148,7 +148,6 @@ INSTALLED_APPS = [
     "parler",
     "anymail",
     "mailer",
-    "utils",
     "events",
     "users",
     "areas",

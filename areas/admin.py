@@ -42,16 +42,8 @@ class ContractZoneAdmin(OSMGeoAdmin):
         (_("Users"), {"fields": ("contractor_users",)}),
     )
     readonly_fields = (
-        "active",
         "name",
         "origin_id",
-        "contractor",
-        "contact_person",
-        "phone",
-        "email",
-        "secondary_contact_person",
-        "secondary_phone",
-        "secondary_email",
     )
 
     def formfield_for_dbfield(self, db_field, **kwargs):

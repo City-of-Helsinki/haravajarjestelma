@@ -22,7 +22,7 @@ EXPOSE 8000/tcp
 
 # ==============================
 FROM appbase as development
-# ==============================
+# ===============================
 
 COPY --chown=appuser:appuser requirements-dev.txt /app/requirements-dev.txt
 RUN apt-install.sh \

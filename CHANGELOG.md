@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.0.0](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v0.8.0...haravajarjestelma-v1.0.0) (2025-01-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* **events:** event view responds with 403/401 instead of 404 if the request has insufficient permissions or tries to access an endpoint that requires authentication event update & delete requires superuser or official status (i.e. contractor cannot modify or delete their own events anymore)
+
+### Features
+
+* Add permission for allowing state patching ([fd86d83](https://github.com/City-of-Helsinki/haravajarjestelma/commit/fd86d83c2de7168aec1646e506824389781aa4f1))
+* Allow authenticated users to patch event state ([1bad3ab](https://github.com/City-of-Helsinki/haravajarjestelma/commit/1bad3ab617ad448e1bd28636fe11a6c9c6203521))
+* Allow contract zone contractor info editing in Django admin UI ([34064d4](https://github.com/City-of-Helsinki/haravajarjestelma/commit/34064d41b304fbe5fe2f94df431721f34fc5f5b4))
+* **events:** Add new permission classes ([cc4e0ae](https://github.com/City-of-Helsinki/haravajarjestelma/commit/cc4e0aebbecec7cc0a1bed7c296e05039b11127d))
+* **events:** Require superuser/official status for event put/delete ([583a402](https://github.com/City-of-Helsinki/haravajarjestelma/commit/583a4020788b2881057a9f4eaadb9e1aaf43951b))
+
+
+### Bug Fixes
+
+* Increase uwsgi buffer-size ([e6f1a38](https://github.com/City-of-Helsinki/haravajarjestelma/commit/e6f1a3878e67d675854044b42cec599dd5f99cfb))
+
+
+### Dependencies
+
+* Bump jinja2 from 3.1.4 to 3.1.5 ([#172](https://github.com/City-of-Helsinki/haravajarjestelma/issues/172)) ([ea7e9b6](https://github.com/City-of-Helsinki/haravajarjestelma/commit/ea7e9b68a5a926e417606fbb7dcf0c45e0b18066))
+
+
+### Miscellaneous Chores
+
+* Switch to City of Helsinki's ubi gdal image ([6d51687](https://github.com/City-of-Helsinki/haravajarjestelma/commit/6d516872bca09cafab9dc744e351fa90e330b795))
+
 ## [0.8.0](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v0.7.2...haravajarjestelma-v0.8.0) (2025-01-07)
 
 

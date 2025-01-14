@@ -10,7 +10,11 @@ USER root
 
 COPY requirements.txt .
 
-RUN pip install -U pip setuptools wheel && pip install --no-cache-dir -r requirements.txt
+RUN dnf update -y && \
+    dnf install -y nmap-ncat && \
+    dnf clean all && \
+    pip install -U pip setuptools wheel && \
+    pip install --no-cache-dir -r requirements.txt
 
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
 

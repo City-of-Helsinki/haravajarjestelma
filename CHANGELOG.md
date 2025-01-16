@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.0.0...haravajarjestelma-v1.0.1) (2025-01-16)
+
+
+### Bug Fixes
+
+* Fix entrypoint database check ([67fe8a3](https://github.com/City-of-Helsinki/haravajarjestelma/commit/67fe8a3fb336849b28cf9b6c9e94eaeda2338e7e))
+
 ## [1.0.0](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v0.8.0...haravajarjestelma-v1.0.0) (2025-01-13)
 
 

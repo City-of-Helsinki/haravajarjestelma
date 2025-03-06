@@ -123,7 +123,7 @@ ipython==8.18.1
     # via -r requirements.in
 jedi==0.19.1
     # via ipython
-jinja2==3.1.5
+jinja2==3.1.6
     # via django-ilmoitin
 lockfile==0.12.2
     # via django-mailer

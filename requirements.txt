@@ -149,7 +149,7 @@ ptyprocess==0.7.0
     # via pexpect
 pure-eval==0.2.3
     # via stack-data
-pyasn1==0.6.1
+pyasn1==0.4.8
     # via
     #   python-jose
     #   rsa
@@ -161,7 +161,7 @@ python-dateutil==2.9.0.post0
     # via
     #   faker
     #   holidays
-python-jose==3.3.0
+python-jose==3.4.0
     # via django-helusers
 pytz==2024.2
     # via -r requirements.in

@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.2](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.0.1...haravajarjestelma-v1.0.2) (2025-03-06)
+
+
+### Dependencies
+
+* Bump cryptography from 43.0.1 to 44.0.1 ([09fa08e](https://github.com/City-of-Helsinki/haravajarjestelma/commit/09fa08e1f095a0ad23b99ad573daf47ac0e1d961))
+* Bump django from 4.2.17 to 4.2.18 ([aa225bb](https://github.com/City-of-Helsinki/haravajarjestelma/commit/aa225bb75e652707b495cb0162f214c2d0fc22b4))
+* Bump jinja2 from 3.1.5 to 3.1.6 ([78752de](https://github.com/City-of-Helsinki/haravajarjestelma/commit/78752de04fed3a8b3b8ae603cb1627beb68199f6))
+* Bump python-jose from 3.3.0 to 3.4.0 ([055a55c](https://github.com/City-of-Helsinki/haravajarjestelma/commit/055a55cf3cf5ef91fc0868de42b3b58b9ebec452))
+
 ## [1.0.1](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.0.0...haravajarjestelma-v1.0.1) (2025-01-16)
 
 

@@ -2,8 +2,9 @@ import pytest
 from django.contrib.auth.models import AnonymousUser
 
 from events.permissions import (
+    AllowPatch,
     AllowPost,
-    AllowStatePatchOnly,
+    AllowPut,
     IsOfficial,
     IsSuperUser,
     ReadOnly,
@@ -46,33 +47,37 @@ def test_allow_post_permission(rf, method, expected):
 
 
 @pytest.mark.parametrize(
-    "method,method_expected",
+    "method,expected",
     [
-        ("patch", True),
+        ("post", False),
+        ("get", False),
+        ("head", False),
+        ("options", False),
+        ("put", True),
+        ("delete", False),
+        ("patch", False),
+    ],
+)
+def test_allow_put_permission(rf, method, expected):
+    request = getattr(rf, method)("/foo")
+    assert AllowPut().has_permission(request, None) is expected
+
+
+@pytest.mark.parametrize(
+    "method,expected",
+    [
         ("post", False),
         ("get", False),
         ("head", False),
         ("options", False),
         ("put", False),
         ("delete", False),
+        ("patch", True),
     ],
 )
-@pytest.mark.parametrize(
-    "data,data_expected",
-    [
-        ({}, True),
-        ({"state": 0}, True),
-        ({"name": "foo"}, False),
-        ({"state": 0, "name": "foo"}, False),
-    ],
-)
-def test_allow_state_patch_only_permission(
-    rf, method, data, method_expected, data_expected
-):
-    expected = method_expected and data_expected
-    request = getattr(rf, method)("/foo", data, content_type="application/json")
-    request.data = data
-    assert AllowStatePatchOnly().has_permission(request, None) is expected
+def test_allow_patch_permission(rf, method, expected):
+    request = getattr(rf, method)("/foo")
+    assert AllowPatch().has_permission(request, None) is expected
 
 
 class IsSuperUserTest:

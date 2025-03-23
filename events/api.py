@@ -8,8 +8,9 @@ from common.api import UTCModelSerializer
 from common.utils import date_range
 from events.models import ERROR_MSG_NO_CONTRACT_ZONE, Event
 from events.permissions import (
+    AllowPatch,
     AllowPost,
-    AllowStatePatchOnly,
+    AllowPut,
     IsOfficial,
     IsSuperUser,
     ReadOnly,
@@ -70,7 +71,7 @@ class EventViewSet(viewsets.ModelViewSet):
     permission_classes = [
         IsSuperUser
         | IsOfficial
-        | (IsAuthenticated & AllowStatePatchOnly)
+        | (IsAuthenticated & (AllowPut | AllowPatch))
         | AllowPost
         | ReadOnly
     ]

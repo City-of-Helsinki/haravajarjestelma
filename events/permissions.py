@@ -19,15 +19,22 @@ class AllowPost(BasePermission):
         return request.method == "POST"
 
 
-class AllowStatePatchOnly(BasePermission):
+class AllowPut(BasePermission):
     """
-    Allows to patch state field only.
+    Allows put method only.
     """
 
     def has_permission(self, request, view):
-        allowed_fields = ["state"]
-        has_allowed_fields_only = all(field in allowed_fields for field in request.data)
-        return request.method == "PATCH" and has_allowed_fields_only
+        return request.method == "PUT"
+
+
+class AllowPatch(BasePermission):
+    """
+    Allows patch method only.
+    """
+
+    def has_permission(self, request, view):
+        return request.method == "PATCH"
 
 
 class IsOfficial(BasePermission):

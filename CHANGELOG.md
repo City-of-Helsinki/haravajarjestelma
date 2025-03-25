@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.0.2...haravajarjestelma-v1.1.0) (2025-03-25)
+
+
+### Features
+
+* Bring back permission to modify events for contractors ([c2e15f9](https://github.com/City-of-Helsinki/haravajarjestelma/commit/c2e15f9ed98b9cffc31a13c7f1568524aeca7760))
+
 ## [1.0.2](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.0.1...haravajarjestelma-v1.0.2) (2025-03-06)
 
 

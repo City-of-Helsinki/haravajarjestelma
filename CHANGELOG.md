@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.1.0...haravajarjestelma-v1.1.1) (2025-05-14)
+
+
+### Dependencies
+
+* Bump django from 4.2.18 to 4.2.21 ([a17b73f](https://github.com/City-of-Helsinki/haravajarjestelma/commit/a17b73fd05d10bf0d780ae94fc718a8bfcf4a3c1))
+
 ## [1.1.0](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.0.2...haravajarjestelma-v1.1.0) (2025-03-25)
 
 

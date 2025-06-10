@@ -167,7 +167,7 @@ pytz==2024.2
     # via -r requirements.in
 pyyaml==6.0.2
     # via django-munigeo
-requests==2.32.3
+requests==2.32.4
     # via
     #   -r requirements.in
     #   django-anymail

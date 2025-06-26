@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("events", "0005_add_small_trash_bag_remove_dumpster")]
 
     operations = [

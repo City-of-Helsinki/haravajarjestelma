@@ -1,4 +1,4 @@
-from django.contrib.admin import register, TabularInline
+from django.contrib.admin import TabularInline, register
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.utils.translation import gettext_lazy as _

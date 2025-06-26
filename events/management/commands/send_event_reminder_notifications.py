@@ -1,10 +1,11 @@
 import logging
 from datetime import timedelta
+
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.utils.timezone import localtime, now
 
-from common.utils import get_today, is_vacation_day, ONE_DAY
+from common.utils import ONE_DAY, get_today, is_vacation_day
 from events.models import Event
 from events.notifications import send_event_reminder_notification
 

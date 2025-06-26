@@ -1,5 +1,6 @@
-import pytest
 from datetime import timedelta
+
+import pytest
 from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.utils import timezone
 from django.utils.timezone import localtime
@@ -109,9 +110,9 @@ def check_received_event_data(event_data, event_obj):
         "equipment_information",
     )
     for field_name in simple_fields:
-        assert event_data[field_name] == getattr(
-            event_obj, field_name
-        ), 'Field "{}" does not match'.format(field_name)
+        assert event_data[field_name] == getattr(event_obj, field_name), (
+            'Field "{}" does not match'.format(field_name)
+        )
 
     assert event_data["created_at"]
     assert event_data["modified_at"]
@@ -126,9 +127,9 @@ def check_event_object(event_obj, event_data):
     for field_name, field_value in event_data.items():
         if field_name == "location":
             continue
-        assert field_value == getattr(
-            event_obj, field_name
-        ), 'Field "{}" does not match'.format(field_name)
+        assert field_value == getattr(event_obj, field_name), (
+            'Field "{}" does not match'.format(field_name)
+        )
     assert event_obj.location
 
 

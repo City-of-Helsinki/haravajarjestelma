@@ -107,8 +107,9 @@ class Event(models.Model):
 
     def save(self, *args, **kwargs):
         if self.pk:
-            # this is not optimal as it causes an extra hit to the db, but event modifications are so
-            # infrequent that we don't bother to build more complex logic for this
+            # this is not optimal as it causes an extra hit to the db, but event
+            # modifications are so infrequent that we don't bother to build more complex
+            # logic for this
             old_state = Event.objects.get(pk=self.pk).state
 
             super().save(*args, **kwargs)

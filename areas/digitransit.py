@@ -1,6 +1,7 @@
+from typing import Literal
+
 import requests
 from django.conf import settings
-from typing import Literal
 
 DIGITRANSIT_API_KEY_HEADER = "digitransit-subscription-key"
 

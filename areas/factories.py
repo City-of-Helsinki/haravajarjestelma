@@ -23,8 +23,8 @@ class ContractZoneFactory(factory.django.DjangoModelFactory):
         model = ContractZone
 
 
-# Because of a bug in django-munigeo v0.3.2 we cannot use Django's get_or_create() for models that
-# have translated fields, so we need to use this workaround for now.
+# Because of a bug in django-munigeo v0.3.2 we cannot use Django's get_or_create() for
+# models that have translated fields, so we need to use this workaround for now.
 def _get_or_create_municipality(id):
     try:
         return Municipality.objects.get(id=id)

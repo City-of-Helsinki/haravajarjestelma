@@ -1,6 +1,7 @@
+from typing import Optional
+
 from django.contrib.auth import get_user_model
 from helsinki_gdpr.types import ErrorResponse
-from typing import Optional
 
 
 def get_user(user: get_user_model()) -> get_user_model():

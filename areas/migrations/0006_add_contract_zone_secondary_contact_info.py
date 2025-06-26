@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("areas", "0005_allow_multiple_users_per_contract_zone")]
 
     operations = [

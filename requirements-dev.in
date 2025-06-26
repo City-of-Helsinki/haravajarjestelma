@@ -1,11 +1,8 @@
 -c requirements.txt
-autopep8
-flake8
-isort
 pytest
 pytest-cov
 pytest-django
 freezegun
-black
 pip-tools
 responses
+ruff

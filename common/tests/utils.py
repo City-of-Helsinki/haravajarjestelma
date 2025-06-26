@@ -21,10 +21,10 @@ def delete(api_client, url, status_code=204):
 def _execute_request(api_client, method, url, status_code, data=None):
     response = getattr(api_client, method)(url, data=data)
     response_data = getattr(response, "data", None)
-    assert (
-        response.status_code == status_code
-    ), "Expected status code {} but got {} with data {}".format(
-        status_code, response.status_code, response_data
+    assert response.status_code == status_code, (
+        "Expected status code {} but got {} with data {}".format(
+            status_code, response.status_code, response_data
+        )
     )
     return response_data
 

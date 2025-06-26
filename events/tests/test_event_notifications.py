@@ -1,5 +1,6 @@
-import pytest
 from datetime import timedelta
+
+import pytest
 from django.core import mail
 from django.core.management import call_command
 from django.utils.timezone import localtime, now
@@ -135,7 +136,6 @@ def test_event_approved_to_organizer_notification_is_sent_to_organizer_and_contr
 def test_event_reminder_notification_is_sent_to_contractors_in_time(
     notification_template_event_reminder, vacation_involved
 ):
-
     if vacation_involved:
         # now = Friday, events on Tuesday should be the latest to get the reminder
         current_moment = "2018-01-12T08:00:00Z"

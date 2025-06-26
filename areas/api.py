@@ -29,7 +29,6 @@ class TranslatedModelSerializer(TranslatableModelSerializer, UTCModelSerializer)
         translated_fields = {}
 
         for lang_key, trans_dict in ret.pop("translations", {}).items():
-
             for field_name, translation in trans_dict.items():
                 if field_name not in translated_fields:
                     translated_fields[field_name] = {lang_key: translation}

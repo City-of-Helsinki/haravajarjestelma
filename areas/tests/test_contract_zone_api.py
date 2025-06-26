@@ -1,5 +1,6 @@
-import pytest
 from datetime import datetime
+
+import pytest
 from django.utils.timezone import make_aware
 from rest_framework.reverse import reverse
 

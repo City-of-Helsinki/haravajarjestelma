@@ -33,7 +33,8 @@ class EventSerializer(UTCModelSerializer):
         start_time = data.get("start_time")
         end_time = data.get("end_time")
 
-        # PATCH updates only 'state', so check that start and end times are present in the data
+        # PATCH updates only 'state', so check that start and end times are present in
+        # the data
         if (start_time and end_time) and (start_time > end_time):
             raise serializers.ValidationError(_("Event must start before ending."))
 

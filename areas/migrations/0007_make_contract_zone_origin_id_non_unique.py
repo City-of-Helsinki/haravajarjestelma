@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("areas", "0006_add_contract_zone_secondary_contact_info")]
 
     operations = [

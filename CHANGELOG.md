@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.1.2...haravajarjestelma-v1.1.3) (2025-08-04)
+
+
+### Dependencies
+
+* Bump requests from 2.32.3 to 2.32.4 ([0842b09](https://github.com/City-of-Helsinki/haravajarjestelma/commit/0842b099d50c582e2f326b704a04dd14300acfb0))
+
 ## [1.1.2](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.1.1...haravajarjestelma-v1.1.2) (2025-06-10)
 
 

@@ -11,7 +11,6 @@ django-parler-rest
 django-filter
 helsinki-profile-gdpr-api
 holidays
-django-enumfields
 django-ilmoitin
 factory_boy
 ipython

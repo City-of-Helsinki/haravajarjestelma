@@ -1,11 +1,11 @@
 import logging
+from enum import Enum
 
 from django.contrib.auth import get_user_model
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_ilmoitin.registry import notifications
 from django_ilmoitin.utils import send_notification
-from enumfields import Enum
 
 User = get_user_model()
 
@@ -13,18 +13,24 @@ logger = logging.getLogger(__name__)
 
 
 class NotificationType(Enum):
-    EVENT_CREATED = "event_created"
-    EVENT_APPROVED_TO_ORGANIZER = "event_approved_to_organizer"
-    EVENT_APPROVED_TO_CONTRACTOR = "event_approved_to_contractor"
-    EVENT_APPROVED_TO_OFFICIAL = "event_approved_to_official"
-    EVENT_REMINDER = "event_reminder"
+    EVENT_CREATED = ("event_created", _("Event created"))
+    EVENT_APPROVED_TO_ORGANIZER = (
+        "event_approved_to_organizer",
+        _("Event approved notification to organizer"),
+    )
+    EVENT_APPROVED_TO_CONTRACTOR = (
+        "event_approved_to_contractor",
+        _("Event approved notification to contractor"),
+    )
+    EVENT_APPROVED_TO_OFFICIAL = (
+        "event_approved_to_official",
+        _("Event approved notification to official"),
+    )
+    EVENT_REMINDER = ("event_reminder", _("Event reminder"))
 
-    class Labels:
-        EVENT_CREATED = _("Event created")
-        EVENT_APPROVED_TO_ORGANIZER = _("Event approved notification to organizer")
-        EVENT_APPROVED_TO_CONTRACTOR = _("Event approved notification to contractor")
-        EVENT_APPROVED_TO_OFFICIAL = _("Event approved notification to official")
-        EVENT_REMINDER = _("Event reminder")
+    def __init__(self, value, label) -> None:
+        self._value_ = value
+        self.label = label
 
 
 notifications.register(

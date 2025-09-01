@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.1.4](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.1.3...haravajarjestelma-v1.1.4) (2025-09-01)
+
+
+### Dependencies
+
+* Bump django from 4.2.22 to 4.2.23 ([4f29f39](https://github.com/City-of-Helsinki/haravajarjestelma/commit/4f29f39d770c3d7d44037d2fb33b7fce9994515c))
+* Remove django-enumfields ([8553e93](https://github.com/City-of-Helsinki/haravajarjestelma/commit/8553e93946b447805e425cb18bf3852e88c0c47e))
+* Replace black, flake8, isort with ruff ([837ed73](https://github.com/City-of-Helsinki/haravajarjestelma/commit/837ed73fb784d0f3a579f864aea4841b9213ac1e))
+* Upgrade pip-tools ([eea4fb7](https://github.com/City-of-Helsinki/haravajarjestelma/commit/eea4fb7c4a12a8ba23246c2149dd5cb21b1312b4))
+* Upgrade to python 3.12 ([8c592b5](https://github.com/City-of-Helsinki/haravajarjestelma/commit/8c592b503aac786f009c84e0dedc20078f40b197))
+
+
+### Documentation
+
+* Ruff and pre-commit ([8a5981a](https://github.com/City-of-Helsinki/haravajarjestelma/commit/8a5981a9f2c0b389f68d73975d9cc47cebd6ee2f))
+
 ## [1.1.3](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.1.2...haravajarjestelma-v1.1.3) (2025-08-04)
 
 

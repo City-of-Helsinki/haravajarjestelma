@@ -1,4 +1,6 @@
 from django.utils.timezone import localtime
+from django.utils import timezone
+from dateutil.relativedelta import relativedelta
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers, viewsets
 from rest_framework.permissions import IsAuthenticated
@@ -37,6 +39,10 @@ class EventSerializer(UTCModelSerializer):
         # the data
         if (start_time and end_time) and (start_time > end_time):
             raise serializers.ValidationError(_("Event must start before ending."))
+
+        now = timezone.now()
+        if start_time > now + relativedelta(months=6):
+            raise serializers.ValidationError(_("Event cannot start later than six months from now."))
 
         location = data.get("location")
         if location:

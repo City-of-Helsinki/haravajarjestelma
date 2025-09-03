@@ -42,7 +42,7 @@ def set_frozen_time():
 
 @pytest.fixture(autouse=True)
 def override_settings(settings):
-    settings.EVENT_MINIMUM_DAYS_BEFORE_START = 7
+    settings.EVENT_MINIMUM_DAYS_BEFORE_START = 6
     settings.EVENT_MAXIMUM_COUNT_PER_CONTRACT_ZONE = 3
 
 

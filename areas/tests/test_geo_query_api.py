@@ -104,7 +104,6 @@ def test_too_early_days_included_in_unavailable_dates(api_client, contract_zone)
         today + timedelta(days=4),
         today + timedelta(days=5),
         today + timedelta(days=6),
-        today + timedelta(days=7),
     ]
 
 
@@ -134,6 +133,6 @@ def test_unavailable_dates(
         )
 
     response_data = get(api_client, get_url(60, 24))
-    dates = response_data["contract_zone"]["unavailable_dates"][8:]
+    dates = response_data["contract_zone"]["unavailable_dates"][7:]
 
     assert dates == [date(2018, 12, d) for d in expected_unavailable_days]

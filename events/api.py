@@ -37,12 +37,14 @@ class EventSerializer(UTCModelSerializer):
 
         # PATCH updates only 'state', so check that start and end times are present in
         # the data
-        if (start_time and end_time) and (start_time > end_time):
-            raise serializers.ValidationError(_("Event must start before ending."))
+        if (start_time and end_time):
+            if start_time > end_time:
+                raise serializers.ValidationError(_("Event must start before ending."))
 
-        now = timezone.now()
-        if start_time > now + relativedelta(months=6):
-            raise serializers.ValidationError(_("Event cannot start later than six months from now."))
+        if start_time:
+            now = timezone.now()
+            if start_time > now + relativedelta(months=6):
+                raise serializers.ValidationError(_("Event cannot start later than six months from now."))
 
         location = data.get("location")
         if location:

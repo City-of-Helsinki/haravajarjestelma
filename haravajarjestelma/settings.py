@@ -62,6 +62,7 @@ env = environ.Env(
     LOG_LEVEL=(str, "INFO"),
     GDPR_API_QUERY_SCOPE=(str, "gdprquery"),
     GDPR_API_DELETE_SCOPE=(str, "gdprdelete"),
+    RECAPTCHA_SECRET=(str, ""),
 )
 if os.path.exists(env_file):
     env.read_env(env_file)
@@ -214,6 +215,8 @@ OIDC_API_TOKEN_AUTH = {
         "OIDC_REQUIRE_SCOPE_FOR_AUTHENTICATION"
     ),
 }
+
+RECAPTCHA_SECRET = env("RECAPTCHA_SECRET")
 
 HELUSERS_BACK_CHANNEL_LOGOUT_ENABLED = True
 

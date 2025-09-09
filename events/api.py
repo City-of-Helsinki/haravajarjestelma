@@ -4,6 +4,8 @@ from dateutil.relativedelta import relativedelta
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers, viewsets
 from rest_framework.permissions import IsAuthenticated
+from django.conf import settings
+import requests
 
 from areas.models import ContractZone
 from common.api import UTCModelSerializer
@@ -35,8 +37,6 @@ class EventSerializer(UTCModelSerializer):
         start_time = data.get("start_time")
         end_time = data.get("end_time")
 
-        # PATCH updates only 'state', so check that start and end times are present in
-        # the data
         if (start_time and end_time) and (start_time > end_time):
             raise serializers.ValidationError(_("Event must start before ending."))
 
@@ -85,3 +85,32 @@ class EventViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.queryset.filter_for_user(self.request.user)
+
+    # overwrite default create to add captcha validation
+    def create(self, request, *args, **kwargs):
+        recaptcha_token = request.data.get("recaptchaToken")
+        if not recaptcha_token:
+            raise serializers.ValidationError(
+                {"recaptcha": "reCAPTCHA token is required."}
+            )
+
+        data = {
+            "secret": settings.RECAPTCHA_SECRET,
+            "response": recaptcha_token,
+        }
+        
+        try:
+            response = requests.post("https://www.google.com/recaptcha/api/siteverify", data=data)
+            response.raise_for_status()
+            result = response.json()
+        except requests.RequestException:
+            raise serializers.ValidationError(
+                {"recaptcha": "Error verifying reCAPTCHA. Please try again later."}
+            )
+
+        if not result.get("success"):
+            raise serializers.ValidationError(
+                {"recaptcha": "Invalid reCAPTCHA. Please try again."}
+            )
+
+        return super().create(request, *args, **kwargs)

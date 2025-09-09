@@ -43,6 +43,21 @@ EXPECTED_EVENT_KEYS = {
 
 
 @pytest.fixture
+def recaptcha_mock(monkeypatch):
+    class MockRecaptchaResponse:
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return {"success": True}
+
+    def mock_post(*args, **kwargs):
+        return MockRecaptchaResponse()
+
+    monkeypatch.setattr("events.api.requests.post", mock_post)
+
+
+@pytest.fixture
 def make_event_data():
     def _make_event_data(*, contract_zone: ContractZone, **kwargs):
         return {
@@ -125,7 +140,7 @@ def check_event_object(event_obj, event_data):
     Check that a created/updated event object matches the given data
     """
     for field_name, field_value in event_data.items():
-        if field_name == "location":
+        if field_name in ("location", "recaptchaToken"):
             continue
         assert field_value == getattr(event_obj, field_name), (
             'Field "{}" does not match'.format(field_name)
@@ -163,8 +178,11 @@ def test_official_get_detail_check_data(api_client, official, event):
     check_received_event_data(data, event)
 
 
-def test_regular_user_post_new_event(user_api_client, contract_zone, make_event_data):
+def test_regular_user_post_new_event(
+    user_api_client, contract_zone, make_event_data, recaptcha_mock
+):
     event_data = make_event_data(contract_zone=contract_zone)
+    event_data["recaptchaToken"] = "mock-token"
 
     post(user_api_client, LIST_URL, event_data)
 
@@ -298,13 +316,16 @@ def test_superuser_can_modify_and_delete_event(
     delete(superuser_api_client, url)
 
 
-def test_event_must_start_before_ending(settings, user_api_client, make_event_data):
+def test_event_must_start_before_ending(
+    settings, user_api_client, make_event_data, recaptcha_mock
+):
     full_days_needed = settings.EVENT_MINIMUM_DAYS_BEFORE_START
     event_data = make_event_data(
         contract_zone=ContractZoneFactory(),
         start_time=timezone.now() + timedelta(days=full_days_needed, hours=6),
         end_time=timezone.now() + timedelta(days=full_days_needed, hours=5),
     )
+    event_data["recaptchaToken"] = "mock-token"
 
     response_data = post(user_api_client, LIST_URL, event_data, 400)
 
@@ -312,7 +333,7 @@ def test_event_must_start_before_ending(settings, user_api_client, make_event_da
 
 
 def test_cannot_create_event_if_start_is_before_minimum_full_days_in_future(
-    settings, user_api_client, contract_zone, make_event_data
+    settings, user_api_client, contract_zone, make_event_data, recaptcha_mock
 ):
     full_days_needed = settings.EVENT_MINIMUM_DAYS_BEFORE_START
     beginning_of_today = localtime(timezone.now()).replace(
@@ -327,12 +348,13 @@ def test_cannot_create_event_if_start_is_before_minimum_full_days_in_future(
         start_time=minute_before_minimum_start,
         end_time=minute_before_minimum_start + timedelta(hours=6),
     )
+    event_data["recaptchaToken"] = "mock-token"
 
     post(user_api_client, LIST_URL, event_data, 400)
 
 
 def test_can_create_event_if_start_is_minimum_full_days_in_future(
-    settings, user_api_client, contract_zone, make_event_data
+    settings, user_api_client, contract_zone, make_event_data, recaptcha_mock
 ):
     full_days_needed = settings.EVENT_MINIMUM_DAYS_BEFORE_START
     beginning_of_today = localtime(timezone.now()).replace(
@@ -347,6 +369,7 @@ def test_can_create_event_if_start_is_minimum_full_days_in_future(
         start_time=midnight_of_minimum_start_day,
         end_time=midnight_of_minimum_start_day + timedelta(hours=6),
     )
+    event_data["recaptchaToken"] = "mock-token"
 
     post(user_api_client, LIST_URL, event_data, 201)
 
@@ -372,9 +395,10 @@ def test_event_filtering_by_contract_zone(official_api_client, event):
 
 
 def test_event_cannot_be_created_in_approved_state(
-    api_client, contract_zone, make_event_data
+    api_client, contract_zone, make_event_data, recaptcha_mock
 ):
     event_data = make_event_data(contract_zone=contract_zone, state=Event.APPROVED)
+    event_data["recaptchaToken"] = "mock-token"
 
     post(api_client, LIST_URL, event_data)
 
@@ -383,7 +407,7 @@ def test_event_cannot_be_created_in_approved_state(
 
 
 def test_event_cannot_be_created_when_days_are_full(
-    official_api_client, contract_zone, make_event_data
+    official_api_client, contract_zone, make_event_data, recaptcha_mock
 ):
     event_data = make_event_data(contract_zone=contract_zone)
     events = EventFactory.create_batch(
@@ -393,6 +417,7 @@ def test_event_cannot_be_created_when_days_are_full(
         end_time=event_data["end_time"],
     )
     assert all(event.contract_zone == contract_zone for event in events)
+    event_data["recaptchaToken"] = "mock-token"
 
     response_data = post(official_api_client, LIST_URL, event_data, 400)
     assert "Unavailable dates" in response_data["non_field_errors"][0]

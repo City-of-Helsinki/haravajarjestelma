@@ -1,11 +1,11 @@
-from django.utils.timezone import localtime
-from django.utils import timezone
+import requests
 from dateutil.relativedelta import relativedelta
+from django.conf import settings
+from django.utils import timezone
+from django.utils.timezone import localtime
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers, viewsets
 from rest_framework.permissions import IsAuthenticated
-from django.conf import settings
-import requests
 
 from areas.models import ContractZone
 from common.api import UTCModelSerializer
@@ -42,7 +42,9 @@ class EventSerializer(UTCModelSerializer):
 
         now = timezone.now()
         if start_time > now + relativedelta(months=6):
-            raise serializers.ValidationError(_("Event cannot start later than six months from now."))
+            raise serializers.ValidationError(_(
+                "Event cannot start later than six months from now."
+            ))
 
         location = data.get("location")
         if location:
@@ -98,9 +100,12 @@ class EventViewSet(viewsets.ModelViewSet):
             "secret": settings.RECAPTCHA_SECRET,
             "response": recaptcha_token,
         }
-        
+
         try:
-            response = requests.post("https://www.google.com/recaptcha/api/siteverify", data=data)
+            response = requests.post(
+                "https://www.google.com/recaptcha/api/siteverify",
+                data=data
+            )
             response.raise_for_status()
             result = response.json()
         except requests.RequestException:

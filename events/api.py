@@ -1,5 +1,8 @@
+from datetime import timedelta
+from os import environ
 from django.utils.timezone import localtime
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
 from rest_framework import serializers, viewsets
 from rest_framework.permissions import IsAuthenticated
 
@@ -37,6 +40,12 @@ class EventSerializer(UTCModelSerializer):
         # the data
         if (start_time and end_time) and (start_time > end_time):
             raise serializers.ValidationError(_("Event must start before ending."))
+
+        max_duration = timedelta(settings.EVENT_MAXIMUM_DAYS_LENGTH)
+        if (end_time - start_time) > max_duration:
+            raise serializers.ValidationError(
+                _("The event duration cannot exceed 7 days.")
+            )
 
         location = data.get("location")
         if location:

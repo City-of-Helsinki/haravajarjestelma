@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.6](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.1.5...haravajarjestelma-v1.1.6) (2025-09-23)
+
+
+### Dependencies
+
+* Bump authlib from 1.3.2 to 1.6.4 ([f79e5a7](https://github.com/City-of-Helsinki/haravajarjestelma/commit/f79e5a769935c187ca87fd95cb3be587cbe7ba29))
+
 ## [1.1.5](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.1.4...haravajarjestelma-v1.1.5) (2025-09-10)
 
 

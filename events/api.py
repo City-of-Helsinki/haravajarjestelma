@@ -1,6 +1,9 @@
+from django.conf import settings
 from datetime import timedelta
 from os import environ
 from django.utils.timezone import localtime
+from django.utils import timezone
+from dateutil.relativedelta import relativedelta
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from rest_framework import serializers, viewsets
@@ -38,8 +41,14 @@ class EventSerializer(UTCModelSerializer):
 
         # PATCH updates only 'state', so check that start and end times are present in
         # the data
-        if (start_time and end_time) and (start_time > end_time):
-            raise serializers.ValidationError(_("Event must start before ending."))
+        if (start_time and end_time):
+            if start_time > end_time:
+                raise serializers.ValidationError(_("Event must start before ending."))
+
+        if start_time:
+            now = timezone.now()
+            if start_time > now + relativedelta(days=settings.EVENT_MAXIMUM_DAYS_TO_START):
+                raise serializers.ValidationError(_(f"Event cannot start later than {settings.EVENT_MAXIMUM_DAYS_TO_START} days from now."))
 
         max_duration = timedelta(settings.EVENT_MAXIMUM_DAYS_LENGTH)
         if (end_time - start_time) > max_duration:

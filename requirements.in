@@ -20,3 +20,4 @@ pytz
 requests
 sentry-sdk
 uwsgi
+python-dateutil

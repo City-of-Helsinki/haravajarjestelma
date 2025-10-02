@@ -19,3 +19,4 @@ drf-oidc-auth
 uwsgi
 pytz
 requests
+python-dateutil

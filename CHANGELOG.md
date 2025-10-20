@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.7](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.1.6...haravajarjestelma-v1.1.7) (2025-10-20)
+
+
+### Dependencies
+
+* Bump psycopg ([627c989](https://github.com/City-of-Helsinki/haravajarjestelma/commit/627c98946ceb535496d263cb0b7c3b01679332e0))
+
 ## [1.1.6](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.1.5...haravajarjestelma-v1.1.6) (2025-09-23)
 
 

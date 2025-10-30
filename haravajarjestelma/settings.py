@@ -1,10 +1,11 @@
 import os
-import subprocess
 
 import environ
 import sentry_sdk
 from django.utils.translation import gettext_lazy as _
 from sentry_sdk.integrations.django import DjangoIntegration
+
+from haravajarjestelma import __version__
 
 checkout_dir = environ.Path(__file__) - 2
 assert os.path.exists(checkout_dir("manage.py"))
@@ -62,6 +63,7 @@ env = environ.Env(
     LOG_LEVEL=(str, "INFO"),
     GDPR_API_QUERY_SCOPE=(str, "gdprquery"),
     GDPR_API_DELETE_SCOPE=(str, "gdprdelete"),
+    OPENSHIFT_BUILD_COMMIT=(str, ""),
 )
 if os.path.exists(env_file):
     env.read_env(env_file)
@@ -102,14 +104,11 @@ if MAILER_EMAIL_BACKEND == "anymail.backends.mailgun.EmailBackend":
 elif MAILER_EMAIL_BACKEND == "anymail.backends.sendgrid.EmailBackend":
     ANYMAIL = {"SENDGRID_API_KEY": env.str("MAIL_SENDGRID_KEY")}
 
-try:
-    version = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"]).strip()
-except Exception:
-    version = "n/a"
-
+COMMIT_HASH = env.str("OPENSHIFT_BUILD_COMMIT", "")
+VERSION = __version__
 sentry_sdk.init(
     dsn=env.str("SENTRY_DSN"),
-    release=version,
+    release=env.str("OPENSHIFT_BUILD_COMMIT", VERSION),
     environment=env("SENTRY_ENVIRONMENT"),
     integrations=[DjangoIntegration()],
 )

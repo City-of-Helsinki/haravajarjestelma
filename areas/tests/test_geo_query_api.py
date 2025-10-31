@@ -17,7 +17,7 @@ ADDRESS_KEYS = {"street", "distance", "number", "number_end", "letter", "locatio
 
 
 def get_url(lat, lon):
-    return URL + "?lat={}&lon={}".format(lat, lon)
+    return URL + f"?lat={lat}&lon={lon}"
 
 
 def check_address_data_matches_object(address_data, address_obj):

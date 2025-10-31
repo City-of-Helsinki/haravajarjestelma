@@ -105,7 +105,7 @@ class ContractZoneAdmin(GISModelAdmin):
         """
         # Check if this formset is for BlockedDate inline
         if formset.model == BlockedDate:
-            # Get instances without committing to database yet
+            # Get the instances that will be saved
             instances = formset.save(commit=False)
 
             # Set created_by for new BlockedDate instances
@@ -113,7 +113,9 @@ class ContractZoneAdmin(GISModelAdmin):
                 if not instance.pk:  # This is a new instance (no primary key yet)
                     # Set the creator to the current admin user for audit trail
                     instance.created_by = request.user
-                instance.save()
+
+            # Save all instances (this handles creations, updates, and deletions)
+            formset.save()
 
             # Save many-to-many relationships if any
             formset.save_m2m()

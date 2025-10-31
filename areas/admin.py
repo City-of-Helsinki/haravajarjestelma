@@ -1,6 +1,7 @@
+from django import forms
 from django.contrib.admin import register
 from django.contrib.auth import get_user_model
-from django.contrib.gis.admin import OSMGeoAdmin
+from django.contrib.gis.admin import GISModelAdmin
 from django.utils.translation import gettext_lazy as _
 
 from .models import ContractZone
@@ -8,12 +9,28 @@ from .models import ContractZone
 User = get_user_model()
 
 
+class ContractZoneModelForm(forms.ModelForm):
+    class Meta:
+        model = ContractZone
+        fields = "__all__"
+
+    def clean_boundary(self):
+        # Editing the boundary is not allowed after creation
+        if self.instance.pk:
+            return self.instance.boundary
+        return self.cleaned_data["boundary"]
+
+
 @register(ContractZone)
-class ContractZoneAdmin(OSMGeoAdmin):
-    default_lon = 2776460  # Central Railway Station in EPSG:3857
-    default_lat = 8438120
-    default_zoom = 10
-    modifiable = False
+class ContractZoneAdmin(GISModelAdmin):
+    form = ContractZoneModelForm
+    gis_widget_kwargs = {
+        "attrs": {
+            "default_zoom": 10,
+            "default_lon": 24.941389,  # Central Railway Station in EPSG:4326,
+            "default_lat": 60.171944,
+        },
+    }
     list_display = (
         "name",
         "contractor",

@@ -70,6 +70,14 @@ class ContractZone(SerializableMixin):
         last_too_early_day = today + timedelta(
             days=settings.EVENT_MINIMUM_DAYS_BEFORE_START
         )
+
+        # Get explicitly blocked dates for this contract zone (beyond minimum lead time only)
+        blocked_dates = set(
+            self.blocked_dates.filter(date__gt=last_too_early_day).values_list(
+                "date", flat=True
+            )
+        )
+
         too_early_dates = {date for date in date_range(today, last_too_early_day)}
 
         events = self.events.filter(start_time__date__gt=last_too_early_day)
@@ -90,10 +98,45 @@ class ContractZone(SerializableMixin):
             if len(events) >= settings.EVENT_MAXIMUM_COUNT_PER_CONTRACT_ZONE
         }
 
-        return list(sorted(too_early_dates | too_many_events_dates))
+        return list(sorted(too_early_dates | too_many_events_dates | blocked_dates))
 
     def get_contact_emails(self):
         return [email for email in (self.email, self.secondary_email) if email]
+
+
+class BlockedDate(models.Model):
+    date = models.DateField(verbose_name=_("date"))
+    contract_zone = models.ForeignKey(
+        ContractZone,
+        verbose_name=_("contract zone"),
+        related_name="blocked_dates",
+        on_delete=models.CASCADE,
+    )
+    reason = models.TextField(
+        verbose_name=_("reason"),
+        blank=True,
+        help_text=_("Optional reason for blocking this date"),
+    )
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name=_("created by"),
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
+    created_at = models.DateTimeField(
+        verbose_name=_("created at"),
+        auto_now_add=True,
+    )
+
+    class Meta:
+        verbose_name = _("blocked date")
+        verbose_name_plural = _("blocked dates")
+        ordering = ("date", "contract_zone")
+        unique_together = ("date", "contract_zone")
+
+    def __str__(self):
+        return f"{self.contract_zone.name} - {self.date}"
 
 
 def get_affected_dates(date):

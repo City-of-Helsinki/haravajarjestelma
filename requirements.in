@@ -1,5 +1,5 @@
 django-environ
-django~=4.2
+django~=5.2
 psycopg[c]
 djangorestframework
 django-cors-headers

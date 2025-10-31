@@ -22,9 +22,7 @@ def _execute_request(api_client, method, url, status_code, data=None):
     response = getattr(api_client, method)(url, data=data)
     response_data = getattr(response, "data", None)
     assert response.status_code == status_code, (
-        "Expected status code {} but got {} with data {}".format(
-            status_code, response.status_code, response_data
-        )
+        f"Expected status code {status_code} but got {response.status_code} with data {response_data}"
     )
     return response_data
 
@@ -42,6 +40,6 @@ def check_translated_field_data_matches_object(data, obj, field_name):
 def assert_objects_in_results(objects, results):
     object_ids = [o.id for o in objects]
     result_ids = [r["id"] for r in results]
-    assert object_ids == result_ids, "Expected {} does not match results {}".format(
-        object_ids, result_ids
+    assert object_ids == result_ids, (
+        f"Expected {object_ids} does not match results {result_ids}"
     )

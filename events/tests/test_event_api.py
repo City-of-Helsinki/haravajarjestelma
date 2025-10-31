@@ -111,7 +111,7 @@ def check_received_event_data(event_data, event_obj):
     )
     for field_name in simple_fields:
         assert event_data[field_name] == getattr(event_obj, field_name), (
-            'Field "{}" does not match'.format(field_name)
+            f'Field "{field_name}" does not match'
         )
 
     assert event_data["created_at"]
@@ -128,7 +128,7 @@ def check_event_object(event_obj, event_data):
         if field_name == "location":
             continue
         assert field_value == getattr(event_obj, field_name), (
-            'Field "{}" does not match'.format(field_name)
+            f'Field "{field_name}" does not match'
         )
     assert event_obj.location
 
@@ -364,9 +364,9 @@ def test_event_filtering_by_contract_zone(official_api_client, event):
     )
     assert event_in_another_contract_zone.contract_zone == another_contract_zone
 
-    results = get(
-        official_api_client, LIST_URL + "?contract_zone={}".format(contract_zone.id)
-    )["results"]
+    results = get(official_api_client, LIST_URL + f"?contract_zone={contract_zone.id}")[
+        "results"
+    ]
 
     assert_objects_in_results([event], results)
 

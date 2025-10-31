@@ -28,7 +28,7 @@ def is_vacation_day(date):
 def assert_to_addresses(*expected_to_addresses, mails=None):
     if mails is None:
         mails = mail.outbox
-    to_addresses = set((m.to[0] for m in mails))
+    to_addresses = set(m.to[0] for m in mails)
     expected_to_addresses = set(expected_to_addresses)
     assert to_addresses == expected_to_addresses, (
         f"{to_addresses} does not match {expected_to_addresses}"

@@ -73,7 +73,7 @@ def test_event_created_notification_is_sent_to_contractors_and_admin(
     event = EventFactory(contract_zone=contract_zone)
 
     assert len(mail.outbox) == 3
-    subject_str = "test event created subject, event: {}!".format(event.name)
+    subject_str = f"test event created subject, event: {event.name}!"
     assert mail.outbox[0].subject == subject_str
     assert mail.outbox[1].subject == subject_str
     assert mail.outbox[2].subject == subject_str
@@ -164,7 +164,7 @@ def test_event_reminder_notification_is_sent_to_contractors_in_time(
     call_command("send_event_reminder_notifications")
 
     assert len(mail.outbox) == 2
-    subject_str = "hello! don't forget event {}!".format(event.name)
+    subject_str = f"hello! don't forget event {event.name}!"
     assert mail.outbox[0].subject == subject_str
     assert mail.outbox[1].subject == subject_str
     assert_to_addresses(event.contract_zone.email, event.contract_zone.secondary_email)

@@ -3,7 +3,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class ModelSyncher(object):
+class ModelSyncher:
     def __init__(self, queryset, generate_obj_id, delete_func=None, force=False):
         d = {}
         self.generate_obj_id = generate_obj_id
@@ -23,7 +23,7 @@ class ModelSyncher(object):
     def mark(self, obj):
         if getattr(obj, "_found", False):
             raise Exception(
-                "Object %s (%s) already marked" % (obj, self.generate_obj_id(obj))
+                f"Object {obj} ({self.generate_obj_id(obj)}) already marked"
             )
 
         obj._found = True
@@ -53,7 +53,7 @@ class ModelSyncher(object):
         ):
             raise Exception("Attempting to delete more than 40% of total items")
         for obj in delete_list:
-            logger.debug("Deleting object %s" % obj)
+            logger.debug(f"Deleting object {obj}")
             if self.delete_func:
                 self.delete_func(obj)
             else:

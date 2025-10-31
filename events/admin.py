@@ -1,14 +1,18 @@
 from django.contrib import admin
-from django.contrib.gis.admin import OSMGeoAdmin
+from django.contrib.gis.admin import GISModelAdmin
 
 from .models import Event
 
 
 @admin.register(Event)
-class EventAdmin(OSMGeoAdmin):
-    default_lon = 2776460  # Central Railway Station in EPSG:3857
-    default_lat = 8438120
-    default_zoom = 10
+class EventAdmin(GISModelAdmin):
+    gis_widget_kwargs = {
+        "attrs": {
+            "default_zoom": 10,
+            "default_lon": 24.941389,  # Central Railway Station in EPSG:4326,
+            "default_lat": 60.171944,
+        },
+    }
     list_display = (
         "name",
         "start_time",

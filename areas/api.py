@@ -20,7 +20,7 @@ class TranslatedModelSerializer(TranslatableModelSerializer, UTCModelSerializer)
     translations = TranslatedFieldsField()
 
     def to_representation(self, obj):
-        ret = super(TranslatedModelSerializer, self).to_representation(obj)
+        ret = super().to_representation(obj)
         if obj is None:
             return ret
         return self.translated_fields_to_representation(obj, ret)

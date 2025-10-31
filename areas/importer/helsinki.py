@@ -26,7 +26,7 @@ class HelsinkiImporter:
     def _fetch_contract_zones(self):
         contract_zone_filter_str = (
             ' AND "nimi" NOT IN ({})'.format(
-                ",".join(("'{}'".format(cz) for cz in EXCLUDED_CONTRACT_ZONES))
+                ",".join(f"'{cz}'" for cz in EXCLUDED_CONTRACT_ZONES)
             )
             if EXCLUDED_CONTRACT_ZONES
             else ""
@@ -36,19 +36,20 @@ class HelsinkiImporter:
             "VERSION": "2.0.0",
             "REQUEST": "GetFeature",
             "TYPENAME": "Vastuualue_rya_urakkarajat",
-            "SRSNAME": "EPSG:{}".format(settings.DEFAULT_SRID),
-            "cql_filter": "tehtavakokonaisuus='PUISTO' AND status='voimassa'{}".format(
-                contract_zone_filter_str
+            "SRSNAME": f"EPSG:{settings.DEFAULT_SRID}",
+            "cql_filter": (
+                "tehtavakokonaisuus='PUISTO' AND "
+                f"status='voimassa'{contract_zone_filter_str}"
             ),
             "outputFormat": "application/json",
         }
-        wfs_url = "{}?{}".format(
-            settings.HELSINKI_WFS_BASE_URL, urllib.parse.urlencode(query_params)
+        wfs_url = (
+            f"{settings.HELSINKI_WFS_BASE_URL}?{urllib.parse.urlencode(query_params)}"
         )
 
-        logger.debug("Fetching contract zone data from url {}".format(wfs_url))
+        logger.debug(f"Fetching contract zone data from url {wfs_url}")
         data_source = DataSource(wfs_url)
-        logger.debug("Fetched {} active contract zones".format(len(data_source[0])))
+        logger.debug(f"Fetched {len(data_source[0])} active contract zones")
 
         return data_source
 

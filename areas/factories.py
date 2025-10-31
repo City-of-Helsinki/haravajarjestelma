@@ -3,7 +3,7 @@ from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from factory.random import randgen
 from munigeo.models import Address, Municipality, Street
 
-from .models import ContractZone
+from .models import ContractZone, BlockedDate
 
 
 class ContractZoneFactory(factory.django.DjangoModelFactory):
@@ -21,6 +21,15 @@ class ContractZoneFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = ContractZone
+
+
+class BlockedDateFactory(factory.django.DjangoModelFactory):
+    date = factory.Faker("date_this_year")
+    contract_zone = factory.SubFactory(ContractZoneFactory)
+    reason = factory.Faker("sentence")
+
+    class Meta:
+        model = BlockedDate
 
 
 # Because of a bug in django-munigeo v0.3.2 we cannot use Django's get_or_create() for

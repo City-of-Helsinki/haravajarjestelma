@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.0](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.1.7...haravajarjestelma-v1.2.0) (2025-11-03)
+
+
+### Features
+
+* Don't use git to determine the version ([f62d7d3](https://github.com/City-of-Helsinki/haravajarjestelma/commit/f62d7d37fe39f2033f2eaa6f3833e3d8bd041bdf))
+* Use GISModelAdmin in Django admin ([b659864](https://github.com/City-of-Helsinki/haravajarjestelma/commit/b6598640965170a72153d8745c1c87c410d8af7f))
+
+
+### Dependencies
+
+* Update to Django 5.2 ([d8bcc70](https://github.com/City-of-Helsinki/haravajarjestelma/commit/d8bcc70c40e90821b4886b33562d874d8718efd1))
+
 ## [1.1.7](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.1.6...haravajarjestelma-v1.1.7) (2025-10-20)
 
 

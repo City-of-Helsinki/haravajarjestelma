@@ -54,7 +54,7 @@ class EventSerializer(UTCModelSerializer):
         max_duration = timedelta(settings.EVENT_MAXIMUM_DAYS_LENGTH)
         if start_time and end_time and (end_time - start_time) > max_duration:
             raise serializers.ValidationError(
-                _("The event duration cannot exceed 7 days.")
+                _("The event duration cannot exceed {days} days.").format(days=settings.EVENT_MAXIMUM_DAYS_LENGTH)
             )
 
         location = data.get("location")

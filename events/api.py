@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from rest_framework import serializers, viewsets
 from rest_framework.permissions import IsAuthenticated
+from django_filters import rest_framework as filters
 
 from areas.models import ContractZone
 from common.api import UTCModelSerializer
@@ -51,7 +52,7 @@ class EventSerializer(UTCModelSerializer):
                 raise serializers.ValidationError(_(f"Event cannot start later than {settings.EVENT_MAXIMUM_DAYS_TO_START} days from now."))
 
         max_duration = timedelta(settings.EVENT_MAXIMUM_DAYS_LENGTH)
-        if (end_time - start_time) > max_duration:
+        if start_time and end_time and (end_time - start_time) > max_duration:
             raise serializers.ValidationError(
                 _("The event duration cannot exceed 7 days.")
             )
@@ -83,10 +84,21 @@ class EventSerializer(UTCModelSerializer):
         return data
 
 
+class EventFilter(filters.FilterSet):
+    start_time_gte = filters.DateTimeFilter(field_name='start_time', lookup_expr='gte')
+    start_time_lte = filters.DateTimeFilter(field_name='start_time', lookup_expr='lte')
+    end_time_gte = filters.DateTimeFilter(field_name='end_time', lookup_expr='gte')
+    end_time_lte = filters.DateTimeFilter(field_name='end_time', lookup_expr='lte')
+
+    class Meta:
+        model = Event
+        fields = ['contract_zone', 'state', 'start_time_gte', 'start_time_lte', 'end_time_gte', 'end_time_lte']
+
+
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
-    filterset_fields = ("contract_zone",)
+    filterset_class = EventFilter
     permission_classes = [
         IsSuperUser
         | IsOfficial
@@ -96,4 +108,7 @@ class EventViewSet(viewsets.ModelViewSet):
     ]
 
     def get_queryset(self):
+        # Allow unauthenticated users to see only approved events
+        if not self.request.user.is_authenticated:
+            return self.queryset.filter(state=Event.APPROVED)
         return self.queryset.filter_for_user(self.request.user)

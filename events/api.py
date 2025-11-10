@@ -128,7 +128,9 @@ class EventViewSet(viewsets.ModelViewSet):
     ]
 
     def get_serializer_class(self):
-        if self.request.user.is_authenticated:
+        if self.action in ("create", "update", "partial_update") or (
+            self.request.user and self.request.user.is_authenticated
+        ):
             return EventSerializer
         return PublicEventSerializer
 

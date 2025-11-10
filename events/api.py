@@ -23,6 +23,12 @@ from events.permissions import (
 )
 
 
+class PublicEventSerializer(UTCModelSerializer):
+    class Meta:
+        model = Event
+        fields = ("name", "start_time", "end_time", "location")
+
+
 class EventSerializer(UTCModelSerializer):
     class Meta:
         model = Event
@@ -120,6 +126,11 @@ class EventViewSet(viewsets.ModelViewSet):
         | AllowPost
         | ReadOnly
     ]
+
+    def get_serializer_class(self):
+        if self.request.user.is_authenticated:
+            return EventSerializer
+        return PublicEventSerializer
 
     def get_queryset(self):
         # Allow unauthenticated users to see only approved events

@@ -41,6 +41,8 @@ EXPECTED_EVENT_KEYS = {
     "equipment_information",
 }
 
+EXPECTED_PUBLIC_EVENT_KEYS = {"name", "start_time", "end_time", "location"}
+
 
 @pytest.fixture
 def make_event_data():
@@ -137,13 +139,17 @@ def get_detail_url(event):
     return reverse("v1:event-detail", kwargs={"pk": event.pk})
 
 
-def test_anonymous_user_get_list_no_results(event, api_client):
+def test_anonymous_user_get_list_approved_events(event, api_client):
+    EventFactory(state=Event.WAITING_FOR_APPROVAL)
     results = get(api_client, LIST_URL)["results"]
-    assert len(results) == 0
+    assert len(results) == 1
+    assert set(results[0].keys()) == EXPECTED_PUBLIC_EVENT_KEYS
 
 
-def test_anonymous_user_get_detail_404(event, api_client):
-    get(api_client, get_detail_url(event), 404)
+def test_anonymous_user_get_detail_approved_event(event, api_client):
+    EventFactory(state=Event.WAITING_FOR_APPROVAL)
+    data = get(api_client, get_detail_url(event))
+    assert set(data.keys()) == EXPECTED_PUBLIC_EVENT_KEYS
 
 
 def test_official_get_list_check_data(api_client, official, event):

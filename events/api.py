@@ -1,14 +1,13 @@
-from django.conf import settings
 from datetime import timedelta
-from os import environ
-from django.utils.timezone import localtime
-from django.utils import timezone
+
 from dateutil.relativedelta import relativedelta
-from django.utils.translation import gettext_lazy as _
 from django.conf import settings
+from django.utils import timezone
+from django.utils.timezone import localtime
+from django.utils.translation import gettext_lazy as _
+from django_filters import rest_framework as filters
 from rest_framework import serializers, viewsets
 from rest_framework.permissions import IsAuthenticated
-from django_filters import rest_framework as filters
 
 from areas.models import ContractZone
 from common.api import UTCModelSerializer
@@ -42,20 +41,27 @@ class EventSerializer(UTCModelSerializer):
 
         # PATCH updates only 'state', so check that start and end times are present in
         # the data
-        if (start_time and end_time):
+        if start_time and end_time:
             if start_time > end_time:
                 raise serializers.ValidationError(_("Event must start before ending."))
 
         if start_time:
             now = timezone.now()
-            if start_time > now + relativedelta(days=settings.EVENT_MAXIMUM_DAYS_TO_START):
-                raise serializers.ValidationError(_("Event cannot start later than {days} days from now.").format(days=settings.EVENT_MAXIMUM_DAYS_TO_START))
-
+            if start_time > now + relativedelta(
+                days=settings.EVENT_MAXIMUM_DAYS_TO_START
+            ):
+                raise serializers.ValidationError(
+                    _("Event cannot start later than {days} days from now.").format(
+                        days=settings.EVENT_MAXIMUM_DAYS_TO_START
+                    )
+                )
 
         max_duration = timedelta(settings.EVENT_MAXIMUM_DAYS_LENGTH)
         if start_time and end_time and (end_time - start_time) > max_duration:
             raise serializers.ValidationError(
-                _("The event duration cannot exceed {days} days.").format(days=settings.EVENT_MAXIMUM_DAYS_LENGTH)
+                _("The event duration cannot exceed {days} days.").format(
+                    days=settings.EVENT_MAXIMUM_DAYS_LENGTH
+                )
             )
 
         location = data.get("location")
@@ -86,14 +92,21 @@ class EventSerializer(UTCModelSerializer):
 
 
 class EventFilter(filters.FilterSet):
-    start_time_gte = filters.DateTimeFilter(field_name='start_time', lookup_expr='gte')
-    start_time_lte = filters.DateTimeFilter(field_name='start_time', lookup_expr='lte')
-    end_time_gte = filters.DateTimeFilter(field_name='end_time', lookup_expr='gte')
-    end_time_lte = filters.DateTimeFilter(field_name='end_time', lookup_expr='lte')
+    start_time_gte = filters.DateTimeFilter(field_name="start_time", lookup_expr="gte")
+    start_time_lte = filters.DateTimeFilter(field_name="start_time", lookup_expr="lte")
+    end_time_gte = filters.DateTimeFilter(field_name="end_time", lookup_expr="gte")
+    end_time_lte = filters.DateTimeFilter(field_name="end_time", lookup_expr="lte")
 
     class Meta:
         model = Event
-        fields = ['contract_zone', 'state', 'start_time_gte', 'start_time_lte', 'end_time_gte', 'end_time_lte']
+        fields = [
+            "contract_zone",
+            "state",
+            "start_time_gte",
+            "start_time_lte",
+            "end_time_gte",
+            "end_time_lte",
+        ]
 
 
 class EventViewSet(viewsets.ModelViewSet):

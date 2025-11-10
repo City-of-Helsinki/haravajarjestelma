@@ -49,12 +49,13 @@ class EventSerializer(UTCModelSerializer):
         if start_time:
             now = timezone.now()
             if start_time > now + relativedelta(days=settings.EVENT_MAXIMUM_DAYS_TO_START):
-                raise serializers.ValidationError(_(f"Event cannot start later than {settings.EVENT_MAXIMUM_DAYS_TO_START} days from now."))
+                raise serializers.ValidationError(_("Event cannot start later than {days} days from now.").format(days=settings.EVENT_MAXIMUM_DAYS_TO_START))
+
 
         max_duration = timedelta(settings.EVENT_MAXIMUM_DAYS_LENGTH)
         if start_time and end_time and (end_time - start_time) > max_duration:
             raise serializers.ValidationError(
-                _("The event duration cannot exceed 7 days.")
+                _("The event duration cannot exceed {days} days.").format(days=settings.EVENT_MAXIMUM_DAYS_LENGTH)
             )
 
         location = data.get("location")

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.1](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.2.0...haravajarjestelma-v1.2.1) (2025-11-10)
+
+
+### Dependencies
+
+* Bump django from 5.2.7 to 5.2.8 ([da095f8](https://github.com/City-of-Helsinki/haravajarjestelma/commit/da095f88f19e65c3949eebe59ec9d5bdf203e614))
+* Bump pip from 25.2 to 25.3 ([1d9fea5](https://github.com/City-of-Helsinki/haravajarjestelma/commit/1d9fea51a838fe64f571b271737ccfb0daed7dd4))
+
 ## [1.2.0](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.1.7...haravajarjestelma-v1.2.0) (2025-11-03)
 
 

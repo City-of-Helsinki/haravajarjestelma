@@ -1,5 +1,11 @@
+from datetime import timedelta
+
+from dateutil.relativedelta import relativedelta
+from django.conf import settings
+from django.utils import timezone
 from django.utils.timezone import localtime
 from django.utils.translation import gettext_lazy as _
+from django_filters import rest_framework as filters
 from rest_framework import serializers, viewsets
 from rest_framework.permissions import IsAuthenticated
 
@@ -15,6 +21,12 @@ from events.permissions import (
     IsSuperUser,
     ReadOnly,
 )
+
+
+class PublicEventSerializer(UTCModelSerializer):
+    class Meta:
+        model = Event
+        fields = ("name", "start_time", "end_time", "location")
 
 
 class EventSerializer(UTCModelSerializer):
@@ -35,8 +47,28 @@ class EventSerializer(UTCModelSerializer):
 
         # PATCH updates only 'state', so check that start and end times are present in
         # the data
-        if (start_time and end_time) and (start_time > end_time):
-            raise serializers.ValidationError(_("Event must start before ending."))
+        if start_time and end_time:
+            if start_time > end_time:
+                raise serializers.ValidationError(_("Event must start before ending."))
+
+        if start_time:
+            now = timezone.now()
+            if start_time > now + relativedelta(
+                days=settings.EVENT_MAXIMUM_DAYS_TO_START
+            ):
+                raise serializers.ValidationError(
+                    _("Event cannot start later than {days} days from now.").format(
+                        days=settings.EVENT_MAXIMUM_DAYS_TO_START
+                    )
+                )
+
+        max_duration = timedelta(settings.EVENT_MAXIMUM_DAYS_LENGTH)
+        if start_time and end_time and (end_time - start_time) > max_duration:
+            raise serializers.ValidationError(
+                _("The event duration cannot exceed {days} days.").format(
+                    days=settings.EVENT_MAXIMUM_DAYS_LENGTH
+                )
+            )
 
         location = data.get("location")
         if location:
@@ -65,10 +97,28 @@ class EventSerializer(UTCModelSerializer):
         return data
 
 
+class EventFilter(filters.FilterSet):
+    start_time_gte = filters.DateTimeFilter(field_name="start_time", lookup_expr="gte")
+    start_time_lte = filters.DateTimeFilter(field_name="start_time", lookup_expr="lte")
+    end_time_gte = filters.DateTimeFilter(field_name="end_time", lookup_expr="gte")
+    end_time_lte = filters.DateTimeFilter(field_name="end_time", lookup_expr="lte")
+
+    class Meta:
+        model = Event
+        fields = [
+            "contract_zone",
+            "state",
+            "start_time_gte",
+            "start_time_lte",
+            "end_time_gte",
+            "end_time_lte",
+        ]
+
+
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
-    filterset_fields = ("contract_zone",)
+    filterset_class = EventFilter
     permission_classes = [
         IsSuperUser
         | IsOfficial
@@ -77,5 +127,15 @@ class EventViewSet(viewsets.ModelViewSet):
         | ReadOnly
     ]
 
+    def get_serializer_class(self):
+        if self.action in ("create", "update", "partial_update") or (
+            self.request.user and self.request.user.is_authenticated
+        ):
+            return EventSerializer
+        return PublicEventSerializer
+
     def get_queryset(self):
+        # Allow unauthenticated users to see only approved events
+        if not self.request.user.is_authenticated:
+            return self.queryset.filter(state=Event.APPROVED)
         return self.queryset.filter_for_user(self.request.user)

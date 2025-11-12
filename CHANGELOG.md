@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.2.1...haravajarjestelma-v1.3.0) (2025-11-12)
+
+
+### Features
+
+* Change logging format to json ([254d030](https://github.com/City-of-Helsinki/haravajarjestelma/commit/254d030f4cb3a011720f5bf7006b2ebcdb115102))
+
 ## [1.2.1](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.2.0...haravajarjestelma-v1.2.1) (2025-11-10)
 
 

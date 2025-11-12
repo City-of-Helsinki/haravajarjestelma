@@ -151,6 +151,7 @@ INSTALLED_APPS = [
     "users",
     "areas",
     "django_ilmoitin",
+    "logger_extra",
 ]
 
 MIDDLEWARE = [
@@ -158,6 +159,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "corsheaders.middleware.CorsMiddleware",
+    "logger_extra.middleware.XRequestIdMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -228,13 +230,22 @@ LOG_LEVEL = env("LOG_LEVEL")
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "filters": {
+        "context": {
+            "()": "logger_extra.filter.LoggerContextFilter",
+        }
+    },
     "formatters": {
-        "timestamped_named": {
-            "format": "%(asctime)s %(name)s %(levelname)s: %(message)s"
+        "json": {
+            "()": "logger_extra.formatter.JSONFormatter",
         }
     },
     "handlers": {
-        "console": {"class": "logging.StreamHandler", "formatter": "timestamped_named"}
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "json",
+            "filters": ["context"],
+        }
     },
     "loggers": {"": {"handlers": ["console"], "level": LOG_LEVEL}},
 }

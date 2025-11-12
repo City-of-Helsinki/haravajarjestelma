@@ -1,6 +1,10 @@
 # ==============================
 FROM helsinki.azurecr.io/ubi9/python-312-gdal AS appbase
 # ==============================
+
+# Branch or tag used to pull python-uwsgi-common.
+ARG UWSGI_COMMON_REF=main
+
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
@@ -15,6 +19,15 @@ RUN dnf update -y && \
     dnf clean all && \
     pip install -U pip setuptools wheel && \
     pip install --no-cache-dir -r requirements.txt
+
+# Build and copy specific python-uwsgi-common files.
+ADD https://github.com/City-of-Helsinki/python-uwsgi-common/archive/${UWSGI_COMMON_REF}.tar.gz /usr/src/
+RUN mkdir -p /usr/src/python-uwsgi-common && \
+    tar --strip-components=1 -xzf /usr/src/${UWSGI_COMMON_REF}.tar.gz -C /usr/src/python-uwsgi-common && \
+    cp /usr/src/python-uwsgi-common/uwsgi-base.ini /app/ && \
+    uwsgi --build-plugin /usr/src/python-uwsgi-common && \
+    rm -rf /usr/src/${UWSGI_COMMON_REF}.tar.gz && \
+    rm -rf /usr/src/python-uwsgi-common
 
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
 

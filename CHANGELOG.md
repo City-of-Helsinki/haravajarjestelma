@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.3.0...haravajarjestelma-v1.4.0) (2025-11-30)
+
+
+### Features
+
+* **sentry:** Update sentry configuration ([7c86282](https://github.com/City-of-Helsinki/haravajarjestelma/commit/7c86282d3e47d0800563678f91faa4956809ba48))
+
 ## [1.3.0](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.2.1...haravajarjestelma-v1.3.0) (2025-11-12)
 
 

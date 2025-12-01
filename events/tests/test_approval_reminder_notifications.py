@@ -85,7 +85,9 @@ class TestCreationBasedReminder:
         freezer = freeze_time("2018-01-11T08:00:00Z")  # Thursday
         freezer.start()
 
-        contract_zone = ContractZoneFactory(email="contractor@test.test")
+        contract_zone = ContractZoneFactory(
+            email="contractor@test.test", secondary_email=""
+        )
         event = EventFactory(
             state=Event.WAITING_FOR_APPROVAL,
             contract_zone=contract_zone,
@@ -222,7 +224,9 @@ class TestDeadlineBasedReminder:
         freezer = freeze_time("2018-01-12T08:00:00Z")  # Friday
         freezer.start()
 
-        contract_zone = ContractZoneFactory(email="contractor@test.test")
+        contract_zone = ContractZoneFactory(
+            email="contractor@test.test", secondary_email=""
+        )
         event = EventFactory(
             state=Event.WAITING_FOR_APPROVAL,
             contract_zone=contract_zone,
@@ -276,7 +280,9 @@ class TestBothTriggers:
         freezer = freeze_time("2018-01-08T08:00:00Z")  # Monday
         freezer.start()
 
-        contract_zone = ContractZoneFactory(email="contractor@test.test")
+        contract_zone = ContractZoneFactory(
+            email="contractor@test.test", secondary_email=""
+        )
         event = EventFactory(
             state=Event.WAITING_FOR_APPROVAL,
             contract_zone=contract_zone,
@@ -319,7 +325,9 @@ class TestBothTriggers:
         freezer = freeze_time("2018-01-08T08:00:00Z")  # Monday
         freezer.start()
 
-        contract_zone = ContractZoneFactory(email="contractor@test.test")
+        contract_zone = ContractZoneFactory(
+            email="contractor@test.test", secondary_email=""
+        )
         event = EventFactory(
             state=Event.WAITING_FOR_APPROVAL,
             contract_zone=contract_zone,
@@ -410,8 +418,12 @@ class TestEdgeCases:
         freezer = freeze_time("2018-01-10T08:00:00Z")
         freezer.start()
 
-        contract_zone1 = ContractZoneFactory(email="contractor1@test.test")
-        contract_zone2 = ContractZoneFactory(email="contractor2@test.test")
+        contract_zone1 = ContractZoneFactory(
+            email="contractor1@test.test", secondary_email=""
+        )
+        contract_zone2 = ContractZoneFactory(
+            email="contractor2@test.test", secondary_email=""
+        )
 
         # Both events have deadline reminder today
         EventFactory(

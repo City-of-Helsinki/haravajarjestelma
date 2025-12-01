@@ -54,7 +54,9 @@ class Command(BaseCommand):
                     f"Sent approval reminder for event '{event.name}' (ID: {event.pk})"
                 )
 
-        logger.info(f"Approval reminder check complete. Sent {reminders_sent} reminder(s)")
+        logger.info(
+            f"Approval reminder check complete. Sent {reminders_sent} reminder(s)"
+        )
 
     def _should_send_reminder(self, event, today):
         """
@@ -69,8 +71,12 @@ class Command(BaseCommand):
         creation_reminder_day = self._calculate_creation_reminder_day(event)
         deadline_reminder_day = self._calculate_deadline_reminder_day(event)
 
-        creation_match = creation_reminder_day is not None and today == creation_reminder_day
-        deadline_match = deadline_reminder_day is not None and today == deadline_reminder_day
+        creation_match = (
+            creation_reminder_day is not None and today == creation_reminder_day
+        )
+        deadline_match = (
+            deadline_reminder_day is not None and today == deadline_reminder_day
+        )
 
         return creation_match or deadline_match
 

@@ -52,9 +52,7 @@ class EventSerializer(UTCModelSerializer):
 
         if start_time:
             now = timezone.now()
-            if start_time > now + timedelta(
-                days=settings.EVENT_MAXIMUM_DAYS_TO_START
-            ):
+            if start_time > now + timedelta(days=settings.EVENT_MAXIMUM_DAYS_TO_START):
                 raise serializers.ValidationError(
                     _("Event cannot start later than {days} days from now.").format(
                         days=settings.EVENT_MAXIMUM_DAYS_TO_START

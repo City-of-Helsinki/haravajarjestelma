@@ -70,7 +70,7 @@ class TestCreationBasedReminder:
         call_command("send_approval_reminder_notifications")
         assert len(mail.outbox) == 2
         assert_to_addresses(contract_zone.email, contract_zone.secondary_email)
-        assert mail.outbox[0].subject == "please approve event {}!".format(event.name)
+        assert mail.outbox[0].subject == f"please approve event {event.name}!"
 
         freezer.stop()
 
@@ -106,7 +106,7 @@ class TestCreationBasedReminder:
         freezer.start()
         call_command("send_approval_reminder_notifications")
         assert len(mail.outbox) == 1
-        assert mail.outbox[0].subject == "please approve event {}!".format(event.name)
+        assert mail.outbox[0].subject == f"please approve event {event.name}!"
         freezer.stop()
 
     def test_reminder_not_sent_for_approved_events(self, notification_template):
@@ -176,18 +176,21 @@ class TestDeadlineBasedReminder:
         event = EventFactory(
             state=Event.WAITING_FOR_APPROVAL,
             contract_zone=contract_zone,
-            start_time=now() + timedelta(days=settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT),
+            start_time=now()
+            + timedelta(days=settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT),
         )
         mail.outbox = []
 
         call_command("send_approval_reminder_notifications")
         assert len(mail.outbox) == 2
         assert_to_addresses(contract_zone.email, contract_zone.secondary_email)
-        assert mail.outbox[0].subject == "please approve event {}!".format(event.name)
+        assert mail.outbox[0].subject == f"please approve event {event.name}!"
 
         freezer.stop()
 
-    def test_reminder_not_sent_before_deadline_reminder_day(self, notification_template):
+    def test_reminder_not_sent_before_deadline_reminder_day(
+        self, notification_template
+    ):
         """Reminder should not be sent before the deadline reminder day."""
         # now = Monday 2018-01-08
         # Event starts in 10 days = Thursday 2018-01-18
@@ -231,7 +234,7 @@ class TestDeadlineBasedReminder:
 
         call_command("send_approval_reminder_notifications")
         assert len(mail.outbox) == 1
-        assert mail.outbox[0].subject == "please approve event {}!".format(event.name)
+        assert mail.outbox[0].subject == f"please approve event {event.name}!"
 
         freezer.stop()
 
@@ -289,7 +292,7 @@ class TestBothTriggers:
         freezer.start()
         call_command("send_approval_reminder_notifications")
         assert len(mail.outbox) == 1
-        assert mail.outbox[0].subject == "please approve event {}!".format(event.name)
+        assert mail.outbox[0].subject == f"please approve event {event.name}!"
         mail.outbox = []
         freezer.stop()
 
@@ -298,10 +301,12 @@ class TestBothTriggers:
         freezer.start()
         call_command("send_approval_reminder_notifications")
         assert len(mail.outbox) == 1
-        assert mail.outbox[0].subject == "please approve event {}!".format(event.name)
+        assert mail.outbox[0].subject == f"please approve event {event.name}!"
         freezer.stop()
 
-    def test_both_reminders_fire_on_same_day_if_dates_align(self, notification_template):
+    def test_both_reminders_fire_on_same_day_if_dates_align(
+        self, notification_template
+    ):
         """
         If creation and deadline reminder days are the same, only one reminder
         should be sent (since it's the same notification).
@@ -331,7 +336,7 @@ class TestBothTriggers:
         call_command("send_approval_reminder_notifications")
         # Even though both conditions match, we only send one notification
         assert len(mail.outbox) == 1
-        assert mail.outbox[0].subject == "please approve event {}!".format(event.name)
+        assert mail.outbox[0].subject == f"please approve event {event.name}!"
         freezer.stop()
 
     def test_both_reminders_disabled(self, notification_template, settings):
@@ -389,7 +394,8 @@ class TestEdgeCases:
         EventFactory(
             state=Event.WAITING_FOR_APPROVAL,
             contract_zone=contract_zone,
-            start_time=now() + timedelta(days=settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT),
+            start_time=now()
+            + timedelta(days=settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT),
         )
         mail.outbox = []
 
@@ -411,12 +417,14 @@ class TestEdgeCases:
         EventFactory(
             state=Event.WAITING_FOR_APPROVAL,
             contract_zone=contract_zone1,
-            start_time=now() + timedelta(days=settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT),
+            start_time=now()
+            + timedelta(days=settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT),
         )
         EventFactory(
             state=Event.WAITING_FOR_APPROVAL,
             contract_zone=contract_zone2,
-            start_time=now() + timedelta(days=settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT),
+            start_time=now()
+            + timedelta(days=settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT),
         )
         mail.outbox = []
 
@@ -425,4 +433,3 @@ class TestEdgeCases:
         assert_to_addresses(contract_zone1.email, contract_zone2.email)
 
         freezer.stop()
-

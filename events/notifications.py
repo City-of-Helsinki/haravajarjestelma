@@ -27,6 +27,10 @@ class NotificationType(Enum):
         _("Event approved notification to official"),
     )
     EVENT_REMINDER = ("event_reminder", _("Event reminder"))
+    EVENT_PENDING_APPROVAL_REMINDER = (
+        "event_pending_approval_reminder",
+        _("Event pending approval reminder"),
+    )
 
     def __init__(self, value, label) -> None:
         self._value_ = value
@@ -50,6 +54,10 @@ notifications.register(
 )
 notifications.register(
     NotificationType.EVENT_REMINDER.value, NotificationType.EVENT_REMINDER.label
+)
+notifications.register(
+    NotificationType.EVENT_PENDING_APPROVAL_REMINDER.value,
+    NotificationType.EVENT_PENDING_APPROVAL_REMINDER.label,
 )
 
 
@@ -89,6 +97,30 @@ def send_event_reminder_notification(event):
 
     event.reminder_sent_at = now()
     event.save(update_fields=("reminder_sent_at",))
+
+
+def send_pending_approval_reminder_notification(event):
+    """
+    Send a reminder to contractors that an event is awaiting their approval.
+
+    This notification is sent to remind contractors to approve or decline
+    pending events before the deadline.
+    """
+    contact_emails = event.contract_zone.get_contact_emails()
+
+    if not contact_emails:
+        logger.warning(
+            f"Contract zone {event.contract_zone} has no contact email so cannot send "
+            '"event_pending_approval_reminder" notification there.'
+        )
+        return
+
+    for email in contact_emails:
+        send_notification(
+            email,
+            NotificationType.EVENT_PENDING_APPROVAL_REMINDER.value,
+            {"event": event},
+        )
 
 
 def _send_notifications_to_contractor_and_officials(

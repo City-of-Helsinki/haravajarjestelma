@@ -24,6 +24,8 @@ def force_settings(settings):
     settings.LANGUAGES = (("fi", _("Finnish")),)
     settings.EVENT_MINIMUM_DAYS_BEFORE_START = 6
     settings.EVENT_REMINDER_DAYS_IN_ADVANCE = 2
+    settings.APPROVAL_REMINDER_DAYS_AFTER_CREATION = 3
+    settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT = 5
     settings.EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
     settings.DEFAULT_FROM_EMAIL = "noreply@foo.bar"
 

@@ -1,6 +1,5 @@
 from datetime import timedelta
 
-from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.utils import timezone
 from django.utils.timezone import localtime
@@ -53,7 +52,7 @@ class EventSerializer(UTCModelSerializer):
 
         if start_time:
             now = timezone.now()
-            if start_time > now + relativedelta(
+            if start_time > now + timedelta(
                 days=settings.EVENT_MAXIMUM_DAYS_TO_START
             ):
                 raise serializers.ValidationError(

@@ -40,10 +40,8 @@ class EventSerializer(UTCModelSerializer):
             fields["state"].read_only = True
         return fields
 
-    def validate(self, data):
-        start_time = data.get("start_time")
-        end_time = data.get("end_time")
-
+    def _validate_time_constraints(self, start_time, end_time):
+        """Validate time-related constraints for the event."""
         # PATCH updates only 'state', so check that start and end times are present in
         # the data
         if start_time and end_time:
@@ -67,6 +65,8 @@ class EventSerializer(UTCModelSerializer):
                 )
             )
 
+    def _validate_location(self, data, start_time, end_time):
+        """Validate location and contract zone availability."""
         location = data.get("location")
         if location:
             data["contract_zone"] = ContractZone.objects.get_active_by_location(
@@ -90,7 +90,13 @@ class EventSerializer(UTCModelSerializer):
                     raise serializers.ValidationError(
                         _("Unavailable dates: {}".format(sorted(unavailable_dates)))
                     )
+        return data
 
+    def validate(self, data):
+        start_time = data.get("start_time")
+        end_time = data.get("end_time")
+        self._validate_time_constraints(start_time, end_time)
+        data = self._validate_location(data, start_time, end_time)
         return data
 
 

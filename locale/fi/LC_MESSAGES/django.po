@@ -168,6 +168,9 @@ msgstr "\"Tapahtuma hyväksytty\" virkailijalle"
 msgid "Event reminder"
 msgstr "Tapahtumamuistutus"
 
+msgid "Event pending approval reminder"
+msgstr "Muistutus hyväksymättömästä tapahtumasta"
+
 msgid "Swedish"
 msgstr "ruotsi"
 

@@ -12,10 +12,8 @@ def set_random_seed():
 
 @pytest.fixture(autouse=True)
 def set_frozen_time():
-    freezer = freeze_time("2018-01-14T08:00:00Z")
-    freezer.start()
-    yield
-    freezer.stop()
+    with freeze_time("2018-01-14T08:00:00Z"):
+        yield
 
 
 @pytest.fixture(autouse=True)

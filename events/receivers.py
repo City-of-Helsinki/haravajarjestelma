@@ -6,6 +6,7 @@ from events.models import Event
 from events.notifications import (
     send_event_approved_notification,
     send_event_created_notification,
+    send_event_received_notification,
 )
 from events.signals import event_approved
 
@@ -14,6 +15,7 @@ from events.signals import event_approved
 def send_notification_on_creation(sender, instance, created, **kwargs):
     if created:
         send_event_created_notification(instance)
+        send_event_received_notification(instance)
 
 
 @receiver(event_approved, sender=Event, dispatch_uid="send_notification_on_approval")

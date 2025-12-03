@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.0](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.3.0...haravajarjestelma-v1.4.0) (2025-12-03)
+
+
+### Features
+
+* Add sentry logging for uWSGI ([1ea31c5](https://github.com/City-of-Helsinki/haravajarjestelma/commit/1ea31c55d5e1268f1461ce58f6d480c9c7cee0c1))
+* **sentry:** Update sentry configuration ([7c86282](https://github.com/City-of-Helsinki/haravajarjestelma/commit/7c86282d3e47d0800563678f91faa4956809ba48))
+
+
+### Dependencies
+
+* Bump django from 5.2.8 to 5.2.9 ([823b9cc](https://github.com/City-of-Helsinki/haravajarjestelma/commit/823b9cca76d0b11a4eb545e9f982abaef1902581))
+
 ## [1.3.0](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.2.1...haravajarjestelma-v1.3.0) (2025-11-12)
 
 

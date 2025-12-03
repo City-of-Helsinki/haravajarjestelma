@@ -34,10 +34,8 @@ def check_address_data_matches_object(address_data, address_obj):
 
 @pytest.fixture(autouse=True)
 def set_frozen_time():
-    freezer = freeze_time("2018-11-01T08:00:00Z")
-    freezer.start()
-    yield
-    freezer.stop()
+    with freeze_time("2018-11-01T08:00:00Z"):
+        yield
 
 
 @pytest.fixture(autouse=True)

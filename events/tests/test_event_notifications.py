@@ -145,28 +145,25 @@ def test_event_reminder_notification_is_sent_to_contractors_in_time(
         current_moment = "2018-01-10T08:00:00Z"
         event_days_afterwards = 2
 
-    freezer = freeze_time(current_moment)
-    freezer.start()
+    with freeze_time(current_moment):
 
-    # this time should be 1 minute too far in the future
-    start_time = localtime(now() + timedelta(days=event_days_afterwards + 1)).replace(
-        hour=0, minute=1
-    )
-    event = EventFactory(state=Event.APPROVED, start_time=start_time)
+        # this time should be 1 minute too far in the future
+        start_time = localtime(now() + timedelta(days=event_days_afterwards + 1)).replace(
+            hour=0, minute=1
+        )
+        event = EventFactory(state=Event.APPROVED, start_time=start_time)
 
-    call_command("send_event_reminder_notifications")
-    assert len(mail.outbox) == 0
+        call_command("send_event_reminder_notifications")
+        assert len(mail.outbox) == 0
 
-    # this time should be inside by 1 minute
-    event.start_time -= timedelta(minutes=2)
-    event.save()
+        # this time should be inside by 1 minute
+        event.start_time -= timedelta(minutes=2)
+        event.save()
 
-    call_command("send_event_reminder_notifications")
+        call_command("send_event_reminder_notifications")
 
-    assert len(mail.outbox) == 2
-    subject_str = f"hello! don't forget event {event.name}!"
-    assert mail.outbox[0].subject == subject_str
-    assert mail.outbox[1].subject == subject_str
-    assert_to_addresses(event.contract_zone.email, event.contract_zone.secondary_email)
-
-    freezer.stop()
+        assert len(mail.outbox) == 2
+        subject_str = f"hello! don't forget event {event.name}!"
+        assert mail.outbox[0].subject == subject_str
+        assert mail.outbox[1].subject == subject_str
+        assert_to_addresses(event.contract_zone.email, event.contract_zone.secondary_email)

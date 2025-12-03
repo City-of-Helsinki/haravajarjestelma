@@ -44,35 +44,29 @@ class TestCreationBasedReminder:
         """
         # Create event on Monday 2018-01-08
         # Reminder should fire 3 days later = Thursday 2018-01-11 (business day)
-        freezer = freeze_time("2018-01-08T08:00:00Z")  # Monday
-        freezer.start()
+        with freeze_time("2018-01-08T08:00:00Z"):  # Monday
 
-        contract_zone = ContractZoneFactory(
-            email="primary@test.test", secondary_email="secondary@test.test"
-        )
-        event = EventFactory(
-            state=Event.WAITING_FOR_APPROVAL,
-            contract_zone=contract_zone,
-            start_time=now() + timedelta(days=30),  # Far in future
-        )
-        mail.outbox = []
+            contract_zone = ContractZoneFactory(
+                email="primary@test.test", secondary_email="secondary@test.test"
+            )
+            event = EventFactory(
+                state=Event.WAITING_FOR_APPROVAL,
+                contract_zone=contract_zone,
+                start_time=now() + timedelta(days=30),  # Far in future
+            )
+            mail.outbox = []
 
-        # Should not send on day of creation
-        call_command("send_approval_reminder_notifications")
-        assert len(mail.outbox) == 0
-
-        freezer.stop()
+            # Should not send on day of creation
+            call_command("send_approval_reminder_notifications")
+            assert len(mail.outbox) == 0
 
         # Advance to 3 days later (Thursday 2018-01-11)
-        freezer = freeze_time("2018-01-11T08:00:00Z")  # Thursday
-        freezer.start()
+        with freeze_time("2018-01-11T08:00:00Z"):  # Thursday
 
-        call_command("send_approval_reminder_notifications")
-        assert len(mail.outbox) == 2
-        assert_to_addresses(contract_zone.email, contract_zone.secondary_email)
-        assert mail.outbox[0].subject == f"please approve event {event.name}!"
-
-        freezer.stop()
+            call_command("send_approval_reminder_notifications")
+            assert len(mail.outbox) == 2
+            assert_to_addresses(contract_zone.email, contract_zone.secondary_email)
+            assert mail.outbox[0].subject == f"please approve event {event.name}!"
 
     def test_vacation_day_shifts_to_next_business_day(self, notification_template):
         """
@@ -82,55 +76,45 @@ class TestCreationBasedReminder:
         # Create event on Thursday 2018-01-11
         # Reminder would be 3 days later = Sunday 2018-01-14 (vacation day)
         # Should shift FORWARD to Monday 2018-01-15
-        freezer = freeze_time("2018-01-11T08:00:00Z")  # Thursday
-        freezer.start()
+        with freeze_time("2018-01-11T08:00:00Z"):  # Thursday
 
-        contract_zone = ContractZoneFactory(
-            email="contractor@test.test", secondary_email=""
-        )
-        event = EventFactory(
-            state=Event.WAITING_FOR_APPROVAL,
-            contract_zone=contract_zone,
-            start_time=now() + timedelta(days=30),
-        )
-        mail.outbox = []
-        freezer.stop()
+            contract_zone = ContractZoneFactory(
+                email="contractor@test.test", secondary_email=""
+            )
+            event = EventFactory(
+                state=Event.WAITING_FOR_APPROVAL,
+                contract_zone=contract_zone,
+                start_time=now() + timedelta(days=30),
+            )
+            mail.outbox = []
 
         # Sunday 2018-01-14 - should NOT fire (shifted to Monday)
-        freezer = freeze_time("2018-01-14T08:00:00Z")  # Sunday
-        freezer.start()
-        call_command("send_approval_reminder_notifications")
-        assert len(mail.outbox) == 0
-        freezer.stop()
+        with freeze_time("2018-01-14T08:00:00Z"):  # Sunday
+            call_command("send_approval_reminder_notifications")
+            assert len(mail.outbox) == 0
 
         # Monday 2018-01-15 - should fire
-        freezer = freeze_time("2018-01-15T08:00:00Z")  # Monday
-        freezer.start()
-        call_command("send_approval_reminder_notifications")
-        assert len(mail.outbox) == 1
-        assert mail.outbox[0].subject == f"please approve event {event.name}!"
-        freezer.stop()
+        with freeze_time("2018-01-15T08:00:00Z"):  # Monday
+            call_command("send_approval_reminder_notifications")
+            assert len(mail.outbox) == 1
+            assert mail.outbox[0].subject == f"please approve event {event.name}!"
 
     def test_reminder_not_sent_for_approved_events(self, notification_template):
         """Approved events should not receive approval reminders."""
-        freezer = freeze_time("2018-01-08T08:00:00Z")  # Monday
-        freezer.start()
+        with freeze_time("2018-01-08T08:00:00Z"):  # Monday
 
-        contract_zone = ContractZoneFactory(email="contractor@test.test")
-        EventFactory(
-            state=Event.APPROVED,  # Already approved
-            contract_zone=contract_zone,
-            start_time=now() + timedelta(days=30),
-        )
-        mail.outbox = []
-        freezer.stop()
+            contract_zone = ContractZoneFactory(email="contractor@test.test")
+            EventFactory(
+                state=Event.APPROVED,  # Already approved
+                contract_zone=contract_zone,
+                start_time=now() + timedelta(days=30),
+            )
+            mail.outbox = []
 
         # 3 days later (Thursday)
-        freezer = freeze_time("2018-01-11T08:00:00Z")
-        freezer.start()
-        call_command("send_approval_reminder_notifications")
-        assert len(mail.outbox) == 0
-        freezer.stop()
+        with freeze_time("2018-01-11T08:00:00Z"):
+            call_command("send_approval_reminder_notifications")
+            assert len(mail.outbox) == 0
 
     def test_reminder_disabled_with_negative_value(
         self, notification_template, settings
@@ -138,24 +122,20 @@ class TestCreationBasedReminder:
         """Setting APPROVAL_REMINDER_DAYS_AFTER_CREATION to -1 disables this reminder."""
         settings.APPROVAL_REMINDER_DAYS_AFTER_CREATION = -1
 
-        freezer = freeze_time("2018-01-08T08:00:00Z")  # Monday
-        freezer.start()
+        with freeze_time("2018-01-08T08:00:00Z"):  # Monday
 
-        contract_zone = ContractZoneFactory(email="contractor@test.test")
-        EventFactory(
-            state=Event.WAITING_FOR_APPROVAL,
-            contract_zone=contract_zone,
-            start_time=now() + timedelta(days=30),
-        )
-        mail.outbox = []
-        freezer.stop()
+            contract_zone = ContractZoneFactory(email="contractor@test.test")
+            EventFactory(
+                state=Event.WAITING_FOR_APPROVAL,
+                contract_zone=contract_zone,
+                start_time=now() + timedelta(days=30),
+            )
+            mail.outbox = []
 
         # 3 days later - should not fire because disabled
-        freezer = freeze_time("2018-01-11T08:00:00Z")
-        freezer.start()
-        call_command("send_approval_reminder_notifications")
-        assert len(mail.outbox) == 0
-        freezer.stop()
+        with freeze_time("2018-01-11T08:00:00Z"):
+            call_command("send_approval_reminder_notifications")
+            assert len(mail.outbox) == 0
 
 
 class TestDeadlineBasedReminder:
@@ -169,26 +149,23 @@ class TestDeadlineBasedReminder:
         # now = Monday 2018-01-08
         # Event starts in 5 days = Saturday 2018-01-13
         # Deadline reminder = 5 days before = Monday 2018-01-08 (today)
-        freezer = freeze_time("2018-01-08T08:00:00Z")  # Monday
-        freezer.start()
+        with freeze_time("2018-01-08T08:00:00Z"):  # Monday
 
-        contract_zone = ContractZoneFactory(
-            email="primary@test.test", secondary_email="secondary@test.test"
-        )
-        event = EventFactory(
-            state=Event.WAITING_FOR_APPROVAL,
-            contract_zone=contract_zone,
-            start_time=now()
-            + timedelta(days=settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT),
-        )
-        mail.outbox = []
+            contract_zone = ContractZoneFactory(
+                email="primary@test.test", secondary_email="secondary@test.test"
+            )
+            event = EventFactory(
+                state=Event.WAITING_FOR_APPROVAL,
+                contract_zone=contract_zone,
+                start_time=now()
+                + timedelta(days=settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT),
+            )
+            mail.outbox = []
 
-        call_command("send_approval_reminder_notifications")
-        assert len(mail.outbox) == 2
-        assert_to_addresses(contract_zone.email, contract_zone.secondary_email)
-        assert mail.outbox[0].subject == f"please approve event {event.name}!"
-
-        freezer.stop()
+            call_command("send_approval_reminder_notifications")
+            assert len(mail.outbox) == 2
+            assert_to_addresses(contract_zone.email, contract_zone.secondary_email)
+            assert mail.outbox[0].subject == f"please approve event {event.name}!"
 
     def test_reminder_not_sent_before_deadline_reminder_day(
         self, notification_template
@@ -197,21 +174,18 @@ class TestDeadlineBasedReminder:
         # now = Monday 2018-01-08
         # Event starts in 10 days = Thursday 2018-01-18
         # Deadline reminder = 5 days before = Saturday 2018-01-13, shifts to Friday 2018-01-12
-        freezer = freeze_time("2018-01-08T08:00:00Z")
-        freezer.start()
+        with freeze_time("2018-01-08T08:00:00Z"):
 
-        contract_zone = ContractZoneFactory(email="contractor@test.test")
-        EventFactory(
-            state=Event.WAITING_FOR_APPROVAL,
-            contract_zone=contract_zone,
-            start_time=now() + timedelta(days=10),
-        )
-        mail.outbox = []
+            contract_zone = ContractZoneFactory(email="contractor@test.test")
+            EventFactory(
+                state=Event.WAITING_FOR_APPROVAL,
+                contract_zone=contract_zone,
+                start_time=now() + timedelta(days=10),
+            )
+            mail.outbox = []
 
-        call_command("send_approval_reminder_notifications")
-        assert len(mail.outbox) == 0
-
-        freezer.stop()
+            call_command("send_approval_reminder_notifications")
+            assert len(mail.outbox) == 0
 
     def test_vacation_day_shifts_to_preceding_business_day(self, notification_template):
         """
@@ -221,26 +195,23 @@ class TestDeadlineBasedReminder:
         # Event starts on Thursday 2018-01-18
         # Deadline reminder = 5 days before = Saturday 2018-01-13 (vacation day)
         # Should shift BACKWARD to Friday 2018-01-12
-        freezer = freeze_time("2018-01-12T08:00:00Z")  # Friday
-        freezer.start()
+        with freeze_time("2018-01-12T08:00:00Z"):  # Friday
 
-        contract_zone = ContractZoneFactory(
-            email="contractor@test.test", secondary_email=""
-        )
-        event = EventFactory(
-            state=Event.WAITING_FOR_APPROVAL,
-            contract_zone=contract_zone,
-            start_time=localtime(now()).replace(
-                year=2018, month=1, day=18, hour=10, minute=0
-            ),  # Thursday
-        )
-        mail.outbox = []
+            contract_zone = ContractZoneFactory(
+                email="contractor@test.test", secondary_email=""
+            )
+            event = EventFactory(
+                state=Event.WAITING_FOR_APPROVAL,
+                contract_zone=contract_zone,
+                start_time=localtime(now()).replace(
+                    year=2018, month=1, day=18, hour=10, minute=0
+                ),  # Thursday
+            )
+            mail.outbox = []
 
-        call_command("send_approval_reminder_notifications")
-        assert len(mail.outbox) == 1
-        assert mail.outbox[0].subject == f"please approve event {event.name}!"
-
-        freezer.stop()
+            call_command("send_approval_reminder_notifications")
+            assert len(mail.outbox) == 1
+            assert mail.outbox[0].subject == f"please approve event {event.name}!"
 
     def test_reminder_disabled_with_negative_value(
         self, notification_template, settings
@@ -248,21 +219,18 @@ class TestDeadlineBasedReminder:
         """Setting APPROVAL_REMINDER_DAYS_BEFORE_EVENT to -1 disables this reminder."""
         settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT = -1
 
-        freezer = freeze_time("2018-01-08T08:00:00Z")
-        freezer.start()
+        with freeze_time("2018-01-08T08:00:00Z"):
 
-        contract_zone = ContractZoneFactory(email="contractor@test.test")
-        EventFactory(
-            state=Event.WAITING_FOR_APPROVAL,
-            contract_zone=contract_zone,
-            start_time=now() + timedelta(days=5),  # Would normally trigger
-        )
-        mail.outbox = []
+            contract_zone = ContractZoneFactory(email="contractor@test.test")
+            EventFactory(
+                state=Event.WAITING_FOR_APPROVAL,
+                contract_zone=contract_zone,
+                start_time=now() + timedelta(days=5),  # Would normally trigger
+            )
+            mail.outbox = []
 
-        call_command("send_approval_reminder_notifications")
-        assert len(mail.outbox) == 0
-
-        freezer.stop()
+            call_command("send_approval_reminder_notifications")
+            assert len(mail.outbox) == 0
 
 
 class TestBothTriggers:
@@ -277,38 +245,32 @@ class TestBothTriggers:
         # Event starts on Monday 2018-01-22 (14 days later)
         # Creation reminder: 2018-01-08 + 3 = Thursday 2018-01-11
         # Deadline reminder: 2018-01-22 - 5 = Wednesday 2018-01-17
-        freezer = freeze_time("2018-01-08T08:00:00Z")  # Monday
-        freezer.start()
+        with freeze_time("2018-01-08T08:00:00Z"):  # Monday
 
-        contract_zone = ContractZoneFactory(
-            email="contractor@test.test", secondary_email=""
-        )
-        event = EventFactory(
-            state=Event.WAITING_FOR_APPROVAL,
-            contract_zone=contract_zone,
-            start_time=localtime(now()).replace(
-                year=2018, month=1, day=22, hour=10, minute=0
-            ),  # Monday 2018-01-22
-        )
-        mail.outbox = []
-        freezer.stop()
+            contract_zone = ContractZoneFactory(
+                email="contractor@test.test", secondary_email=""
+            )
+            event = EventFactory(
+                state=Event.WAITING_FOR_APPROVAL,
+                contract_zone=contract_zone,
+                start_time=localtime(now()).replace(
+                    year=2018, month=1, day=22, hour=10, minute=0
+                ),  # Monday 2018-01-22
+            )
+            mail.outbox = []
 
         # Day 3 (Thursday 2018-01-11) - creation reminder fires
-        freezer = freeze_time("2018-01-11T08:00:00Z")
-        freezer.start()
-        call_command("send_approval_reminder_notifications")
-        assert len(mail.outbox) == 1
-        assert mail.outbox[0].subject == f"please approve event {event.name}!"
-        mail.outbox = []
-        freezer.stop()
+        with freeze_time("2018-01-11T08:00:00Z"):
+            call_command("send_approval_reminder_notifications")
+            assert len(mail.outbox) == 1
+            assert mail.outbox[0].subject == f"please approve event {event.name}!"
+            mail.outbox = []
 
         # 5 days before event (Wednesday 2018-01-17) - deadline reminder fires
-        freezer = freeze_time("2018-01-17T08:00:00Z")
-        freezer.start()
-        call_command("send_approval_reminder_notifications")
-        assert len(mail.outbox) == 1
-        assert mail.outbox[0].subject == f"please approve event {event.name}!"
-        freezer.stop()
+        with freeze_time("2018-01-17T08:00:00Z"):
+            call_command("send_approval_reminder_notifications")
+            assert len(mail.outbox) == 1
+            assert mail.outbox[0].subject == f"please approve event {event.name}!"
 
     def test_both_reminders_fire_on_same_day_if_dates_align(
         self, notification_template
@@ -322,51 +284,44 @@ class TestBothTriggers:
         # Creation reminder: 2018-01-08 + 3 = Thursday 2018-01-11
         # Deadline reminder: 2018-01-16 - 5 = Thursday 2018-01-11
         # Both align on Thursday 2018-01-11
-        freezer = freeze_time("2018-01-08T08:00:00Z")  # Monday
-        freezer.start()
+        with freeze_time("2018-01-08T08:00:00Z"):  # Monday
 
-        contract_zone = ContractZoneFactory(
-            email="contractor@test.test", secondary_email=""
-        )
-        event = EventFactory(
-            state=Event.WAITING_FOR_APPROVAL,
-            contract_zone=contract_zone,
-            start_time=localtime(now()).replace(
-                year=2018, month=1, day=16, hour=10, minute=0
-            ),  # Tuesday 2018-01-16
-        )
-        mail.outbox = []
-        freezer.stop()
+            contract_zone = ContractZoneFactory(
+                email="contractor@test.test", secondary_email=""
+            )
+            event = EventFactory(
+                state=Event.WAITING_FOR_APPROVAL,
+                contract_zone=contract_zone,
+                start_time=localtime(now()).replace(
+                    year=2018, month=1, day=16, hour=10, minute=0
+                ),  # Tuesday 2018-01-16
+            )
+            mail.outbox = []
 
         # Thursday 2018-01-11 - both triggers match, but only one email sent
-        freezer = freeze_time("2018-01-11T08:00:00Z")
-        freezer.start()
-        call_command("send_approval_reminder_notifications")
-        # Even though both conditions match, we only send one notification
-        assert len(mail.outbox) == 1
-        assert mail.outbox[0].subject == f"please approve event {event.name}!"
-        freezer.stop()
+        with freeze_time("2018-01-11T08:00:00Z"):
+            call_command("send_approval_reminder_notifications")
+            # Even though both conditions match, we only send one notification
+            assert len(mail.outbox) == 1
+            assert mail.outbox[0].subject == f"please approve event {event.name}!"
 
     def test_both_reminders_disabled(self, notification_template, settings):
         """When both reminders are disabled, no emails are sent."""
         settings.APPROVAL_REMINDER_DAYS_AFTER_CREATION = -1
         settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT = -1
 
-        freezer = freeze_time("2018-01-08T08:00:00Z")
-        freezer.start()
+        with freeze_time("2018-01-08T08:00:00Z"):
 
-        contract_zone = ContractZoneFactory(email="contractor@test.test")
-        EventFactory(
-            state=Event.WAITING_FOR_APPROVAL,
-            contract_zone=contract_zone,
-            start_time=now() + timedelta(days=5),
-        )
-        mail.outbox = []
+            contract_zone = ContractZoneFactory(email="contractor@test.test")
+            EventFactory(
+                state=Event.WAITING_FOR_APPROVAL,
+                contract_zone=contract_zone,
+                start_time=now() + timedelta(days=5),
+            )
+            mail.outbox = []
 
-        call_command("send_approval_reminder_notifications")
-        assert len(mail.outbox) == 0
-
-        freezer.stop()
+            call_command("send_approval_reminder_notifications")
+            assert len(mail.outbox) == 0
 
 
 class TestEdgeCases:
@@ -374,74 +329,65 @@ class TestEdgeCases:
 
     def test_no_reminder_for_past_events(self, notification_template):
         """Events that have already started should not receive reminders."""
-        freezer = freeze_time("2018-01-14T08:00:00Z")
-        freezer.start()
+        with freeze_time("2018-01-14T08:00:00Z"):
 
-        contract_zone = ContractZoneFactory(email="contractor@test.test")
-        # Event that started yesterday
-        EventFactory(
-            state=Event.WAITING_FOR_APPROVAL,
-            contract_zone=contract_zone,
-            start_time=now() - timedelta(days=1),
-        )
-        mail.outbox = []
+            contract_zone = ContractZoneFactory(email="contractor@test.test")
+            # Event that started yesterday
+            EventFactory(
+                state=Event.WAITING_FOR_APPROVAL,
+                contract_zone=contract_zone,
+                start_time=now() - timedelta(days=1),
+            )
+            mail.outbox = []
 
-        call_command("send_approval_reminder_notifications")
-        assert len(mail.outbox) == 0
-
-        freezer.stop()
+            call_command("send_approval_reminder_notifications")
+            assert len(mail.outbox) == 0
 
     def test_no_reminder_when_contract_zone_has_no_email(
         self, notification_template, caplog
     ):
         """When contract zone has no email, log a warning and don't crash."""
-        freezer = freeze_time("2018-01-10T08:00:00Z")
-        freezer.start()
+        with freeze_time("2018-01-10T08:00:00Z"):
 
-        contract_zone = ContractZoneFactory(email="", secondary_email="")
-        EventFactory(
-            state=Event.WAITING_FOR_APPROVAL,
-            contract_zone=contract_zone,
-            start_time=now()
-            + timedelta(days=settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT),
-        )
-        mail.outbox = []
+            contract_zone = ContractZoneFactory(email="", secondary_email="")
+            EventFactory(
+                state=Event.WAITING_FOR_APPROVAL,
+                contract_zone=contract_zone,
+                start_time=now()
+                + timedelta(days=settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT),
+            )
+            mail.outbox = []
 
-        call_command("send_approval_reminder_notifications")
-        assert len(mail.outbox) == 0
-        assert "has no contact email" in caplog.text
-
-        freezer.stop()
+            call_command("send_approval_reminder_notifications")
+            assert len(mail.outbox) == 0
+            assert "has no contact email" in caplog.text
 
     def test_multiple_pending_events_each_get_reminders(self, notification_template):
         """Each pending event should be evaluated independently."""
-        freezer = freeze_time("2018-01-10T08:00:00Z")
-        freezer.start()
+        with freeze_time("2018-01-10T08:00:00Z"):
 
-        contract_zone1 = ContractZoneFactory(
-            email="contractor1@test.test", secondary_email=""
-        )
-        contract_zone2 = ContractZoneFactory(
-            email="contractor2@test.test", secondary_email=""
-        )
+            contract_zone1 = ContractZoneFactory(
+                email="contractor1@test.test", secondary_email=""
+            )
+            contract_zone2 = ContractZoneFactory(
+                email="contractor2@test.test", secondary_email=""
+            )
 
-        # Both events have deadline reminder today
-        EventFactory(
-            state=Event.WAITING_FOR_APPROVAL,
-            contract_zone=contract_zone1,
-            start_time=now()
-            + timedelta(days=settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT),
-        )
-        EventFactory(
-            state=Event.WAITING_FOR_APPROVAL,
-            contract_zone=contract_zone2,
-            start_time=now()
-            + timedelta(days=settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT),
-        )
-        mail.outbox = []
+            # Both events have deadline reminder today
+            EventFactory(
+                state=Event.WAITING_FOR_APPROVAL,
+                contract_zone=contract_zone1,
+                start_time=now()
+                + timedelta(days=settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT),
+            )
+            EventFactory(
+                state=Event.WAITING_FOR_APPROVAL,
+                contract_zone=contract_zone2,
+                start_time=now()
+                + timedelta(days=settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT),
+            )
+            mail.outbox = []
 
-        call_command("send_approval_reminder_notifications")
-        assert len(mail.outbox) == 2
-        assert_to_addresses(contract_zone1.email, contract_zone2.email)
-
-        freezer.stop()
+            call_command("send_approval_reminder_notifications")
+            assert len(mail.outbox) == 2
+            assert_to_addresses(contract_zone1.email, contract_zone2.email)

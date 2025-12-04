@@ -87,6 +87,13 @@ class Event(models.Model):
         editable=False,
     )
 
+    is_anonymized = models.BooleanField(
+        verbose_name=_("is anonymized"),
+        default=False,
+        db_index=True,
+        help_text=_("Whether this event has been anonymized for GDPR compliance"),
+    )
+
     objects = EventQuerySet.as_manager()
 
     class Meta:

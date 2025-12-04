@@ -85,6 +85,7 @@ def test_event_received_notification_is_sent_to_organizer(
 
     # Manually trigger the event received notification
     from events.notifications import send_event_received_notification
+
     send_event_received_notification(event)
 
     assert len(mail.outbox) == 1
@@ -102,7 +103,7 @@ def test_event_created_notification_is_sent_to_contractors_and_admin(
 
     # Should now be 4 emails: 3 for contractors/officials + 1 for organizer
     assert len(mail.outbox) == 4
-    subject_str = "test event created subject, event: {}!".format(event.name)
+    subject_str = f"test event created subject, event: {event.name}!"
     # First 3 emails are for contractors/officials
     assert mail.outbox[0].subject == subject_str
     assert mail.outbox[1].subject == subject_str
@@ -111,7 +112,10 @@ def test_event_created_notification_is_sent_to_contractors_and_admin(
     assert mail.outbox[3].subject == f"Event received: {event.name}"
     assert mail.outbox[3].to == [event.organizer_email]
     assert_to_addresses(
-        official.email, contract_zone.email, contract_zone.secondary_email, event.organizer_email
+        official.email,
+        contract_zone.email,
+        contract_zone.secondary_email,
+        event.organizer_email,
     )
 
 
@@ -179,11 +183,10 @@ def test_event_reminder_notification_is_sent_to_contractors_in_time(
         event_days_afterwards = 2
 
     with freeze_time(current_moment):
-
         # this time should be 1 minute too far in the future
-        start_time = localtime(now() + timedelta(days=event_days_afterwards + 1)).replace(
-            hour=0, minute=1
-        )
+        start_time = localtime(
+            now() + timedelta(days=event_days_afterwards + 1)
+        ).replace(hour=0, minute=1)
         event = EventFactory(state=Event.APPROVED, start_time=start_time)
 
         call_command("send_event_reminder_notifications")
@@ -199,4 +202,6 @@ def test_event_reminder_notification_is_sent_to_contractors_in_time(
         subject_str = f"hello! don't forget event {event.name}!"
         assert mail.outbox[0].subject == subject_str
         assert mail.outbox[1].subject == subject_str
-        assert_to_addresses(event.contract_zone.email, event.contract_zone.secondary_email)
+        assert_to_addresses(
+            event.contract_zone.email, event.contract_zone.secondary_email
+        )

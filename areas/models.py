@@ -71,7 +71,8 @@ class ContractZone(SerializableMixin):
             days=settings.EVENT_MINIMUM_DAYS_BEFORE_START
         )
 
-        # Get explicitly blocked dates for this contract zone (beyond minimum lead time only)
+        # Get explicitly blocked dates for this contract zone
+        # (beyond minimum lead time only)
         blocked_dates = set(
             self.blocked_dates.filter(date__gt=last_too_early_day).values_list(
                 "date", flat=True

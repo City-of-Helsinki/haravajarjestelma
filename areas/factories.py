@@ -3,7 +3,7 @@ from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from factory.random import randgen
 from munigeo.models import Address, Municipality, Street
 
-from .models import ContractZone, BlockedDate
+from .models import BlockedDate, ContractZone
 
 
 class ContractZoneFactory(factory.django.DjangoModelFactory):

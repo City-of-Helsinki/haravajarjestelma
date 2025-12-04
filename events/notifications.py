@@ -16,7 +16,7 @@ def get_notification_base_context():
     """Get common context variables for all notifications"""
     return {
         "site_name": "Helsinki Puistotalkoot",
-        "site_url": "https://puistotalkoot.hel.fi"
+        "site_url": "https://puistotalkoot.hel.fi",
     }
 
 
@@ -118,9 +118,7 @@ def send_event_reminder_notification(event):
     context = get_notification_base_context()
     context["event"] = event
     for email in contact_emails:
-        send_notification(
-            email, NotificationType.EVENT_REMINDER.value, context
-        )
+        send_notification(email, NotificationType.EVENT_REMINDER.value, context)
 
     event.reminder_sent_at = now()
     event.save(update_fields=("reminder_sent_at",))

@@ -1,11 +1,11 @@
 from django import forms
 from django.contrib import admin
-from django.contrib.admin import register, TabularInline
+from django.contrib.admin import TabularInline, register
 from django.contrib.auth import get_user_model
 from django.contrib.gis.admin import GISModelAdmin
 from django.utils.translation import gettext_lazy as _
 
-from .models import ContractZone, BlockedDate
+from .models import BlockedDate, ContractZone
 
 User = get_user_model()
 
@@ -27,6 +27,7 @@ class BlockedDateInline(TabularInline):
     Inline admin for managing blocked dates directly on the ContractZone admin page.
     Shows blocked dates in a tabular format with audit information.
     """
+
     model = BlockedDate
     extra = 0
     fields = ("date", "reason", "created_by", "created_at")
@@ -130,6 +131,7 @@ class BlockedDateAdmin(admin.ModelAdmin):
     Admin interface for managing blocked dates across all contract zones.
     Provides full CRUD operations with audit trail tracking.
     """
+
     list_display = ("date", "contract_zone", "reason", "created_by", "created_at")
     list_filter = ("contract_zone", "date", "created_by")
     search_fields = ("contract_zone__name", "reason")

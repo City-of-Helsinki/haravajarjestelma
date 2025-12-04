@@ -39,6 +39,7 @@ EXPECTED_EVENT_KEYS = {
     "trash_picker_count",
     "contract_zone",
     "equipment_information",
+    "is_anonymized",
 }
 
 EXPECTED_PUBLIC_EVENT_KEYS = {"name", "start_time", "end_time", "location"}

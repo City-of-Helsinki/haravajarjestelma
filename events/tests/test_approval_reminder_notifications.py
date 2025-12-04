@@ -45,7 +45,6 @@ class TestCreationBasedReminder:
         # Create event on Monday 2018-01-08
         # Reminder should fire 3 days later = Thursday 2018-01-11 (business day)
         with freeze_time("2018-01-08T08:00:00Z"):  # Monday
-
             contract_zone = ContractZoneFactory(
                 email="primary@test.test", secondary_email="secondary@test.test"
             )
@@ -62,7 +61,6 @@ class TestCreationBasedReminder:
 
         # Advance to 3 days later (Thursday 2018-01-11)
         with freeze_time("2018-01-11T08:00:00Z"):  # Thursday
-
             call_command("send_approval_reminder_notifications")
             assert len(mail.outbox) == 2
             assert_to_addresses(contract_zone.email, contract_zone.secondary_email)
@@ -77,7 +75,6 @@ class TestCreationBasedReminder:
         # Reminder would be 3 days later = Sunday 2018-01-14 (vacation day)
         # Should shift FORWARD to Monday 2018-01-15
         with freeze_time("2018-01-11T08:00:00Z"):  # Thursday
-
             contract_zone = ContractZoneFactory(
                 email="contractor@test.test", secondary_email=""
             )
@@ -102,7 +99,6 @@ class TestCreationBasedReminder:
     def test_reminder_not_sent_for_approved_events(self, notification_template):
         """Approved events should not receive approval reminders."""
         with freeze_time("2018-01-08T08:00:00Z"):  # Monday
-
             contract_zone = ContractZoneFactory(email="contractor@test.test")
             EventFactory(
                 state=Event.APPROVED,  # Already approved
@@ -123,7 +119,6 @@ class TestCreationBasedReminder:
         settings.APPROVAL_REMINDER_DAYS_AFTER_CREATION = -1
 
         with freeze_time("2018-01-08T08:00:00Z"):  # Monday
-
             contract_zone = ContractZoneFactory(email="contractor@test.test")
             EventFactory(
                 state=Event.WAITING_FOR_APPROVAL,
@@ -150,7 +145,6 @@ class TestDeadlineBasedReminder:
         # Event starts in 5 days = Saturday 2018-01-13
         # Deadline reminder = 5 days before = Monday 2018-01-08 (today)
         with freeze_time("2018-01-08T08:00:00Z"):  # Monday
-
             contract_zone = ContractZoneFactory(
                 email="primary@test.test", secondary_email="secondary@test.test"
             )
@@ -175,7 +169,6 @@ class TestDeadlineBasedReminder:
         # Event starts in 10 days = Thursday 2018-01-18
         # Deadline reminder = 5 days before = Saturday 2018-01-13, shifts to Friday 2018-01-12
         with freeze_time("2018-01-08T08:00:00Z"):
-
             contract_zone = ContractZoneFactory(email="contractor@test.test")
             EventFactory(
                 state=Event.WAITING_FOR_APPROVAL,
@@ -196,7 +189,6 @@ class TestDeadlineBasedReminder:
         # Deadline reminder = 5 days before = Saturday 2018-01-13 (vacation day)
         # Should shift BACKWARD to Friday 2018-01-12
         with freeze_time("2018-01-12T08:00:00Z"):  # Friday
-
             contract_zone = ContractZoneFactory(
                 email="contractor@test.test", secondary_email=""
             )
@@ -220,7 +212,6 @@ class TestDeadlineBasedReminder:
         settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT = -1
 
         with freeze_time("2018-01-08T08:00:00Z"):
-
             contract_zone = ContractZoneFactory(email="contractor@test.test")
             EventFactory(
                 state=Event.WAITING_FOR_APPROVAL,
@@ -246,7 +237,6 @@ class TestBothTriggers:
         # Creation reminder: 2018-01-08 + 3 = Thursday 2018-01-11
         # Deadline reminder: 2018-01-22 - 5 = Wednesday 2018-01-17
         with freeze_time("2018-01-08T08:00:00Z"):  # Monday
-
             contract_zone = ContractZoneFactory(
                 email="contractor@test.test", secondary_email=""
             )
@@ -285,7 +275,6 @@ class TestBothTriggers:
         # Deadline reminder: 2018-01-16 - 5 = Thursday 2018-01-11
         # Both align on Thursday 2018-01-11
         with freeze_time("2018-01-08T08:00:00Z"):  # Monday
-
             contract_zone = ContractZoneFactory(
                 email="contractor@test.test", secondary_email=""
             )
@@ -311,7 +300,6 @@ class TestBothTriggers:
         settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT = -1
 
         with freeze_time("2018-01-08T08:00:00Z"):
-
             contract_zone = ContractZoneFactory(email="contractor@test.test")
             EventFactory(
                 state=Event.WAITING_FOR_APPROVAL,
@@ -330,7 +318,6 @@ class TestEdgeCases:
     def test_no_reminder_for_past_events(self, notification_template):
         """Events that have already started should not receive reminders."""
         with freeze_time("2018-01-14T08:00:00Z"):
-
             contract_zone = ContractZoneFactory(email="contractor@test.test")
             # Event that started yesterday
             EventFactory(
@@ -348,7 +335,6 @@ class TestEdgeCases:
     ):
         """When contract zone has no email, log a warning and don't crash."""
         with freeze_time("2018-01-10T08:00:00Z"):
-
             contract_zone = ContractZoneFactory(email="", secondary_email="")
             EventFactory(
                 state=Event.WAITING_FOR_APPROVAL,
@@ -365,7 +351,6 @@ class TestEdgeCases:
     def test_multiple_pending_events_each_get_reminders(self, notification_template):
         """Each pending event should be evaluated independently."""
         with freeze_time("2018-01-10T08:00:00Z"):
-
             contract_zone1 = ContractZoneFactory(
                 email="contractor1@test.test", secondary_email=""
             )

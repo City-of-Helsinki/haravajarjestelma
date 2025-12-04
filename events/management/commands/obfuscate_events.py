@@ -1,15 +1,14 @@
 """Management command to anonymize old Event PII."""
 
-from datetime import timedelta
 import logging
 import os
+from datetime import timedelta
 
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.utils import timezone
 
 from events.models import Event
-
 
 logger = logging.getLogger(__name__)
 
@@ -28,11 +27,13 @@ SENTINELS = {
 
 class Command(BaseCommand):
     """
-    Django management command to anonymize old Event PII (Personally Identifiable Information).
+    Django management command to anonymize old Event PII
+    (Personally Identifiable Information).
 
-    This command replaces sensitive organizer information with sentinel values for events
-    that have ended more than a configurable number of days ago. Events are never deleted,
-    only anonymized in-place.
+    This command replaces sensitive organizer information with sentinel values
+    for events
+    that have ended more than a configurable number of days ago. Events are never
+    deleted, only anonymized in-place.
 
     The command supports:
     - Configurable retention period (default: 90 days)
@@ -43,6 +44,7 @@ class Command(BaseCommand):
     Use case: GDPR compliance by removing PII from old events while preserving
     aggregate statistics and event history.
     """
+
     help = "Anonymize old Event PII in-place, never deleting events"
 
     def get_cutoff_date(self, options):
@@ -68,7 +70,7 @@ class Command(BaseCommand):
         Get the queryset of events eligible for anonymization.
 
         Returns events that have ended before the cutoff date and haven't
-        already been anonymized (based on the sentinel organizer_email).
+        already been anonymized (based on the is_anonymized flag).
 
         Args:
             cutoff_date: Datetime threshold - events ending before this are eligible
@@ -76,9 +78,7 @@ class Command(BaseCommand):
         Returns:
             QuerySet: Events to be anonymized
         """
-        base_qs = Event.objects.filter(end_time__lte=cutoff_date)
-        # Ignore already obfuscated emails - use organizer_email sentinel as primary idempotency guard
-        return base_qs.exclude(organizer_email=SENTINELS["organizer_email"])
+        return Event.objects.filter(end_time__lte=cutoff_date, is_anonymized=False)
 
     def anonymize_events(self, events_queryset):
         """
@@ -99,6 +99,7 @@ class Command(BaseCommand):
             for event in events:
                 update_values = {
                     **SENTINELS,
+                    "is_anonymized": True,
                     "modified_at": timezone.now(),
                 }
 
@@ -110,10 +111,16 @@ class Command(BaseCommand):
 
         Adds all supported options for controlling the anonymization process.
         """
-        parser.add_argument("--older-than-days", type=int,
-                           help="Override default retention period (days)")
-        parser.add_argument("--dry-run", action="store_true",
-                           help="Show what would be anonymized without making changes")
+        parser.add_argument(
+            "--older-than-days",
+            type=int,
+            help="Override default retention period (days)",
+        )
+        parser.add_argument(
+            "--dry-run",
+            action="store_true",
+            help="Show what would be anonymized without making changes",
+        )
 
     def handle(self, *args, **options):
         """
@@ -138,5 +145,3 @@ class Command(BaseCommand):
             return
 
         self.anonymize_events(events_to_anonymize)
-
-

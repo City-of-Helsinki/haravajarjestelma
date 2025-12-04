@@ -140,5 +140,10 @@ class EventViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         # Allow unauthenticated users to see only approved events
         if not self.request.user.is_authenticated:
-            return self.queryset.filter(state=Event.APPROVED)
-        return self.queryset.filter_for_user(self.request.user)
+            return self.queryset.filter(state=Event.APPROVED).filter(
+                is_anonymized=False
+            )
+
+        # For authenticated users, filter for their events and exclude anonymized events
+        queryset = self.queryset.filter_for_user(self.request.user)
+        return queryset.filter(is_anonymized=False)

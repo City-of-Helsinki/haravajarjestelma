@@ -1,10 +1,12 @@
-import pytest
 from datetime import timedelta
+
+import pytest
 from django.db import IntegrityError
 from django.utils.timezone import localtime, now
 
-from ..factories import BlockedDateFactory, ContractZoneFactory
 from events.factories import EventFactory
+
+from ..factories import BlockedDateFactory, ContractZoneFactory
 
 
 @pytest.fixture
@@ -16,9 +18,7 @@ def test_blocked_date_creation(contract_zone):
     """Test that blocked dates can be created successfully."""
     date = localtime(now()).date() + timedelta(days=10)
     blocked_date = BlockedDateFactory(
-        contract_zone=contract_zone,
-        date=date,
-        reason="Test blocking"
+        contract_zone=contract_zone, date=date, reason="Test blocking"
     )
 
     assert blocked_date.contract_zone == contract_zone
@@ -76,11 +76,8 @@ def test_get_unavailable_dates_combines_all_reasons(contract_zone):
     future_date = localtime(now()).date() + timedelta(days=10)
 
     # Create 3 events (capacity limit) on the same working day group
-    events = EventFactory.create_batch(
-        3,
-        contract_zone=contract_zone,
-        start_time=future_date,
-        end_time=future_date
+    EventFactory.create_batch(
+        3, contract_zone=contract_zone, start_time=future_date, end_time=future_date
     )
 
     # Create a blocked date (different date to avoid overlap)

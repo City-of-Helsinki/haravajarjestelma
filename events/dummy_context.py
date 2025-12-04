@@ -29,7 +29,7 @@ sample_event = EventFactory.build(
     contract_zone=sample_zone,
     name="Sample Park Cleanup Event",
     description="Let's clean up the park together! We'll meet at the main entrance "
-                "and work our way through the park collecting litter.",
+    "and work our way through the park collecting litter.",
     organizer_email="organizer@example.com",
     organizer_first_name="John",
     organizer_last_name="Doe",
@@ -40,7 +40,7 @@ sample_event = EventFactory.build(
     targets="Clean up litter from park paths and picnic areas",
     maintenance_location="Central Park, Helsinki",
     additional_information="Please bring your own gloves if possible. "
-                           "Coffee and snacks will be provided.",
+    "Coffee and snacks will be provided.",
     small_trash_bag_count=20,
     large_trash_bag_count=5,
     trash_picker_count=10,

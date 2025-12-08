@@ -99,7 +99,7 @@ class ContractZone(SerializableMixin):
             if len(events) >= settings.EVENT_MAXIMUM_COUNT_PER_CONTRACT_ZONE
         }
 
-        return list(sorted(too_early_dates | too_many_events_dates | blocked_dates))
+        return sorted(too_early_dates | too_many_events_dates | blocked_dates)
 
     def get_contact_emails(self):
         return [email for email in (self.email, self.secondary_email) if email]

@@ -1,5 +1,10 @@
+from datetime import timedelta
+
+from django.conf import settings
+from django.utils import timezone
 from django.utils.timezone import localtime
 from django.utils.translation import gettext_lazy as _
+from django_filters import rest_framework as filters
 from rest_framework import serializers, viewsets
 from rest_framework.permissions import IsAuthenticated
 
@@ -17,6 +22,12 @@ from events.permissions import (
 )
 
 
+class PublicEventSerializer(UTCModelSerializer):
+    class Meta:
+        model = Event
+        fields = ("name", "start_time", "end_time", "location")
+
+
 class EventSerializer(UTCModelSerializer):
     class Meta:
         model = Event
@@ -29,15 +40,33 @@ class EventSerializer(UTCModelSerializer):
             fields["state"].read_only = True
         return fields
 
-    def validate(self, data):
-        start_time = data.get("start_time")
-        end_time = data.get("end_time")
-
+    def _validate_time_constraints(self, start_time, end_time):
+        """Validate time-related constraints for the event."""
         # PATCH updates only 'state', so check that start and end times are present in
         # the data
-        if (start_time and end_time) and (start_time > end_time):
-            raise serializers.ValidationError(_("Event must start before ending."))
+        if start_time and end_time:
+            if start_time > end_time:
+                raise serializers.ValidationError(_("Event must start before ending."))
 
+        if start_time:
+            now = timezone.now()
+            if start_time > now + timedelta(days=settings.EVENT_MAXIMUM_DAYS_TO_START):
+                raise serializers.ValidationError(
+                    _("Event cannot start later than {days} days from now.").format(
+                        days=settings.EVENT_MAXIMUM_DAYS_TO_START
+                    )
+                )
+
+        max_duration = timedelta(settings.EVENT_MAXIMUM_DAYS_LENGTH)
+        if start_time and end_time and (end_time - start_time) > max_duration:
+            raise serializers.ValidationError(
+                _("The event duration cannot exceed {days} days.").format(
+                    days=settings.EVENT_MAXIMUM_DAYS_LENGTH
+                )
+            )
+
+    def _validate_location(self, data, start_time, end_time):
+        """Validate location and contract zone availability."""
         location = data.get("location")
         if location:
             data["contract_zone"] = ContractZone.objects.get_active_by_location(
@@ -61,14 +90,38 @@ class EventSerializer(UTCModelSerializer):
                     raise serializers.ValidationError(
                         _("Unavailable dates: {}".format(sorted(unavailable_dates)))
                     )
-
         return data
+
+    def validate(self, data):
+        start_time = data.get("start_time")
+        end_time = data.get("end_time")
+        self._validate_time_constraints(start_time, end_time)
+        data = self._validate_location(data, start_time, end_time)
+        return data
+
+
+class EventFilter(filters.FilterSet):
+    start_time_gte = filters.DateTimeFilter(field_name="start_time", lookup_expr="gte")
+    start_time_lte = filters.DateTimeFilter(field_name="start_time", lookup_expr="lte")
+    end_time_gte = filters.DateTimeFilter(field_name="end_time", lookup_expr="gte")
+    end_time_lte = filters.DateTimeFilter(field_name="end_time", lookup_expr="lte")
+
+    class Meta:
+        model = Event
+        fields = [
+            "contract_zone",
+            "state",
+            "start_time_gte",
+            "start_time_lte",
+            "end_time_gte",
+            "end_time_lte",
+        ]
 
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
-    filterset_fields = ("contract_zone",)
+    filterset_class = EventFilter
     permission_classes = [
         IsSuperUser
         | IsOfficial
@@ -77,5 +130,20 @@ class EventViewSet(viewsets.ModelViewSet):
         | ReadOnly
     ]
 
+    def get_serializer_class(self):
+        if self.action in ("create", "update", "partial_update") or (
+            self.request.user and self.request.user.is_authenticated
+        ):
+            return EventSerializer
+        return PublicEventSerializer
+
     def get_queryset(self):
-        return self.queryset.filter_for_user(self.request.user)
+        # Allow unauthenticated users to see only approved events
+        if not self.request.user.is_authenticated:
+            return self.queryset.filter(state=Event.APPROVED).filter(
+                is_anonymized=False
+            )
+
+        # For authenticated users, filter for their events and exclude anonymized events
+        queryset = self.queryset.filter_for_user(self.request.user)
+        return queryset.filter(is_anonymized=False)

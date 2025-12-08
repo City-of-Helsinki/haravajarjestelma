@@ -34,15 +34,13 @@ def check_address_data_matches_object(address_data, address_obj):
 
 @pytest.fixture(autouse=True)
 def set_frozen_time():
-    freezer = freeze_time("2018-11-01T08:00:00Z")
-    freezer.start()
-    yield
-    freezer.stop()
+    with freeze_time("2018-11-01T08:00:00Z"):
+        yield
 
 
 @pytest.fixture(autouse=True)
 def override_settings(settings):
-    settings.EVENT_MINIMUM_DAYS_BEFORE_START = 7
+    settings.EVENT_MINIMUM_DAYS_BEFORE_START = 6
     settings.EVENT_MAXIMUM_COUNT_PER_CONTRACT_ZONE = 3
 
 
@@ -104,7 +102,6 @@ def test_too_early_days_included_in_unavailable_dates(api_client, contract_zone)
         today + timedelta(days=4),
         today + timedelta(days=5),
         today + timedelta(days=6),
-        today + timedelta(days=7),
     ]
 
 
@@ -134,6 +131,6 @@ def test_unavailable_dates(
         )
 
     response_data = get(api_client, get_url(60, 24))
-    dates = response_data["contract_zone"]["unavailable_dates"][8:]
+    dates = response_data["contract_zone"]["unavailable_dates"][7:]
 
     assert dates == [date(2018, 12, d) for d in expected_unavailable_days]

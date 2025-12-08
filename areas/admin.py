@@ -35,7 +35,6 @@ class BlockedDateInline(TabularInline):
     readonly_fields = ("created_by", "created_at")
 
     def get_queryset(self, request):
-        self.request = request  # Store request for use in formfield_for_dbfield
         return super().get_queryset(request).select_related("created_by")
 
 

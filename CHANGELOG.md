@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.2](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.4.1...haravajarjestelma-v1.4.2) (2026-01-19)
+
+
+### Dependencies
+
+* Bump pyasn1 from 0.6.1 to 0.6.2 ([ab9dd3d](https://github.com/City-of-Helsinki/haravajarjestelma/commit/ab9dd3d7affcbf88da5d388a542eab12c9331cd2))
+* Update urllib3 ([2e32aae](https://github.com/City-of-Helsinki/haravajarjestelma/commit/2e32aaee5ee63f869bb4029c8620a39f46882da1))
+
 ## [1.4.1](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.4.0...haravajarjestelma-v1.4.1) (2026-01-12)
 
 

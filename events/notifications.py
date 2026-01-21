@@ -130,6 +130,9 @@ def send_pending_approval_reminder_notification(event):
 
     This notification is sent to remind contractors to approve or decline
     pending events before the deadline.
+
+    Returns:
+        bool: True if notifications were sent; False when skipped (e.g. no contacts).
     """
     contact_emails = event.contract_zone.get_contact_emails()
 
@@ -138,7 +141,7 @@ def send_pending_approval_reminder_notification(event):
             f"Contract zone {event.contract_zone} has no contact email so cannot send "
             '"event_pending_approval_reminder" notification there.'
         )
-        return
+        return False
 
     for email in contact_emails:
         send_notification(
@@ -146,6 +149,8 @@ def send_pending_approval_reminder_notification(event):
             NotificationType.EVENT_PENDING_APPROVAL_REMINDER.value,
             {"event": event},
         )
+
+    return True
 
 
 def _send_notifications_to_contractor_and_officials(

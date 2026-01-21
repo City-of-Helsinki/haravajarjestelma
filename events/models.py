@@ -86,6 +86,18 @@ class Event(models.Model):
         null=True,
         editable=False,
     )
+    approval_creation_reminder_sent_at = models.DateTimeField(
+        verbose_name=_("approval creation reminder sent at"),
+        blank=True,
+        null=True,
+        editable=False,
+    )
+    approval_deadline_reminder_sent_at = models.DateTimeField(
+        verbose_name=_("approval deadline reminder sent at"),
+        blank=True,
+        null=True,
+        editable=False,
+    )
 
     is_anonymized = models.BooleanField(
         verbose_name=_("is anonymized"),

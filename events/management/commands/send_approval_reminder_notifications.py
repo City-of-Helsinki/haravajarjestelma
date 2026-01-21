@@ -10,8 +10,8 @@ based on two independent triggers:
 2. Deadline-based: Y days before the event is scheduled to start (shifts to preceding
    business day if it falls on a vacation day, to ensure reminder is sent in time)
 
-Both triggers use exact date matching, so the command naturally prevents
-duplicate emails when run daily.
+Both triggers use exact date matching. Per-trigger timestamps are stored to
+prevent duplicate sends if the job reruns on the same day (e.g. crash loops).
 
 Set either APPROVAL_REMINDER_DAYS_AFTER_CREATION or APPROVAL_REMINDER_DAYS_BEFORE_EVENT
 to -1 to disable that particular reminder type.
@@ -46,39 +46,59 @@ class Command(BaseCommand):
         )
 
         for event in pending_events:
-            should_send = self._should_send_reminder(event, today)
-            if should_send:
-                send_pending_approval_reminder_notification(event)
-                reminders_sent += 1
-                logger.info(
-                    f"Sent approval reminder for event '{event.name}' (ID: {event.pk})"
-                )
+            creation_due = self._is_creation_reminder_due(event, today)
+            deadline_due = self._is_deadline_reminder_due(event, today)
+
+            # If neither trigger is due (or already sent), skip
+            if not (creation_due or deadline_due):
+                continue
+
+            sent = send_pending_approval_reminder_notification(event)
+            if not sent:
+                # Leave timestamps untouched
+                # so a later run can try again if data is fixed
+                continue
+
+            timestamp = now()
+            update_fields = []
+            if creation_due:
+                event.approval_creation_reminder_sent_at = timestamp
+                update_fields.append("approval_creation_reminder_sent_at")
+            if deadline_due:
+                event.approval_deadline_reminder_sent_at = timestamp
+                update_fields.append("approval_deadline_reminder_sent_at")
+
+            if update_fields:
+                event.save(update_fields=update_fields)
+
+            reminders_sent += 1
+            logger.info(
+                f"Sent approval reminder for event '{event.name}' (ID: {event.pk})"
+            )
 
         logger.info(
             f"Approval reminder check complete. Sent {reminders_sent} reminder(s)"
         )
 
-    def _should_send_reminder(self, event, today):
+    def _is_creation_reminder_due(self, event, today):
         """
-        Determine if an approval reminder should be sent for the given event.
-
-        Returns True if today matches either:
-        - The creation-based reminder day (X days after event creation)
-        - The deadline-based reminder day (Y days before event start)
-
-        Either reminder type can be disabled by setting its config value to -1.
+        Return True when the creation-based reminder should send today and has
+        not already been sent (timestamp is null).
         """
-        creation_reminder_day = self._calculate_creation_reminder_day(event)
-        deadline_reminder_day = self._calculate_deadline_reminder_day(event)
+        reminder_day = self._calculate_creation_reminder_day(event)
+        if reminder_day is None or event.approval_creation_reminder_sent_at:
+            return False
+        return today == reminder_day
 
-        creation_match = (
-            creation_reminder_day is not None and today == creation_reminder_day
-        )
-        deadline_match = (
-            deadline_reminder_day is not None and today == deadline_reminder_day
-        )
-
-        return creation_match or deadline_match
+    def _is_deadline_reminder_due(self, event, today):
+        """
+        Return True when the deadline-based reminder should send today and has
+        not already been sent (timestamp is null).
+        """
+        reminder_day = self._calculate_deadline_reminder_day(event)
+        if reminder_day is None or event.approval_deadline_reminder_sent_at:
+            return False
+        return today == reminder_day
 
     def _calculate_creation_reminder_day(self, event):
         """

@@ -66,6 +66,14 @@ class TestCreationBasedReminder:
             assert_to_addresses(contract_zone.email, contract_zone.secondary_email)
             assert mail.outbox[0].subject == f"please approve event {event.name}!"
 
+            event.refresh_from_db()
+            assert event.approval_creation_reminder_sent_at is not None
+
+            # Same day rerun should not duplicate
+            mail.outbox = []
+            call_command("send_approval_reminder_notifications")
+            assert len(mail.outbox) == 0
+
     def test_vacation_day_shifts_to_next_business_day(self, notification_template):
         """
         If the creation reminder falls on a weekend, it should shift to the
@@ -161,6 +169,14 @@ class TestDeadlineBasedReminder:
             assert_to_addresses(contract_zone.email, contract_zone.secondary_email)
             assert mail.outbox[0].subject == f"please approve event {event.name}!"
 
+            event.refresh_from_db()
+            assert event.approval_deadline_reminder_sent_at is not None
+
+            # Same day rerun should not duplicate
+            mail.outbox = []
+            call_command("send_approval_reminder_notifications")
+            assert len(mail.outbox) == 0
+
     def test_reminder_not_sent_before_deadline_reminder_day(
         self, notification_template
     ):
@@ -255,12 +271,17 @@ class TestBothTriggers:
             assert len(mail.outbox) == 1
             assert mail.outbox[0].subject == f"please approve event {event.name}!"
             mail.outbox = []
+            event.refresh_from_db()
+            assert event.approval_creation_reminder_sent_at is not None
+            assert event.approval_deadline_reminder_sent_at is None
 
         # 5 days before event (Wednesday 2018-01-17) - deadline reminder fires
         with freeze_time("2018-01-17T08:00:00Z"):
             call_command("send_approval_reminder_notifications")
             assert len(mail.outbox) == 1
             assert mail.outbox[0].subject == f"please approve event {event.name}!"
+            event.refresh_from_db()
+            assert event.approval_deadline_reminder_sent_at is not None
 
     def test_both_reminders_fire_on_same_day_if_dates_align(
         self, notification_template
@@ -293,6 +314,14 @@ class TestBothTriggers:
             # Even though both conditions match, we only send one notification
             assert len(mail.outbox) == 1
             assert mail.outbox[0].subject == f"please approve event {event.name}!"
+
+            event.refresh_from_db()
+            assert event.approval_creation_reminder_sent_at is not None
+            assert event.approval_deadline_reminder_sent_at is not None
+            assert (
+                event.approval_creation_reminder_sent_at
+                == event.approval_deadline_reminder_sent_at
+            )
 
     def test_both_reminders_disabled(self, notification_template, settings):
         """When both reminders are disabled, no emails are sent."""
@@ -336,7 +365,7 @@ class TestEdgeCases:
         """When contract zone has no email, log a warning and don't crash."""
         with freeze_time("2018-01-10T08:00:00Z"):
             contract_zone = ContractZoneFactory(email="", secondary_email="")
-            EventFactory(
+            event = EventFactory(
                 state=Event.WAITING_FOR_APPROVAL,
                 contract_zone=contract_zone,
                 start_time=now()
@@ -347,6 +376,36 @@ class TestEdgeCases:
             call_command("send_approval_reminder_notifications")
             assert len(mail.outbox) == 0
             assert "has no contact email" in caplog.text
+            event.refresh_from_db()
+            assert event.approval_creation_reminder_sent_at is None
+            assert event.approval_deadline_reminder_sent_at is None
+
+    def test_missing_email_then_fixed_retries(self, notification_template):
+        """
+        If contact emails are missing the first run, we do not stamp the reminder
+        so a later fix can send it.
+        """
+        with freeze_time("2018-01-10T08:00:00Z"):
+            contract_zone = ContractZoneFactory(email="", secondary_email="")
+            event = EventFactory(
+                state=Event.WAITING_FOR_APPROVAL,
+                contract_zone=contract_zone,
+                start_time=now()
+                + timedelta(days=settings.APPROVAL_REMINDER_DAYS_BEFORE_EVENT),
+            )
+            mail.outbox = []
+
+            call_command("send_approval_reminder_notifications")
+            assert len(mail.outbox) == 0
+
+            # Fix contact info and rerun the same day
+            contract_zone.email = "fixed@test.test"
+            contract_zone.save()
+            call_command("send_approval_reminder_notifications")
+            assert len(mail.outbox) == 1
+
+            event.refresh_from_db()
+            assert event.approval_deadline_reminder_sent_at is not None
 
     def test_multiple_pending_events_each_get_reminders(self, notification_template):
         """Each pending event should be evaluated independently."""

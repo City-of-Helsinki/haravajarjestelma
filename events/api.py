@@ -31,7 +31,11 @@ class PublicEventSerializer(UTCModelSerializer):
 class EventSerializer(UTCModelSerializer):
     class Meta:
         model = Event
-        exclude = ("reminder_sent_at",)
+        exclude = (
+            "reminder_sent_at",
+            "approval_creation_reminder_sent_at",
+            "approval_deadline_reminder_sent_at",
+        )
         read_only_fields = ("contract_zone",)
 
     def get_fields(self):

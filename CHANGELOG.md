@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.5.0](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.4.2...haravajarjestelma-v1.5.0) (2026-01-23)
+
+
+### Features
+
+* Add approval reminder notifications for pending events ([2966e1d](https://github.com/City-of-Helsinki/haravajarjestelma/commit/2966e1d196dcc132a437a9f2c14d58179aa679ab))
+* Add filter and automated database filling for testing ([#217](https://github.com/City-of-Helsinki/haravajarjestelma/issues/217)) ([38a74ee](https://github.com/City-of-Helsinki/haravajarjestelma/commit/38a74eed828eadc8f3b95e7d5ba0e46868f4a475))
+* Add restraint on max length of event ([e85ad79](https://github.com/City-of-Helsinki/haravajarjestelma/commit/e85ad7922482beae480f1ce01d88634d7889d902))
+* Add restricted view for public events ([ff4f708](https://github.com/City-of-Helsinki/haravajarjestelma/commit/ff4f708574513234fdc95bbc0bc27df60d7a8e6a))
+* **api:** Filter out anonymized events from admin endpoints ([6ce6902](https://github.com/City-of-Helsinki/haravajarjestelma/commit/6ce6902f25669fdb44577ce47c5808c215fa0d54))
+* **areas:** Add blocked dates ([3efeb39](https://github.com/City-of-Helsinki/haravajarjestelma/commit/3efeb394f97d61f62130a6dbb8f06da97e72d181))
+* Create events allowed for all ([3d510b3](https://github.com/City-of-Helsinki/haravajarjestelma/commit/3d510b3ef527de17434f1f8b9b1e961bcf7a1c84))
+* **events:** Add command to anonymize old events ([4bd7ec5](https://github.com/City-of-Helsinki/haravajarjestelma/commit/4bd7ec5d10078c6c19ead1c651a049d3f7479b2a))
+* **events:** Add event received confirmation email ([38be221](https://github.com/City-of-Helsinki/haravajarjestelma/commit/38be2218fd8fab3023568e5da2494e616fba6c71))
+* Ps-217 earliest booking date ([#207](https://github.com/City-of-Helsinki/haravajarjestelma/issues/207)) ([86e6e75](https://github.com/City-of-Helsinki/haravajarjestelma/commit/86e6e75dec1dcc2c3ea321240bc9cd12177f983a))
+* Ps-218 starting date max ([#206](https://github.com/City-of-Helsinki/haravajarjestelma/issues/206)) ([fc92d33](https://github.com/City-of-Helsinki/haravajarjestelma/commit/fc92d332bd5a2b894d8d9e0a603d1b9b69d2d699))
+* Show map pins ([#218](https://github.com/City-of-Helsinki/haravajarjestelma/issues/218)) ([3412270](https://github.com/City-of-Helsinki/haravajarjestelma/commit/3412270dbd9b3c82f5ccbfbe42a14ca8a3ea76bd))
+
+
+### Bug Fixes
+
+* **admin:** Fix inline blockeddate deletion ([de0e38c](https://github.com/City-of-Helsinki/haravajarjestelma/commit/de0e38cfd998dae959b38b95f63025c91b01f64b))
+
+
+### Dependencies
+
+* Bump wheel from 0.45.1 to 0.46.2 ([f02f614](https://github.com/City-of-Helsinki/haravajarjestelma/commit/f02f61413d3566edda73c9d3529d3b5556c70603))
+
 ## [1.4.2](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.4.1...haravajarjestelma-v1.4.2) (2026-01-19)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.2](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.5.1...haravajarjestelma-v1.5.2) (2026-02-12)
+
+
+### Dependencies
+
+* Bump cryptography from 46.0.3 to 46.0.5 ([8e3da39](https://github.com/City-of-Helsinki/haravajarjestelma/commit/8e3da39b6d7834ebbd8456fdc50e6738287dcbd5))
+
 ## [1.5.1](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.5.0...haravajarjestelma-v1.5.1) (2026-02-05)
 
 

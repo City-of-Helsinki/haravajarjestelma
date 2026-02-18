@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.3](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.5.2...haravajarjestelma-v1.5.3) (2026-02-18)
+
+
+### Dependencies
+
+* Bump sqlparse from 0.5.3 to 0.5.4 ([dccb1bd](https://github.com/City-of-Helsinki/haravajarjestelma/commit/dccb1bddf0eb77d7a1a98567b02e194ec15bb965))
+
 ## [1.5.2](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.5.1...haravajarjestelma-v1.5.2) (2026-02-12)
 
 

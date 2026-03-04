@@ -1,3 +1,8 @@
+[project]
+name = "haravajarjestelma"
+requires-python = ">=3.12, <3.13"
+version = "1.5.3"
+
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "haravajarjestelma.settings"
 norecursedirs = ["node_modules", ".git", "venv*"]

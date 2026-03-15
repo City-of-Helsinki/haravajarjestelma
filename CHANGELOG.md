@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.4](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.5.3...haravajarjestelma-v1.5.4) (2026-03-15)
+
+
+### Dependencies
+
+* Bump authlib from 1.6.6 to 1.6.7 ([08c588a](https://github.com/City-of-Helsinki/haravajarjestelma/commit/08c588a65f3b43973bbec3dff2eac58b7c38f0a4))
+* Bump django from 5.2.11 to 5.2.12 ([dd2a818](https://github.com/City-of-Helsinki/haravajarjestelma/commit/dd2a818af2b57f9809d2de512d2b3b2b0e916915))
+
 ## [1.5.3](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.5.2...haravajarjestelma-v1.5.3) (2026-02-18)
 
 

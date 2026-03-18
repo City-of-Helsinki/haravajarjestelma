@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.5.4](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.5.3...haravajarjestelma-v1.5.4) (2026-03-18)
+
+
+### Bug Fixes
+
+* Pipelines refactor ([#246](https://github.com/City-of-Helsinki/haravajarjestelma/issues/246)) ([f003681](https://github.com/City-of-Helsinki/haravajarjestelma/commit/f003681ff659f8c840736bec6e2b71aa24c562a6))
+
+
+### Dependencies
+
+* Bump authlib from 1.6.6 to 1.6.7 ([08c588a](https://github.com/City-of-Helsinki/haravajarjestelma/commit/08c588a65f3b43973bbec3dff2eac58b7c38f0a4))
+* Bump authlib from 1.6.7 to 1.6.9 ([f4083ac](https://github.com/City-of-Helsinki/haravajarjestelma/commit/f4083ac23ff5dd635deda142613e60a0c2123f40))
+* Bump django from 5.2.11 to 5.2.12 ([dd2a818](https://github.com/City-of-Helsinki/haravajarjestelma/commit/dd2a818af2b57f9809d2de512d2b3b2b0e916915))
+* Bump pyasn1 from 0.6.2 to 0.6.3 ([eaa2282](https://github.com/City-of-Helsinki/haravajarjestelma/commit/eaa228246ad689814efd9b61029a2b16b541fa2b))
+
 ## [1.5.3](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.5.2...haravajarjestelma-v1.5.3) (2026-02-18)
 
 

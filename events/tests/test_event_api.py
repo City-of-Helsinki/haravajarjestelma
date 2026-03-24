@@ -178,6 +178,21 @@ def test_regular_user_post_new_event(user_api_client, contract_zone, make_event_
     check_event_object(new_event, event_data)
 
 
+def test_regular_user_post_new_event_without_maintenance_location(
+    user_api_client, contract_zone, make_event_data
+):
+    event_data = make_event_data(contract_zone=contract_zone)
+    del event_data["maintenance_location"]
+
+    response_data = post(user_api_client, LIST_URL, event_data)
+
+    assert Event.objects.count() == 1
+    new_event = Event.objects.latest("id")
+    assert new_event.maintenance_location == ""
+    check_event_object(new_event, {**event_data, "maintenance_location": ""})
+    assert response_data["maintenance_location"] == ""
+
+
 def test_official_put_event(official_api_client, event, make_event_data):
     event_data = make_event_data(contract_zone=event.contract_zone)
 

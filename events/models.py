@@ -55,7 +55,9 @@ class Event(models.Model):
         verbose_name=_("estimated attendee count")
     )
     targets = models.TextField(verbose_name=_("targets"))
-    maintenance_location = models.TextField(verbose_name=_("maintenance location"))
+    maintenance_location = models.TextField(
+        verbose_name=_("maintenance location"), blank=True
+    )
     additional_information = models.TextField(
         verbose_name=_("additional information"), blank=True
     )

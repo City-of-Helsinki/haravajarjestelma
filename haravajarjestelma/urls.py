@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.http import HttpResponse
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
@@ -19,18 +18,6 @@ urlpatterns = [
     path("v1/", include((router.urls, "haravajarjestelma"), namespace="v1")),
     path("helauth/", include("helusers.urls")),
     path("gdpr-api/", include("helsinki_gdpr.urls")),
+    # Kubernetes liveness & readiness probes
+    path("", include("helsinki_health_endpoints.urls")),
 ]
-
-
-#
-# Kubernetes liveness & readiness probes
-#
-def healthz(*args, **kwargs):
-    return HttpResponse(status=200)
-
-
-def readiness(*args, **kwargs):
-    return HttpResponse(status=200)
-
-
-urlpatterns += [path("healthz", healthz), path("readiness", readiness)]

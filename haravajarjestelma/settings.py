@@ -117,6 +117,9 @@ elif MAILER_EMAIL_BACKEND == "anymail.backends.sendgrid.EmailBackend":
 COMMIT_HASH = env.str("OPENSHIFT_BUILD_COMMIT", "")
 VERSION = __version__
 
+# Django helsinki health endpoints
+SENTRY_RELEASE = env.str("SENTRY_RELEASE")
+
 SENTRY_TRACES_SAMPLE_RATE = env("SENTRY_TRACES_SAMPLE_RATE")
 SENTRY_TRACES_IGNORE_PATHS = env.list("SENTRY_TRACES_IGNORE_PATHS")
 
@@ -185,6 +188,7 @@ INSTALLED_APPS = [
     "areas",
     "django_ilmoitin",
     "logger_extra",
+    "helsinki_health_endpoints",
 ]
 
 MIDDLEWARE = [

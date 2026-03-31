@@ -2,6 +2,7 @@ django-cors-headers
 django-environ
 django-filter
 django-helusers
+django-helsinki-health-endpoints
 django-ilmoitin
 django-logger-extra@https://github.com/City-of-Helsinki/django-logger-extra/archive/refs/tags/v0.1.0.zip
 django-munigeo

@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.6.0](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.5.4...haravajarjestelma-v1.6.0) (2026-04-01)
+
+
+### Features
+
+* Use django-helsinki-health-endpoints for readiness and healthz ([a9eac06](https://github.com/City-of-Helsinki/haravajarjestelma/commit/a9eac06d94844644ad028c9dc0fa34f26ac0ea5e))
+
+
+### Bug Fixes
+
+* **events:** Make maintenance location optional ([92c3a0e](https://github.com/City-of-Helsinki/haravajarjestelma/commit/92c3a0e489bedd0488239ddf39f407a2d6cc2245))
+
+
+### Dependencies
+
+* Bump cryptography from 46.0.5 to 46.0.6 ([084d49a](https://github.com/City-of-Helsinki/haravajarjestelma/commit/084d49ac48145da4d23645cc3976f27b01a6d3f8))
+* Bump ecdsa from 0.19.1 to 0.19.2 ([2e32abb](https://github.com/City-of-Helsinki/haravajarjestelma/commit/2e32abb44d99f99ffd70f69cbd997ea28c6b1fc2))
+* Bump requests from 2.32.5 to 2.33.0 ([9166894](https://github.com/City-of-Helsinki/haravajarjestelma/commit/91668948998bd7ad34f5c57349161af071479102))
+
 ## [1.5.4](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.5.3...haravajarjestelma-v1.5.4) (2026-03-18)
 
 

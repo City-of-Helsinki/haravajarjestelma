@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.6.1](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.6.0...haravajarjestelma-v1.6.1) (2026-04-14)
+
+
+### Dependencies
+
+* Bump cryptography from 46.0.6 to 46.0.7 ([8078e8b](https://github.com/City-of-Helsinki/haravajarjestelma/commit/8078e8bd3f59b2237578e7d07cabced6cf1fe17e))
+* Bump django from 5.2.12 to 5.2.13 ([a9aaccf](https://github.com/City-of-Helsinki/haravajarjestelma/commit/a9aaccf30edc933600bc5a6793452bf5e5cbeb0d))
+* Bump pytest from 8.4.2 to 9.0.3 ([3941646](https://github.com/City-of-Helsinki/haravajarjestelma/commit/394164620bcbf2c10de22a9cc467f18b44e4d37c))
+
 ## [1.6.0](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.5.4...haravajarjestelma-v1.6.0) (2026-04-01)
 
 

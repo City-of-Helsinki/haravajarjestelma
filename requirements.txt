@@ -343,9 +343,9 @@ django-helsinki-health-endpoints==1.0.0 \
     --hash=sha256:75670113e99bfd1fc23e317a3a22cff563140f495655c2a5f6ab219389dafd52 \
     --hash=sha256:eebf1baa6917d7b0e11123aec191df773883102ec1653025a86d7037dba389e2
     # via -r requirements.in
-django-helusers==0.14.0 \
-    --hash=sha256:424f97e7aa6792ae255de56344f765795444849ea82e9d4e01666494c28e960c \
-    --hash=sha256:79b922d51278a9e9793a00279782e5455b72e9e9d0f261dd17be2f0dbcbaa1f9
+django-helusers==1.1.0 \
+    --hash=sha256:5d6c4d0db11db633a031cfdcef6e754fb26c167d3e179d77882c2edecca60830 \
+    --hash=sha256:73ef1c9f3050cbb3a4f3a35264f26807f60a00b66eef31d8b07cd1ffd61de965
     # via
     #   -r requirements.in
     #   helsinki-profile-gdpr-api

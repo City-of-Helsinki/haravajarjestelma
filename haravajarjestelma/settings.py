@@ -74,6 +74,8 @@ env = environ.Env(
     GDPR_API_QUERY_SCOPE=(str, "gdprquery"),
     GDPR_API_DELETE_SCOPE=(str, "gdprdelete"),
     OPENSHIFT_BUILD_COMMIT=(str, ""),
+    HELUSERS_PASSWORD_LOGIN_DISABLED=(bool, True),
+    HELUSERS_PASSWORD_LOGIN_ALLOWLIST=(list, []),
 )
 if os.path.exists(env_file):
     env.read_env(env_file)
@@ -223,6 +225,11 @@ TEMPLATES = [
 SITE_ID = 1
 
 AUTH_USER_MODEL = "users.User"
+
+AUTHENTICATION_BACKENDS = ["helusers.auth.HelusersModelBackend"]
+
+HELUSERS_PASSWORD_LOGIN_DISABLED = env.bool("HELUSERS_PASSWORD_LOGIN_DISABLED")
+HELUSERS_PASSWORD_LOGIN_ALLOWLIST = env("HELUSERS_PASSWORD_LOGIN_ALLOWLIST")
 
 DEFAULT_SRID = 4326
 

@@ -15,6 +15,8 @@ router.register("contract_zone", ContractZoneViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("pysocial/", include("social_django.urls", namespace="social")),
+    path("helauth/", include("helusers.urls")),
     path("v1/", include((router.urls, "haravajarjestelma"), namespace="v1")),
     path("helauth/", include("helusers.urls")),
     path("gdpr-api/", include("helsinki_gdpr.urls")),

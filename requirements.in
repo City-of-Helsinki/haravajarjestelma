@@ -20,4 +20,5 @@ psycopg[c]
 pytz
 requests
 sentry-sdk
+social-auth-app-django
 uwsgi

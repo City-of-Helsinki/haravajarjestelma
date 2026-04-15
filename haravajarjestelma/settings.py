@@ -1,6 +1,7 @@
 import os
 
 import environ
+import helusers.defaults
 import sentry_sdk
 from corsheaders.defaults import default_headers
 from django.utils.translation import gettext_lazy as _
@@ -74,8 +75,11 @@ env = environ.Env(
     GDPR_API_QUERY_SCOPE=(str, "gdprquery"),
     GDPR_API_DELETE_SCOPE=(str, "gdprdelete"),
     OPENSHIFT_BUILD_COMMIT=(str, ""),
-    HELUSERS_PASSWORD_LOGIN_DISABLED=(bool, True),
+    HELUSERS_PASSWORD_LOGIN_DISABLED=(bool, False),
     HELUSERS_PASSWORD_LOGIN_ALLOWLIST=(list, []),
+    SOCIAL_AUTH_TUNNISTAMO_KEY=(str, ""),
+    SOCIAL_AUTH_TUNNISTAMO_OIDC_ENDPOINT=(str, ""),
+    SOCIAL_AUTH_TUNNISTAMO_SECRET=(str, ""),
 )
 if os.path.exists(env_file):
     env.read_env(env_file)
@@ -185,6 +189,7 @@ INSTALLED_APPS = [
     "parler",
     "anymail",
     "mailer",
+    "social_django",  # For django-admin Keycloak login
     "events",
     "users",
     "areas",
@@ -226,10 +231,24 @@ SITE_ID = 1
 
 AUTH_USER_MODEL = "users.User"
 
-AUTHENTICATION_BACKENDS = ["helusers.auth.HelusersModelBackend"]
+AUTHENTICATION_BACKENDS = [
+    "helusers.tunnistamo_oidc.TunnistamoOIDCAuth",
+    "helusers.auth.HelusersModelBackend",
+]
 
+HELUSERS_BACK_CHANNEL_LOGOUT_ENABLED = True
 HELUSERS_PASSWORD_LOGIN_DISABLED = env.bool("HELUSERS_PASSWORD_LOGIN_DISABLED")
 HELUSERS_PASSWORD_LOGIN_ALLOWLIST = env("HELUSERS_PASSWORD_LOGIN_ALLOWLIST")
+
+SESSION_SERIALIZER = "helusers.sessions.TunnistamoOIDCSerializer"
+
+SOCIAL_AUTH_PIPELINE = helusers.defaults.SOCIAL_AUTH_PIPELINE
+SOCIAL_AUTH_TUNNISTAMO_KEY = env("SOCIAL_AUTH_TUNNISTAMO_KEY")
+SOCIAL_AUTH_TUNNISTAMO_SECRET = env("SOCIAL_AUTH_TUNNISTAMO_SECRET")
+SOCIAL_AUTH_TUNNISTAMO_OIDC_ENDPOINT = env("SOCIAL_AUTH_TUNNISTAMO_OIDC_ENDPOINT")
+
+LOGIN_REDIRECT_URL = "/v1/"
+LOGOUT_REDIRECT_URL = "/v1/"
 
 DEFAULT_SRID = 4326
 
@@ -268,8 +287,6 @@ OIDC_API_TOKEN_AUTH = {
         "OIDC_REQUIRE_SCOPE_FOR_AUTHENTICATION"
     ),
 }
-
-HELUSERS_BACK_CHANNEL_LOGOUT_ENABLED = True
 
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",

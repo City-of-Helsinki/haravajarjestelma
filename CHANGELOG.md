@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.7.0](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.6.1...haravajarjestelma-v1.7.0) (2026-04-20)
+
+
+### Features
+
+* Add Django admin AD-login and disable password login ([94d2729](https://github.com/City-of-Helsinki/haravajarjestelma/commit/94d2729df388062bf07deeed0436fd32e775aa1c))
+* Disable Django admin password login ([e3e0ea0](https://github.com/City-of-Helsinki/haravajarjestelma/commit/e3e0ea0f6652699273cde412fca1ee5f59dff21b))
+
+
+### Dependencies
+
+* Bump authlib from 1.6.9 to 1.6.11 ([ab0bac1](https://github.com/City-of-Helsinki/haravajarjestelma/commit/ab0bac15dbb31c3a726a350f5eb2ae8cd1546505))
+* Bump pygments ([17364cb](https://github.com/City-of-Helsinki/haravajarjestelma/commit/17364cb6526af3d771bdc277cc85f6fd5c2b5f65))
+* Remove redundant cryptography hashes ([11292bb](https://github.com/City-of-Helsinki/haravajarjestelma/commit/11292bbe54ea7d897c244662214096707208e708))
+
 ## [1.6.1](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.6.0...haravajarjestelma-v1.6.1) (2026-04-14)
 
 

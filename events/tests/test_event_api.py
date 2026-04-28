@@ -84,7 +84,7 @@ def set_frozen_time():
 @pytest.fixture(autouse=True)
 def override_settings(settings):
     settings.EVENT_MINIMUM_DAYS_BEFORE_START = 6
-    settings.EVENT_MAXIMUM_COUNT_PER_CONTRACT_ZONE = 3
+    settings.EVENT_MAXIMUM_COUNT_PER_CONTRACT_ZONE = 4
 
 
 def check_received_event_data(event_data, event_obj):
@@ -407,7 +407,7 @@ def test_event_cannot_be_created_when_days_are_full(
 ):
     event_data = make_event_data(contract_zone=contract_zone)
     events = EventFactory.create_batch(
-        3,
+        4,
         contract_zone=contract_zone,
         start_time=event_data["start_time"],
         end_time=event_data["end_time"],

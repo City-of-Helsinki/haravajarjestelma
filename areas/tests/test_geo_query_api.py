@@ -41,7 +41,7 @@ def set_frozen_time():
 @pytest.fixture(autouse=True)
 def override_settings(settings):
     settings.EVENT_MINIMUM_DAYS_BEFORE_START = 6
-    settings.EVENT_MAXIMUM_COUNT_PER_CONTRACT_ZONE = 3
+    settings.EVENT_MAXIMUM_COUNT_PER_CONTRACT_ZONE = 4
 
 
 @pytest.fixture
@@ -112,7 +112,7 @@ def test_too_early_days_included_in_unavailable_dates(api_client, contract_zone)
         ([9, 9], []),  # Sunday
         ([6, 6], []),  # holiday
         ([5, 6, 6], [5, 6]),  # 6 = holiday
-        ([10, 10, 10], [10]),  # max num of events is 3
+        ([10, 10, 10, 10], [10]),  # max num of events is 4
         ([14, 14, 14], [14, 15, 16]),  # 14 = Friday
         ([14, 15, 16], [14, 15, 16]),
         ([21, 22, 23], [21, 22, 23, 24, 25, 26]),  # 21 = Friday, 24-26 holidays

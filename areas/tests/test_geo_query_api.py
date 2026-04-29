@@ -111,18 +111,32 @@ def test_too_early_days_included_in_unavailable_dates(api_client, contract_zone)
         ([10, 10], []),  # normal Monday
         ([9, 9], []),  # Sunday
         ([6, 6], []),  # holiday
-        ([5, 6, 6], [5, 6]),  # 6 = holiday
+        ([10, 10, 10], []),  # max num of events is 4
+        # Three events on the Dec 5/6 delivery bucket still fit; the 4th pushes the whole group over the limit.
+        ([5, 6, 6, 6], [5, 6]),  # 6 = holiday
         ([10, 10, 10, 10], [10]),  # max num of events is 4
-        ([14, 14, 14], [14, 15, 16]),  # 14 = Friday
-        ([14, 15, 16], [14, 15, 16]),
-        ([21, 22, 23], [21, 22, 23, 24, 25, 26]),  # 21 = Friday, 24-26 holidays
+        # Four events on Friday fill the whole Friday/weekend bucket, so Fri-Sun become unavailable.
+        ([14, 14, 14, 14], [14, 15, 16]),  # 14 = Friday
+        # Events on Fri/Sat/Sun count as one vacation-day group, so the 4th event blocks the whole group.
+        ([14, 15, 16, 16], [14, 15, 16]),
+        # Same idea as above, but the group extends over the Christmas holidays too.
+        ([21, 22, 23, 23], [21, 22, 23, 24, 25, 26]),  # 21 = Friday, 24-26 holidays
     ],
 )
 def test_unavailable_dates(
     api_client, contract_zone, event_days, expected_unavailable_days
 ):
     """
-    Test how event dates in December 2018 yield unavailable dates (too early dates ignored)
+    Test how event dates in December 2018 yield unavailable dates (too early dates ignored).
+
+    Friday, weekends, and holidays are treated as one delivery bucket because the
+    employees delivering the equipment do not work on weekends or holidays. They
+    fulfil the delivery on the most recent working day before the break, so
+    capacity on those days must be counted together.
+
+    Each number in event_days creates one separate event on that calendar day.
+    Duplicate day numbers are intentional: they model multiple events on the same
+    day group so the capacity boundary and vacation-day grouping can be tested.
     """
     for event_day in event_days:
         d = make_aware(datetime(2018, 12, event_day, 11))

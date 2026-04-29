@@ -371,6 +371,20 @@ def test_can_create_event_if_start_is_minimum_full_days_in_future(
     post(user_api_client, LIST_URL, event_data, 201)
 
 
+def test_event_can_be_created_when_three_events_already_exist(
+    official_api_client, contract_zone, make_event_data
+):
+    event_data = make_event_data(contract_zone=contract_zone)
+    EventFactory.create_batch(
+        3,
+        contract_zone=contract_zone,
+        start_time=event_data["start_time"],
+        end_time=event_data["end_time"],
+    )
+
+    post(official_api_client, LIST_URL, event_data, 201)
+
+
 def test_event_filtering_by_contract_zone(official_api_client, event):
     contract_zone = event.contract_zone
 

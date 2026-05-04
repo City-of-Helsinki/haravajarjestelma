@@ -75,9 +75,9 @@ def test_get_unavailable_dates_combines_all_reasons(contract_zone):
     """Test that unavailable dates include capacity limits AND blocked dates."""
     future_date = localtime(now()).date() + timedelta(days=10)
 
-    # Create 3 events (capacity limit) on the same working day group
+    # Create 4 events (capacity limit) on the same working day group
     EventFactory.create_batch(
-        3, contract_zone=contract_zone, start_time=future_date, end_time=future_date
+        4, contract_zone=contract_zone, start_time=future_date, end_time=future_date
     )
 
     # Create a blocked date (different date to avoid overlap)

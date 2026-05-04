@@ -86,7 +86,7 @@ The following settings can be used to configure the application either using env
 
 * `EVENT_MINIMUM_DAYS_BEFORE_START`: Minimum amount of days an event needs to be created in advance before it's start. Default `7`.
 
-* `EVENT_MAXIMUM_COUNT_PER_CONTRACT_ZONE`: Maximum amount of events there can be on one day per contract zone. Default: `3`.
+* `EVENT_MAXIMUM_COUNT_PER_CONTRACT_ZONE`: Maximum amount of events there can be on one day per contract zone. Default: `4`.
 
 * `EVENT_REMINDER_DAYS_IN_ADVANCE`: Number of days event reminders to contractors are sent in advance. Default `2`.
 

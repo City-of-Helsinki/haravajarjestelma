@@ -1,4 +1,5 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
+from typing import Any
 
 import pytest
 from django.contrib.gis.geos import MultiPolygon, Point, Polygon
@@ -7,7 +8,7 @@ from django.utils.timezone import localtime
 from freezegun import freeze_time
 from rest_framework.reverse import reverse
 
-from areas.factories import ContractZoneFactory
+from areas.factories import BlockedDateFactory, ContractZoneFactory
 from areas.models import ContractZone
 from common.tests.utils import assert_objects_in_results, delete, get, patch, post, put
 from events.factories import EventFactory
@@ -47,7 +48,9 @@ EXPECTED_PUBLIC_EVENT_KEYS = {"name", "start_time", "end_time", "location"}
 
 @pytest.fixture
 def make_event_data():
-    def _make_event_data(*, contract_zone: ContractZone, **kwargs):
+    def _make_event_data(
+        *, contract_zone: ContractZone, **kwargs: Any
+    ) -> dict[str, Any]:
         return {
             "name": "Testitalkoot",
             "description": "Testitalkoissa haravoidaan ahkerasti.",
@@ -134,8 +137,24 @@ def check_event_object(event_obj, event_data):
     assert event_obj.location
 
 
-def get_detail_url(event):
+def get_detail_url(event: Event) -> str:
     return reverse("v1:event-detail", kwargs={"pk": event.pk})
+
+
+def get_multi_day_event_window(settings: Any) -> tuple[datetime, datetime]:
+    """Return a start/end pair for a valid multi-day event submission.
+
+    :param settings: Django test settings fixture.
+    :return: Start and end datetimes for a valid multi-day event.
+    :rtype: tuple[datetime, datetime]
+    """
+    full_days_needed = settings.EVENT_MINIMUM_DAYS_BEFORE_START
+    beginning_of_today = localtime(timezone.now()).replace(
+        hour=0, minute=0, second=0, microsecond=0
+    )
+    start_time = beginning_of_today + timedelta(days=full_days_needed + 1, hours=10)
+    end_time = start_time + timedelta(days=2)
+    return start_time, end_time
 
 
 def test_anonymous_user_get_list_approved_events(event, api_client):
@@ -371,6 +390,55 @@ def test_can_create_event_if_start_is_minimum_full_days_in_future(
     post(user_api_client, LIST_URL, event_data, 201)
 
 
+def test_event_cannot_be_created_when_start_day_is_blocked(
+    settings, user_api_client, contract_zone, make_event_data
+):
+    """Reject an event when the start date itself is blocked.
+
+    :param settings: Django test settings fixture.
+    :param user_api_client: Authenticated API client fixture.
+    :param contract_zone: Contract zone used for the event.
+    :param make_event_data: Fixture helper that builds a valid event payload.
+    """
+    start_time, end_time = get_multi_day_event_window(settings)
+    BlockedDateFactory(contract_zone=contract_zone, date=localtime(start_time).date())
+
+    event_data = make_event_data(
+        contract_zone=contract_zone,
+        start_time=start_time,
+        end_time=end_time,
+    )
+
+    response_data = post(user_api_client, LIST_URL, event_data, 400)
+
+    assert "Unavailable dates" in response_data["non_field_errors"][0]
+
+
+def test_event_can_span_unavailable_day_if_start_day_is_available(
+    settings, user_api_client, contract_zone, make_event_data
+):
+    """Allow a multi-day event when only a later day is blocked.
+
+    :param settings: Django test settings fixture.
+    :param user_api_client: Authenticated API client fixture.
+    :param contract_zone: Contract zone used for the event.
+    :param make_event_data: Fixture helper that builds a valid event payload.
+    """
+    start_time, end_time = get_multi_day_event_window(settings)
+    BlockedDateFactory(
+        contract_zone=contract_zone,
+        date=localtime(start_time).date() + timedelta(days=1),
+    )
+
+    event_data = make_event_data(
+        contract_zone=contract_zone,
+        start_time=start_time,
+        end_time=end_time,
+    )
+
+    post(user_api_client, LIST_URL, event_data, 201)
+
+
 def test_event_can_be_created_when_three_events_already_exist(
     official_api_client, contract_zone, make_event_data
 ):
@@ -383,6 +451,37 @@ def test_event_can_be_created_when_three_events_already_exist(
     )
 
     post(official_api_client, LIST_URL, event_data, 201)
+
+
+def test_event_can_be_modified_when_later_day_is_blocked(
+    official_api_client, contract_zone, make_event_data
+):
+    """Allow edits when the event start date stays valid.
+
+    :param official_api_client: Authenticated API client with official access.
+    :param contract_zone: Contract zone used for the event.
+    :param make_event_data: Fixture helper that builds a valid event payload.
+    """
+    event_data = make_event_data(contract_zone=contract_zone)
+    event = EventFactory(
+        contract_zone=contract_zone,
+        start_time=event_data["start_time"],
+        end_time=event_data["end_time"],
+    )
+    BlockedDateFactory(
+        contract_zone=contract_zone,
+        date=localtime(event.start_time).date() + timedelta(days=1),
+    )
+
+    patch(
+        official_api_client,
+        get_detail_url(event),
+        {
+            "end_time": event.end_time + timedelta(days=2),
+            "location": event_data["location"],
+        },
+        200,
+    )
 
 
 def test_event_filtering_by_contract_zone(official_api_client, event):

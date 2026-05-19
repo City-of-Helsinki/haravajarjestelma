@@ -21,7 +21,10 @@ from areas.factories import ContractZoneFactory
 from common.utils import assert_to_addresses
 from events.factories import EventFactory
 from events.models import Event
-from events.notifications import NotificationType
+from events.notifications import (
+    NotificationType,
+    send_pending_approval_reminder_notification,
+)
 
 
 @pytest.fixture
@@ -32,6 +35,30 @@ def notification_template():
         body_html="<b>test pending approval reminder body HTML!</b>",
         body_text="test pending approval reminder body text!",
     )
+
+
+def test_pending_approval_reminder_includes_site_url():
+    """
+    Regression (PS-289): site_url must be in context or
+    NotificationTemplateException is raised.
+    """
+    NotificationTemplate.objects.language("fi").create(
+        type=NotificationType.EVENT_PENDING_APPROVAL_REMINDER.value,
+        subject="reminder for {{ site_url }}",
+        body_html="<b>body</b>",
+        body_text="body",
+    )
+    contract_zone = ContractZoneFactory(
+        email="contractor@test.test", secondary_email=""
+    )
+    event = EventFactory(state=Event.WAITING_FOR_APPROVAL, contract_zone=contract_zone)
+    mail.outbox = []
+
+    result = send_pending_approval_reminder_notification(event)
+
+    assert result is True
+    assert len(mail.outbox) == 1
+    assert "https://puistotalkoot.hel.fi" in mail.outbox[0].subject
 
 
 class TestCreationBasedReminder:

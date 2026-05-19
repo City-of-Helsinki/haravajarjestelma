@@ -143,11 +143,13 @@ def send_pending_approval_reminder_notification(event):
         )
         return False
 
+    context = get_notification_base_context()
+    context["event"] = event
     for email in contact_emails:
         send_notification(
             email,
             NotificationType.EVENT_PENDING_APPROVAL_REMINDER.value,
-            {"event": event},
+            context,
         )
 
     return True

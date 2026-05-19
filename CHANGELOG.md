@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.2](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.7.1...haravajarjestelma-v1.7.2) (2026-05-19)
+
+
+### Bug Fixes
+
+* **events:** Raise default contract zone capacity ([8a9c402](https://github.com/City-of-Helsinki/haravajarjestelma/commit/8a9c40206fd9abc94bab2e6c89ab43152c7ec5ce))
+
+
+### Dependencies
+
+* Bump authlib from 1.6.11 to 1.6.12 ([a4d82ad](https://github.com/City-of-Helsinki/haravajarjestelma/commit/a4d82addc985a4be252cb2e775528d0e2fcddc0f))
+
 ## [1.7.1](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.7.0...haravajarjestelma-v1.7.1) (2026-05-11)
 
 

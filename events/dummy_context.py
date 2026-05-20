@@ -50,12 +50,18 @@ sample_event = EventFactory.build(
 )
 
 
-# Update dummy context with sample data
+_event_context = {"event": sample_event}
+
+# Update dummy context with sample data for all notification types
 dummy_context.update(
     {
         COMMON_CONTEXT: get_notification_base_context(),
-        "event_received": {
-            "event": sample_event,
-        },
+        "event_created": _event_context,
+        "event_received": _event_context,
+        "event_approved_to_organizer": _event_context,
+        "event_approved_to_contractor": _event_context,
+        "event_approved_to_official": _event_context,
+        "event_reminder": _event_context,
+        "event_pending_approval_reminder": _event_context,
     }
 )

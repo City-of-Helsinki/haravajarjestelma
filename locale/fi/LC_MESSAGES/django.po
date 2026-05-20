@@ -69,6 +69,11 @@ msgstr "urakka-alueet"
 msgid "Finnish"
 msgstr "suomi"
 
+#: events/admin.py:32
+#, python-format
+msgid "%(field)s: template rendering failed: %(error)s"
+msgstr "%(field)s: kentässä on virhe: %(error)s"
+
 msgid "Event must start before ending."
 msgstr "Tapahtuman alkuajan täytyy olla ennen sen loppuaikaa."
 

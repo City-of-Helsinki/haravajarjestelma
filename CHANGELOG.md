@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.7.3](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.7.2...haravajarjestelma-v1.7.3) (2026-06-03)
+
+
+### Bug Fixes
+
+* **events:** Validate start date only ([ffebc1a](https://github.com/City-of-Helsinki/haravajarjestelma/commit/ffebc1a70951a19806008b605134e8d105a78a5f))
+* **notifications:** Add site_url to pending approval reminder context ([338ed35](https://github.com/City-of-Helsinki/haravajarjestelma/commit/338ed3528a46c51e8fc2720c5c80e0fe5fc6235a))
+
+
+### Dependencies
+
+* Bump idna from 3.11 to 3.15 ([36bd3b0](https://github.com/City-of-Helsinki/haravajarjestelma/commit/36bd3b0363988a03d6b8564d1c147b4b5dfbef62))
+* Bump urllib3 from 2.6.3 to 2.7.0 ([98d675f](https://github.com/City-of-Helsinki/haravajarjestelma/commit/98d675ff1b882d58cb27338c56d0148729081143))
+
 ## [1.7.2](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.7.1...haravajarjestelma-v1.7.2) (2026-05-19)
 
 

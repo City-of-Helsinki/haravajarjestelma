@@ -336,3 +336,6 @@ GDPR_API_USER_PROVIDER = "users.gdpr.get_user"
 GDPR_API_DELETER = "users.gdpr.delete_data"
 GDPR_API_QUERY_SCOPE = env("GDPR_API_QUERY_SCOPE")
 GDPR_API_DELETE_SCOPE = env("GDPR_API_DELETE_SCOPE")
+
+# This is required by OSMWidget / openstreetmaps
+SECURE_REFERRER_POLICY = "origin-when-cross-origin"

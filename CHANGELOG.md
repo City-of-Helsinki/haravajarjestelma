@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.4](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.7.3...haravajarjestelma-v1.7.4) (2026-06-11)
+
+
+### Bug Fixes
+
+* Add validation for notification templates ([f29fd0d](https://github.com/City-of-Helsinki/haravajarjestelma/commit/f29fd0d88b214c51293d2789f7f8c8c392c73ed7))
+* Use datetimes in dummy context ([dcd9cbd](https://github.com/City-of-Helsinki/haravajarjestelma/commit/dcd9cbd03e0bf137e77de125dc56704d8833c562))
+
 ## [1.7.3](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.7.2...haravajarjestelma-v1.7.3) (2026-06-03)
 
 

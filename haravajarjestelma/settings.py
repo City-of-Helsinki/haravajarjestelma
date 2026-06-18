@@ -66,6 +66,7 @@ env = environ.Env(
     APPROVAL_REMINDER_DAYS_BEFORE_EVENT=(int, 5),  # Set to -1 to disable reminder
     HELSINKI_WFS_BASE_URL=(str, "https://kartta.hel.fi/ws/geoserver/avoindata/wfs"),
     EXCLUDED_CONTRACT_ZONES=(list, []),
+    TILE_URL=(str, None),
     DIGITRANSIT_ADDRESS_SEARCH_URL=(
         str,
         "https://api.digitransit.fi/geocoding/v1/search",
@@ -265,6 +266,8 @@ APPROVAL_REMINDER_DAYS_BEFORE_EVENT = env("APPROVAL_REMINDER_DAYS_BEFORE_EVENT")
 HELSINKI_WFS_BASE_URL = env("HELSINKI_WFS_BASE_URL")
 
 EXCLUDED_CONTRACT_ZONES = env("EXCLUDED_CONTRACT_ZONES")
+
+TILE_URL = env("TILE_URL")
 
 DIGITRANSIT_ADDRESS_SEARCH_URL = env("DIGITRANSIT_ADDRESS_SEARCH_URL")
 DIGITRANSIT_API_KEY = env("DIGITRANSIT_API_KEY")

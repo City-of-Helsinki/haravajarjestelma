@@ -1,12 +1,15 @@
 from django.contrib import admin
 from django.contrib.gis.admin import GISModelAdmin
 
+from haravajarjestelma.settings import TILE_URL
+
 from .models import Event
 
 
 @admin.register(Event)
 class EventAdmin(GISModelAdmin):
     gis_widget_kwargs = {
+        **(  {"tile_url": TILE_URL} if TILE_URL else {}),
         "attrs": {
             "default_zoom": 10,
             "default_lon": 24.941389,  # Central Railway Station in EPSG:4326,

@@ -5,6 +5,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.gis.admin import GISModelAdmin
 from django.utils.translation import gettext_lazy as _
 
+from haravajarjestelma.settings import TILE_URL
+
 from .models import BlockedDate, ContractZone
 
 User = get_user_model()
@@ -42,6 +44,7 @@ class BlockedDateInline(TabularInline):
 class ContractZoneAdmin(GISModelAdmin):
     form = ContractZoneModelForm
     gis_widget_kwargs = {
+        **(  {"tile_url": TILE_URL} if TILE_URL else {}),
         "attrs": {
             "default_zoom": 10,
             "default_lon": 24.941389,  # Central Railway Station in EPSG:4326,

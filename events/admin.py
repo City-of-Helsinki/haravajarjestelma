@@ -7,6 +7,8 @@ from django_ilmoitin.models import NotificationTemplate
 from jinja2 import StrictUndefined
 from jinja2.sandbox import SandboxedEnvironment
 
+from common.widgets import HaravaOSMWidget
+
 from .dummy_context import dummy_context
 from .models import Event
 
@@ -45,6 +47,7 @@ admin.site.register(NotificationTemplate, ValidatedNotificationTemplateAdmin)
 
 @admin.register(Event)
 class EventAdmin(GISModelAdmin):
+    gis_widget = HaravaOSMWidget
     gis_widget_kwargs = {
         "attrs": {
             "default_zoom": 10,

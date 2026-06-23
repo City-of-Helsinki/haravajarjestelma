@@ -71,6 +71,10 @@ env = environ.Env(
         "https://api.digitransit.fi/geocoding/v1/search",
     ),
     DIGITRANSIT_API_KEY=(str, ""),
+    TILE_URL=(
+        str,
+        "https://maptiles.api.hel.fi/styles/hel-osm-bright-fi/{z}/{x}/{y}.png",
+    ),
     LOG_LEVEL=(str, "INFO"),
     GDPR_API_QUERY_SCOPE=(str, "gdprquery"),
     GDPR_API_DELETE_SCOPE=(str, "gdprdelete"),
@@ -190,6 +194,7 @@ INSTALLED_APPS = [
     "anymail",
     "mailer",
     "social_django",  # For django-admin Keycloak login
+    "common",
     "events",
     "users",
     "areas",
@@ -268,6 +273,7 @@ EXCLUDED_CONTRACT_ZONES = env("EXCLUDED_CONTRACT_ZONES")
 
 DIGITRANSIT_ADDRESS_SEARCH_URL = env("DIGITRANSIT_ADDRESS_SEARCH_URL")
 DIGITRANSIT_API_KEY = env("DIGITRANSIT_API_KEY")
+TILE_URL = env("TILE_URL")
 
 CORS_ALLOWED_ORIGINS = env("CORS_ALLOWED_ORIGINS")
 CORS_ALLOW_ALL_ORIGINS = env("CORS_ALLOW_ALL_ORIGINS")

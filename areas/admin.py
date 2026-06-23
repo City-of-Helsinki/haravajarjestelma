@@ -5,6 +5,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.gis.admin import GISModelAdmin
 from django.utils.translation import gettext_lazy as _
 
+from common.widgets import HaravaOSMWidget
+
 from .models import BlockedDate, ContractZone
 
 User = get_user_model()
@@ -41,6 +43,7 @@ class BlockedDateInline(TabularInline):
 @register(ContractZone)
 class ContractZoneAdmin(GISModelAdmin):
     form = ContractZoneModelForm
+    gis_widget = HaravaOSMWidget
     gis_widget_kwargs = {
         "attrs": {
             "default_zoom": 10,

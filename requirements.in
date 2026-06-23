@@ -10,7 +10,9 @@ django-parler
 django-parler-rest
 djangorestframework
 djangorestframework-gis
-django~=5.2
+# Note to future Django 6 upgrader:
+# harava-osm.html must be migrated
+django~=5.2 
 drf-oidc-auth
 factory_boy
 helsinki-profile-gdpr-api

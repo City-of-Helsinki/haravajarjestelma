@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.8.0](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.7.4...haravajarjestelma-v1.8.0) (2026-07-02)
+
+
+### Features
+
+* Support TILE_URL in admin OSM widget ([90021c1](https://github.com/City-of-Helsinki/haravajarjestelma/commit/90021c1c174a433c0d1426da0d7f324a6333c207))
+
+
+### Dependencies
+
+* Bump cryptography from 46.0.7 to 48.0.1 ([ec2d342](https://github.com/City-of-Helsinki/haravajarjestelma/commit/ec2d342755e5644d9f7f2bf34b4e733ab5d83606))
+* Bump pyjwt from 2.12.1 to 2.13.0 ([08614c3](https://github.com/City-of-Helsinki/haravajarjestelma/commit/08614c330c06c3e939ef256d1c45080fa053543d))
+
 ## [1.7.4](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.7.3...haravajarjestelma-v1.7.4) (2026-06-11)
 
 

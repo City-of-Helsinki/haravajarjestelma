@@ -17,21 +17,18 @@ The project is now running at [localhost:8085](http://localhost:8085)
 
 ## Development without Docker
 
-### Install pip-tools
+### Install uv
 
-* Run `pip install pip-tools`
-
-### Creating Python requirements files
-
-* Run `pip-compile requirements.in`
-
-### Updating Python requirements files
-
-* Run `pip-compile --upgrade requirements.in`
+* Follow the [installation instructions](https://docs.astral.sh/uv/getting-started/installation/) for `uv`.
 
 ### Installing Python requirements
 
-* Run `pip-sync requirements.txt`
+* Run `uv sync` to install all runtime and development dependencies into a `.venv`.
+
+### Updating Python requirements
+
+* Run `uv lock --upgrade` to update `uv.lock` to the latest allowed versions, then `uv sync` to apply them.
+* Run `uv add <package>` / `uv remove <package>` to add or remove a production dependency (use `--group dev` or `--group prod` for the respective dependency groups).
 
 ### Database
 
@@ -52,23 +49,23 @@ Allow user to create test database
 
 Run migrations if needed:
 
-    python manage.py migrate
+    uv run manage.py migrate
 
 Create superuser if needed:
 
-    python manage.py createsuperuser
+    uv run manage.py createsuperuser
 
 Import geo data
 
-    python manage.py geo_import --municipalities finland
-    python manage.py geo_import --addresses helsinki
-    python manage.py import_helsinki_contract_zones
+    uv run manage.py geo_import --municipalities finland
+    uv run manage.py geo_import --addresses helsinki
+    uv run manage.py import_helsinki_contract_zones
 
 ### Daily running
 
 * Set the `DEBUG` environment variable to `1`.
-* Run `python manage.py migrate`
-* Run `python manage.py runserver 0:8085`
+* Run `uv run manage.py migrate`
+* Run `uv run manage.py runserver 0:8085`
 
 The project is now running at [localhost:8085](http://localhost:8085)
 

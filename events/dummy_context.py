@@ -10,7 +10,7 @@ We extend django-ilmoitin's global dummy_context with:
 - Template-specific sample data for each notification type
 """
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from django_ilmoitin.dummy_context import COMMON_CONTEXT, dummy_context
 
@@ -36,8 +36,8 @@ sample_event = EventFactory.build(
     organizer_first_name="John",
     organizer_last_name="Doe",
     organizer_phone="+358 50 123 4567",
-    start_time=datetime(2024, 12, 25, 10, 0, 0, tzinfo=timezone.utc),
-    end_time=datetime(2024, 12, 25, 14, 0, 0, tzinfo=timezone.utc),
+    start_time=datetime(2024, 12, 25, 10, 0, 0, tzinfo=UTC),
+    end_time=datetime(2024, 12, 25, 14, 0, 0, tzinfo=UTC),
     estimated_attendee_count=15,
     targets="Clean up litter from park paths and picnic areas",
     maintenance_location="Central Park, Helsinki",

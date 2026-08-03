@@ -8,17 +8,26 @@ ARG UWSGI_COMMON_REF=main
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+# uv configuration
+ENV UV_PROJECT_ENVIRONMENT=/opt/app-root \
+    UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy \
+    UV_NO_CACHE=1 \
+    UV_PYTHON_DOWNLOADS=never
+ENV PATH="${UV_PROJECT_ENVIRONMENT}/bin:${PATH}"
+
+COPY --from=ghcr.io/astral-sh/uv:0.12.1@sha256:cf4eedcaa81655197f625739489effcbe71b61ceb1506f332c3facae5deceded /uv /uvx /usr/local/bin/
+
 WORKDIR /app
 
 USER root
 
-COPY requirements.txt .
+COPY pyproject.toml uv.lock ./
 
 RUN dnf update -y && \
     dnf install -y nmap-ncat && \
     dnf clean all && \
-    pip install -U pip setuptools wheel && \
-    pip install --no-cache-dir -r requirements.txt
+    uv sync --locked --no-install-project --no-dev --group prod
 
 # Build and copy specific python-uwsgi-common files.
 ADD https://github.com/City-of-Helsinki/python-uwsgi-common/archive/${UWSGI_COMMON_REF}.tar.gz /usr/src/
@@ -40,8 +49,7 @@ ENTRYPOINT ["/app/docker-entrypoint.sh"]
 FROM appbase AS development
 # ==============================
 
-COPY requirements-dev.txt .
-RUN pip install --no-cache-dir -r requirements-dev.txt
+RUN uv sync --locked --no-install-project --all-groups
 
 ENV DEV_SERVER=1
 

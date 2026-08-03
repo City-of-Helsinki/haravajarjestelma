@@ -2,6 +2,50 @@
 name = "haravajarjestelma"
 requires-python = ">=3.12, <3.13"
 version = "1.7.4"
+dependencies = [
+    "django-cors-headers",
+    "django-environ",
+    "django-filter",
+    "django-helusers",
+    "django-helsinki-health-endpoints",
+    "django-ilmoitin",
+    "django-logger-extra @ https://github.com/City-of-Helsinki/django-logger-extra/archive/refs/tags/v0.1.0.zip",
+    "django-munigeo",
+    "django-parler<2.4",
+    "django-parler-rest",
+    "djangorestframework",
+    "djangorestframework-gis",
+    # Note to future Django 6 upgrader:
+    # harava-osm.html must be migrated
+    "django~=5.2",
+    "drf-oidc-auth",
+    "factory-boy",
+    "helsinki-profile-gdpr-api",
+    "holidays",
+    "psycopg[c]",
+    "pytz",
+    "requests",
+    "sentry-sdk",
+    "social-auth-app-django",
+]
+
+[dependency-groups]
+dev = [
+    "freezegun",
+    "ipython",
+    "pytest",
+    "pytest-cov",
+    "pytest-django",
+    "responses",
+]
+prod = [
+    "uwsgi",
+    "uwsgitop",
+]
+
+[tool.uv]
+package = false
+exclude-newer = "P3D"
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "haravajarjestelma.settings"
@@ -36,8 +80,3 @@ select = [
     "UP",
 ]
 extend-per-file-ignores = { "*/migrations/*" = ["E501"], "*/tests/*" = ["E501"] }
-
-[tool.pip-tools.compile]
-generate-hashes = true
-strip-extras = true
-allow-unsafe = true

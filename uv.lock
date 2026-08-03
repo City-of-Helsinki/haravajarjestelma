@@ -343,28 +343,15 @@ wheels = [
 
 [[package]]
 name = "django-logger-extra"
-version = "0.1.0"
-source = { url = "https://github.com/City-of-Helsinki/django-logger-extra/archive/refs/tags/v0.1.0.zip" }
+version = "1.1.2"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
 ]
-sdist = { hash = "sha256:90dc28c88cb26e9684873cf1951568abfa2cda454837fe342b2bf482847bf380" }
-
-[package.metadata]
-requires-dist = [
-    { name = "coverage", extras = ["toml"], marker = "extra == 'test'" },
-    { name = "coverage-enable-subprocess", marker = "extra == 'test'" },
-    { name = "django", specifier = ">=4.2" },
-    { name = "django-auditlog", marker = "extra == 'auditlog'" },
-    { name = "django-logger-extra", extras = ["auditlog"], marker = "extra == 'all'" },
-    { name = "django-logger-extra", extras = ["test"], marker = "extra == 'all'" },
-    { name = "pytest", marker = "extra == 'test'" },
-    { name = "pytest-django", marker = "extra == 'test'" },
-    { name = "pytest-randomly", marker = "extra == 'test'" },
-    { name = "pytest-rerunfailures", marker = "extra == 'test'" },
-    { name = "pytest-xdist", extras = ["psutil"], marker = "extra == 'test'" },
+sdist = { url = "https://files.pythonhosted.org/packages/fa/4a/401ce9c4e3ef8a453f84b198bf6904f9959a7567cdca65d2bff76c9c4cde/django_logger_extra-1.1.2.tar.gz", hash = "sha256:b86e2cbf5266997cceb7acb6b645b6916b9fc72cf466c71ef5b5eed672d5ed8b", size = 15776, upload-time = "2026-04-22T11:25:30.396Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e5/3b/b9339afaef62610f195ed5349b26a1c498cefcabfc2f58acde02a7ecec93/django_logger_extra-1.1.2-py2.py3-none-any.whl", hash = "sha256:d71004c4956577e7bff2e3745d9432f55172a6cf29de3f11179e015469ab4d26", size = 10222, upload-time = "2026-04-22T11:25:28.795Z" },
 ]
-provides-extras = ["test", "auditlog", "all"]
 
 [[package]]
 name = "django-mailer"
@@ -585,7 +572,7 @@ requires-dist = [
     { name = "django-helsinki-health-endpoints" },
     { name = "django-helusers" },
     { name = "django-ilmoitin" },
-    { name = "django-logger-extra", url = "https://github.com/City-of-Helsinki/django-logger-extra/archive/refs/tags/v0.1.0.zip" },
+    { name = "django-logger-extra" },
     { name = "django-munigeo" },
     { name = "django-parler", specifier = "<2.4" },
     { name = "django-parler-rest" },

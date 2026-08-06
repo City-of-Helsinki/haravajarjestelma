@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.8.0](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.7.4...haravajarjestelma-v1.8.0) (2026-08-06)
+
+
+### Features
+
+* Support TILE_URL in admin OSM widget ([90021c1](https://github.com/City-of-Helsinki/haravajarjestelma/commit/90021c1c174a433c0d1426da0d7f324a6333c207))
+
+
+### Bug Fixes
+
+* Auto-setup GDAL and GEOS in settings ([072fd61](https://github.com/City-of-Helsinki/haravajarjestelma/commit/072fd6194870aff438c15f856d2fcc7be1f2cb5d))
+* Remove duplicate helusers urls include ([de55ee9](https://github.com/City-of-Helsinki/haravajarjestelma/commit/de55ee91b7ce5ec62294ae3150afc4685485f6e8))
+* Use direct datetime UTC import ([a47fa20](https://github.com/City-of-Helsinki/haravajarjestelma/commit/a47fa20da4baf1295b179dc2580961559a4a43ac))
+
+
+### Dependencies
+
+* Bump cryptography from 46.0.7 to 48.0.1 ([ec2d342](https://github.com/City-of-Helsinki/haravajarjestelma/commit/ec2d342755e5644d9f7f2bf34b4e733ab5d83606))
+* Bump cryptography from 49.0.0 to 50.0.0 ([de25944](https://github.com/City-of-Helsinki/haravajarjestelma/commit/de25944e4c55c04a93afa255f3be306252afb36a))
+* Bump django from 5.2.14 to 5.2.15 ([67aab5d](https://github.com/City-of-Helsinki/haravajarjestelma/commit/67aab5d17e2e835113e8c97b66f5ae47166cc36b))
+* Bump pip from 26.1 to 26.1.2 ([bfda3bd](https://github.com/City-of-Helsinki/haravajarjestelma/commit/bfda3bdd1c450b776b77ed98048fae5f4bf14ef8))
+* Bump pyasn1 from 0.6.3 to 0.6.4 ([2db3cc6](https://github.com/City-of-Helsinki/haravajarjestelma/commit/2db3cc63aed69d13346d450153fb477d62900fad))
+* Bump pyjwt from 2.12.1 to 2.13.0 ([08614c3](https://github.com/City-of-Helsinki/haravajarjestelma/commit/08614c330c06c3e939ef256d1c45080fa053543d))
+* Bump setuptools from 80.9.0 to 83.0.0 ([cc6b93d](https://github.com/City-of-Helsinki/haravajarjestelma/commit/cc6b93d52828abf8ee5ee5ea177a97f7be3beaf1))
+* Update django-anymail and ipython ([023a0a8](https://github.com/City-of-Helsinki/haravajarjestelma/commit/023a0a8064c3cf09e1c943d4a22eed7107b5c2cc))
+* Update django-helusers to v.1.2.0 ([af24f77](https://github.com/City-of-Helsinki/haravajarjestelma/commit/af24f774f4c7cd3c27797b3e8ff61cd8366d8118))
+* Update django-logger-extra to v.1.1.2 ([63a0b7d](https://github.com/City-of-Helsinki/haravajarjestelma/commit/63a0b7d07c3199f0d258b1019a36d2def604743f))
+* Update pre-commit tool versions ([3638ae3](https://github.com/City-of-Helsinki/haravajarjestelma/commit/3638ae38ef2e607e4a0029289e3d080c2c477843))
+
 ## [1.7.4](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.7.3...haravajarjestelma-v1.7.4) (2026-06-11)
 
 

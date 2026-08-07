@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.1](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.8.0...haravajarjestelma-v1.8.1) (2026-08-07)
+
+
+### Bug Fixes
+
+* **deps:** Pin social-auth-app-django below 6.0.0 ([3a9483a](https://github.com/City-of-Helsinki/haravajarjestelma/commit/3a9483a45bea00cf64bdee6a3f655a445d3a78f9))
+
 ## [1.8.0](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.7.4...haravajarjestelma-v1.8.0) (2026-08-06)
 
 

@@ -1,7 +1,7 @@
 [project]
 name = "haravajarjestelma"
 requires-python = ">=3.12, <3.13"
-version = "1.8.1"
+version = "1.8.2"
 dependencies = [
     "django-cors-headers",
     "django-environ",

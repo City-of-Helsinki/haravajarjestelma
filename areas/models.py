@@ -79,7 +79,7 @@ class ContractZone(SerializableMixin):
             )
         )
 
-        too_early_dates = {date for date in date_range(today, last_too_early_day)}
+        too_early_dates = set(date_range(today, last_too_early_day))
 
         events = self.events.filter(start_time__date__gt=last_too_early_day)
         if exclude_event:
@@ -166,4 +166,4 @@ def get_affected_dates(date):
     while is_vacation_day(end_date + ONE_DAY):
         end_date += ONE_DAY
 
-    return [d for d in date_range(start_date, end_date)]
+    return list(date_range(start_date, end_date))

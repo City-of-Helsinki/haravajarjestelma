@@ -15,7 +15,20 @@ User = get_user_model()
 class ContractZoneModelForm(forms.ModelForm):
     class Meta:
         model = ContractZone
-        fields = "__all__"
+        fields = (
+            "origin_id",
+            "name",
+            "boundary",
+            "active",
+            "contractor",
+            "contractor_users",
+            "contact_person",
+            "phone",
+            "email",
+            "secondary_contact_person",
+            "secondary_phone",
+            "secondary_email",
+        )
 
     def clean_boundary(self):
         # Editing the boundary is not allowed after creation

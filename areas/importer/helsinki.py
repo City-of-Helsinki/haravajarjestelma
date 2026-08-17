@@ -15,15 +15,17 @@ logger = logging.getLogger(__name__)
 
 
 class HelsinkiImporter:
-    def import_contract_zones(self, force=False):
+    @staticmethod
+    def import_contract_zones(force=False):
         logger.info("Importing Helsinki contract zones")
 
-        data_source = self._fetch_contract_zones()
-        self._process_contract_zones(data_source, force)
+        data_source = HelsinkiImporter._fetch_contract_zones()
+        HelsinkiImporter._process_contract_zones(data_source, force)
 
         logger.info("Helsinki contract zone import done!")
 
-    def _fetch_contract_zones(self):
+    @staticmethod
+    def _fetch_contract_zones():
         contract_zone_filter_str = (
             ' AND "nimi" NOT IN ({})'.format(
                 ",".join(f"'{cz}'" for cz in EXCLUDED_CONTRACT_ZONES)
@@ -53,28 +55,31 @@ class HelsinkiImporter:
 
         return data_source
 
+    @staticmethod
     @transaction.atomic
-    def _process_contract_zones(self, data_source, force=False):
+    def _process_contract_zones(data_source, force=False):
         layer = data_source[0]
         syncher = ModelSyncher(
-            ContractZone.objects.all(), lambda x: x.name, self._deactivate_contract_zone
+            ContractZone.objects.all(),
+            lambda x: x.name,
+            HelsinkiImporter._deactivate_contract_zone,
         )
 
         for feat in layer:
             data = {
                 "name": str(feat["nimi"]),
                 "boundary": feat.geom.geos,
-                "contractor": self._get_attribute_safe(feat, "urakoitsija"),
-                "contact_person": self._get_attribute_safe(feat, "talkoot"),
-                "email": self._get_attribute_safe(feat, "talkoot_email"),
-                "phone": self._get_attribute_safe(feat, "talkoot_puh"),
-                "secondary_contact_person": self._get_attribute_safe(
+                "contractor": HelsinkiImporter._get_attribute_safe(feat, "urakoitsija"),
+                "contact_person": HelsinkiImporter._get_attribute_safe(feat, "talkoot"),
+                "email": HelsinkiImporter._get_attribute_safe(feat, "talkoot_email"),
+                "phone": HelsinkiImporter._get_attribute_safe(feat, "talkoot_puh"),
+                "secondary_contact_person": HelsinkiImporter._get_attribute_safe(
                     feat, "talkoot_varahlo"
                 ),
-                "secondary_email": self._get_attribute_safe(
+                "secondary_email": HelsinkiImporter._get_attribute_safe(
                     feat, "talkoot_varahlo_email"
                 ),
-                "secondary_phone": self._get_attribute_safe(
+                "secondary_phone": HelsinkiImporter._get_attribute_safe(
                     feat, "talkoot_varahlo_puh"
                 ),
                 "origin_id": str(feat["id"]),

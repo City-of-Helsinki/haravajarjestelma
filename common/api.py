@@ -1,13 +1,13 @@
 from copy import deepcopy
+from datetime import UTC
 
-import pytz
 from django.db import models
 from rest_framework import serializers
 
 
 class UTCDateTimeField(serializers.DateTimeField):
     def __init__(self, *args, **kwargs):
-        kwargs.update(default_timezone=pytz.UTC)
+        kwargs.update(default_timezone=UTC)
         super().__init__(*args, **kwargs)
 
 

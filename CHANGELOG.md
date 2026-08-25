@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.8.3](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.8.2...haravajarjestelma-v1.8.3) (2026-08-25)
+
+
+### Bug Fixes
+
+* List ContractZoneModelForm fields explicitly ([35939dc](https://github.com/City-of-Helsinki/haravajarjestelma/commit/35939dc1f95c30a62f4db2c2d26fc31d1a7f9503))
+* Make HelsinkiImporter methods static ([91042e8](https://github.com/City-of-Helsinki/haravajarjestelma/commit/91042e83dec4bce4787ac87e9343113e47bc6909))
+* Replace pytz UTC with datetime.UTC ([5423a55](https://github.com/City-of-Helsinki/haravajarjestelma/commit/5423a55320bc2086d10b1eabb26b5beea20559da))
+* Replace redundant comprehensions with constructors ([f8496e3](https://github.com/City-of-Helsinki/haravajarjestelma/commit/f8496e3d4d5fa22cdbdaf45fb6ed948e75d52989))
+* Use bash [[ ]] for SKIP_DATABASE_CHECK condition ([9537c0f](https://github.com/City-of-Helsinki/haravajarjestelma/commit/9537c0f565867e548d69e53be1cf87f2227dc677))
+* Use set comprehension in assert_to_addresses ([5f24bf6](https://github.com/City-of-Helsinki/haravajarjestelma/commit/5f24bf68c80c26d3630c6bfd6e421d7b810c767a))
+
+
+### Dependencies
+
+* Bump sqlparse from 0.5.5 to 0.6.0 ([cafc837](https://github.com/City-of-Helsinki/haravajarjestelma/commit/cafc837f951feee784ef769cddf778d780653d3d))
+
 ## [1.8.2](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.8.1...haravajarjestelma-v1.8.2) (2026-08-14)
 
 

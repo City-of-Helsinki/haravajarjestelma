@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.4](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.8.3...haravajarjestelma-v1.8.4) (2026-09-04)
+
+
+### Dependencies
+
+* Bump djangorestframework from 3.17.1 to 3.17.2 ([d332ffe](https://github.com/City-of-Helsinki/haravajarjestelma/commit/d332ffe9a5bae7a97875f4735b7db04acd1daaae))
+
 ## [1.8.3](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.8.2...haravajarjestelma-v1.8.3) (2026-08-25)
 
 

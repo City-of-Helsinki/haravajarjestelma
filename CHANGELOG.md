@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.8.5](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.8.4...haravajarjestelma-v1.8.5) (2026-10-01)
+
+
+### Dependencies
+
+* Bump pyjwt from 2.13.0 to 2.15.0 ([289500d](https://github.com/City-of-Helsinki/haravajarjestelma/commit/289500d3412aa58651d2c6fa9db2bd4ae6a07364))
+* Bump urllib3 from 2.7.0 to 2.8.0 ([d51e45c](https://github.com/City-of-Helsinki/haravajarjestelma/commit/d51e45c6a5a5b0b66c47411c901f5c2c79f0a3ca))
+
 ## [1.8.4](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.8.3...haravajarjestelma-v1.8.4) (2026-09-04)
 
 

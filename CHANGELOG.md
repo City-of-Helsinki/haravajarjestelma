@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.6](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.8.5...haravajarjestelma-v1.8.6) (2026-10-10)
+
+
+### Dependencies
+
+* Bump oauthlib from 3.3.1 to 4.0.0 ([466ff6d](https://github.com/City-of-Helsinki/haravajarjestelma/commit/466ff6df32d2745a0a0abaa2681725ed2fe36c96))
+
 ## [1.8.5](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.8.4...haravajarjestelma-v1.8.5) (2026-10-01)
 
 

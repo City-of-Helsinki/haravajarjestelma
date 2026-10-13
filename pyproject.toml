@@ -26,9 +26,7 @@ dependencies = [
     "pytz",
     "requests",
     "sentry-sdk",
-    # Pin below 6.0.0: 6.x makes social login views POST-only, breaking the
-    # admin Keycloak login GET link (405). See CHANGELOG for social-app-django 6.0.0.
-    "social-auth-app-django>=5.9,<6",
+    "social-auth-app-django",
 ]
 
 [dependency-groups]
@@ -48,7 +46,6 @@ prod = [
 [tool.uv]
 package = false
 exclude-newer = "P3D"
-exclude-newer-package = { django-helusers = "2026-08-03T12:00:00Z" }
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "haravajarjestelma.settings"

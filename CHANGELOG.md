@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.8.7](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.8.6...haravajarjestelma-v1.8.7) (2026-10-23)
+
+
+### Bug Fixes
+
+* Bump uv version to 0.13.5 ([065bed1](https://github.com/City-of-Helsinki/haravajarjestelma/commit/065bed108afaa12831342f7f769bb5b0ae40bb2a))
+
+
+### Dependencies
+
+* Bump certifi to 2026.10.19 ([145d820](https://github.com/City-of-Helsinki/haravajarjestelma/commit/145d820a4320b934c8517f46fbd0938c896d0568))
+
 ## [1.8.6](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.8.5...haravajarjestelma-v1.8.6) (2026-10-14)
 
 

@@ -548,3 +548,15 @@ def test_event_can_be_modified_when_days_are_full(
 
     event.refresh_from_db()
     assert event.name == "Modified name"
+
+
+def test_event_cannot_post_is_anonymized(api_client, contract_zone, make_event_data):
+    event_data = make_event_data(
+        contract_zone=contract_zone, name="non-anonymized-new-event", is_anonymized=True
+    )
+    response = post(api_client, LIST_URL, event_data)
+
+    assert response["is_anonymized"] is False
+
+    event = Event.objects.get(name="non-anonymized-new-event")
+    assert event.is_anonymized is False

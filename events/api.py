@@ -36,7 +36,7 @@ class EventSerializer(UTCModelSerializer):
             "approval_creation_reminder_sent_at",
             "approval_deadline_reminder_sent_at",
         )
-        read_only_fields = ("contract_zone",)
+        read_only_fields = ("contract_zone", "is_anonymized")
 
     def get_fields(self):
         fields = super().get_fields()

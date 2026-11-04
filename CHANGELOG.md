@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.8.9](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.8.8...haravajarjestelma-v1.8.9) (2026-11-04)
+
+
+### Bug Fixes
+
+* Make is_anonymized read only for event ([d805c54](https://github.com/City-of-Helsinki/haravajarjestelma/commit/d805c549d2ce46b78114c8cdcc99f436fd2f4ea1))
+
+
+### Dependencies
+
+* Bump authlib from 1.7.2 to 1.9.1 ([4daab90](https://github.com/City-of-Helsinki/haravajarjestelma/commit/4daab90b21bd78b45e2ba322afd5f0e1c6259bd1))
+* Bump joserfc from 1.7.4 to 1.7.6 ([64c0304](https://github.com/City-of-Helsinki/haravajarjestelma/commit/64c0304db7c436f4edf27261d36ad83415360383))
+* Bump social-auth-core from 5.2.0 to 6.2.0 ([ce96251](https://github.com/City-of-Helsinki/haravajarjestelma/commit/ce962514fa965c79358121e369ec55d810f61280))
+
 ## [1.8.8](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.8.7...haravajarjestelma-v1.8.8) (2026-10-26)
 
 

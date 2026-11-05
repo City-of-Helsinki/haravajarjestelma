@@ -47,6 +47,8 @@ prod = [
 package = false
 required-version = ">=0.13.4"
 exclude-newer = "P3D"
+# Pin the cutoff to the 1.3.2 upload; advance it when intentionally upgrading again.
+exclude-newer-package = { "django-helusers" = "2026-11-05T14:34:50Z" }
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "haravajarjestelma.settings"

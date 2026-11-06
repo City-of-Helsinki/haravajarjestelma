@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.8.10](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.8.9...haravajarjestelma-v1.8.10) (2026-11-06)
+
+
+### Dependencies
+
+* Bump django-helusers to 1.3.2 ([7304073](https://github.com/City-of-Helsinki/haravajarjestelma/commit/7304073cd883c513aa18f5ad6e8fce07ad9e9f36))
+* Bump oauthlib from 4.0.0 to 4.0.1 ([ad42862](https://github.com/City-of-Helsinki/haravajarjestelma/commit/ad42862ef7dc1eb7b824809e61476709fa34bfce))
+
 ## [1.8.9](https://github.com/City-of-Helsinki/haravajarjestelma/compare/haravajarjestelma-v1.8.8...haravajarjestelma-v1.8.9) (2026-11-04)
 
 
